@@ -1,33 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-/**
- * Interface & Utility
- */
-
 export type State = {
-  counter: number
+  selectedPoolAddress: string
+  visible: boolean
 }
-
-/**
- * Store constructor
- */
 
 const NAME = 'main'
 const initialState: State = {
-  counter: 0,
+  selectedPoolAddress: '',
+  visible: false,
 }
 
 /**
  * Actions
  */
 
-export const increaseCounter = createAsyncThunk<State, void, { state: any }>(
-  `${NAME}/increaseCounter`,
-  async (_, { getState }) => {
-    const {
-      main: { counter },
-    } = getState()
-    return { counter: counter + 1 }
+export const selectPool = createAsyncThunk(
+  `${NAME}/selectPool`,
+  async (poolAddress: string) => {
+    return { selectedPoolAddress: poolAddress, selectedLptAddress: '' }
+  },
+)
+export const handleOpenDrawer = createAsyncThunk(
+  `${NAME}/handleOpenDrawer`,
+  async (condition: boolean) => {
+    return { visible: condition }
   },
 )
 
@@ -40,10 +37,15 @@ const slice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) =>
-    void builder.addCase(
-      increaseCounter.fulfilled,
-      (state, { payload }) => void Object.assign(state, payload),
-    ),
+    void builder
+      .addCase(
+        selectPool.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        handleOpenDrawer.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      ),
 })
 
 export default slice.reducer
