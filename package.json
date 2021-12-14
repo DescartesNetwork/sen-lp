@@ -28,6 +28,8 @@
     "remarkable": "^2.0.1",
     "swiper": "^7.2.0",
     "tweetnacl": "^1.0.3",
+    "react-fast-compare": "^3.2.0",
+    "chart.js": "^2.9.4",
     "web-vitals": "^2.1.1"
   },
   "scripts": {
@@ -74,6 +76,7 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.3.1",
     "@types/remarkable": "^2.0.3",
+    "@types/chart.js": "^2.9.34",
     "assert": "^2.0.0",
     "craco-module-federation": "^1.1.0",
     "crypto-browserify": "^3.12.0",
