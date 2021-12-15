@@ -1,6 +1,7 @@
+import { ReactNode } from 'react'
+
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import { MintAvatar } from 'app/shared/components/mint'
-import { ReactNode } from 'react'
 import IonIcon from 'shared/antd/ionicon'
 import LiquidityAction from './liquidityAction'
 
