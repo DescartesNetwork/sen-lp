@@ -55,7 +55,7 @@ const ListAllPools = ({
       </Col>
       {(searchedPools || sortedPools).map((poolData, i) => (
         <Col span={24} key={poolData.address + i}>
-          <LazyLoad height={84} overflow>
+          <LazyLoad height={78} overflow>
             <ItemPool
               data={poolData}
               action={action(poolData.address)}

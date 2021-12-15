@@ -33,10 +33,9 @@ const PoolTVL = ({ poolAddress }: { poolAddress: string }) => {
       let tvl = 0
       ;[0, 1, 2].forEach((i) => {
         if (reserves[i] && decimals[i] && prices[i])
-          tvl =
-            tvl +
+          tvl +=
             Number(utils.undecimalize(reserves[i] as bigint, decimals[i])) *
-              prices[i]
+            prices[i]
       })
       return setTVL(tvl)
     } catch (er) {

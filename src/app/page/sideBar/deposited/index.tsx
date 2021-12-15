@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import ListMyPools from './listMyPools'
+import ListMyPools from './listDepositedPools'
 
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppDispatch, AppState } from 'app/model'
@@ -24,7 +24,13 @@ const MyPools = () => {
       <Button
         type="text"
         onClick={() => setActiveAddress(lptAddress, poolAddress)}
-        icon={<IonIcon name="arrow-forward-outline" />}
+        size="small"
+        icon={
+          <IonIcon
+            name="arrow-forward-outline"
+            style={{ fontSize: 12, color: '#7A7B85' }}
+          />
+        }
       />
     ),
     [setActiveAddress],

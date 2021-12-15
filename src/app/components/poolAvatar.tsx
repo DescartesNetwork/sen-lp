@@ -42,7 +42,7 @@ const PoolAvatar = ({
   }, [getLogoURIs])
 
   return (
-    <Avatar.Group style={{ marginTop: 4, marginBottom: 4 }}>
+    <Avatar.Group>
       {logoURIs.map((logoURI, i) => (
         <Avatar
           key={i}

@@ -37,7 +37,12 @@ const AllPools = () => {
         <Button
           type="text"
           onClick={() => setActiveAddress(poolAddress)}
-          icon={<IonIcon name="arrow-forward-outline" />}
+          icon={
+            <IonIcon
+              name="arrow-forward-outline"
+              style={{ fontSize: 12, color: '#7A7B85' }}
+            />
+          }
         />
       )
     },

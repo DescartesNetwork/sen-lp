@@ -1,10 +1,4 @@
-import {
-  Fragment,
-  ReactElement,
-  useEffect,
-  useMemo,
-  CSSProperties,
-} from 'react'
+import { Fragment, ReactElement, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PoolData } from '@senswap/sen-js'
 
@@ -18,12 +12,6 @@ import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
-
-const CARD_ACTIVE_STYLE: CSSProperties = {
-  borderColor: 'rgba(249,87,94,0.5)',
-  boxShadow:
-    '0 1px 2px -2px rgb(0 0 0 / 64%), 0 3px 6px 0 rgb(0 0 0 / 48%), 0 5px 12px 4px rgb(0 0 0 / 36%)',
-}
 
 const ItemPool = ({
   data,
@@ -55,29 +43,28 @@ const ItemPool = ({
   }, [dispatch, poolAddress])
 
   const isFrozen = poolState === PoolStatus.Frozen
-  const cardStyle = selected ? CARD_ACTIVE_STYLE : {}
+  const cardStyle = selected ? 'card-active' : ''
 
   return (
     <Card
-      bodyStyle={{ padding: 12 }}
+      className={cardStyle}
+      bodyStyle={{ padding: 12, height: 78 }}
       onClick={onClick}
       bordered={selected}
       hoverable
-      style={{ cursor: 'pointer', ...cardStyle }}
     >
       <Row gutter={[12, 12]} wrap={false} align="middle">
         <Col span={24} flex="auto">
           <Space direction="vertical" size={4}>
-            <Space style={{ whiteSpace: 'nowrap' }}>
+            <Space>
               <PoolAvatar poolAddress={poolAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
                 <PoolName poolAddress={poolAddress} />
               </Typography.Text>
-              <PoolCardStatus poolAddress={poolAddress} />
             </Space>
             <Space>
               <Tooltip title="The Total Value Locked is roughly estimated and perhaps inaccurate because unknown tokens ain't involved in the computation.">
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                <Typography.Text type="secondary" className="caption">
                   TVL:
                 </Typography.Text>
               </Tooltip>
@@ -85,7 +72,7 @@ const ItemPool = ({
                 <PoolTVL poolAddress={poolAddress} />
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
-              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+              <Typography.Text type="secondary" className="caption">
                 APY:
               </Typography.Text>
               <Typography.Text>
@@ -94,7 +81,12 @@ const ItemPool = ({
             </Space>
           </Space>
         </Col>
-        <Col>{action}</Col>
+        <Col>
+          <Space size={2}>
+            <PoolCardStatus poolAddress={poolAddress} />
+            {action}
+          </Space>
+        </Col>
       </Row>
     </Card>
   )

@@ -1,4 +1,4 @@
-import { Space, Divider } from 'antd'
+import { Space } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { usePool, useWallet } from 'senhub/providers'
@@ -16,11 +16,8 @@ const PoolCardStatus = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <Space>
-      {(isFrozen || isOwner) && (
-        <Divider type="vertical" style={{ margin: 0 }} />
-      )}
-      {isFrozen && <IonIcon name="snow-outline" />}
-      {isOwner && <IonIcon name="person-outline" />}
+      {isFrozen && <IonIcon name="snow-outline" style={{ fontSize: 16 }} />}
+      {isOwner && <IonIcon name="person-outline" style={{ fontSize: 16 }} />}
     </Space>
   )
 }

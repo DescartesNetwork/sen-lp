@@ -19,8 +19,8 @@ const {
 
 export const Page = () => {
   return (
-    <MintProvider>
-      <UIProvider appId={appId}>
+    <UIProvider appId={appId}>
+      <MintProvider>
         <PoolProvider>
           <AccountProvider>
             <WalletProvider>
@@ -30,8 +30,8 @@ export const Page = () => {
             </WalletProvider>
           </AccountProvider>
         </PoolProvider>
-      </UIProvider>
-    </MintProvider>
+      </MintProvider>
+    </UIProvider>
   )
 }
 

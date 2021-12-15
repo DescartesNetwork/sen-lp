@@ -23,7 +23,7 @@ const Search = ({
     if (account.isAddress(keyword)) {
       const poolData = pools.find(({ address }) => address === keyword)
       if (!poolData) return onChange([])
-      else return onChange([poolData])
+      return onChange([poolData])
     }
     const tokenInfos = await tokenProvider.find(keyword)
     if (!tokenInfos) return onChange(undefined)
@@ -60,7 +60,7 @@ const Search = ({
           />
         }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setKeyword(e.target.value || '')
+          setKeyword(e.target.value)
         }
       />
     </Card>

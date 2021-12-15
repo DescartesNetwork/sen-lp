@@ -1,7 +1,6 @@
 import { Card, Tabs } from 'antd'
 import AllPools from './allPools'
-import Transactions from './transactions'
-import MyPools from './myPools'
+import MyPools from './deposited'
 import NewPool from './newPool'
 import LptWatcher from 'app/components/lptWatcher'
 
@@ -16,11 +15,8 @@ const SideBar = () => {
         <Tabs.TabPane key="all-pools" tab="All pools">
           <AllPools />
         </Tabs.TabPane>
-        <Tabs.TabPane key="my-pools" tab="My pools">
+        <Tabs.TabPane key="deposited" tab="Deposited">
           <MyPools />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="transactions" tab="transactions">
-          <Transactions />
         </Tabs.TabPane>
       </Tabs>
       <LptWatcher />

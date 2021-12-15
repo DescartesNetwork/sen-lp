@@ -1,21 +1,14 @@
-import { Fragment, ReactElement, CSSProperties } from 'react'
+import { Fragment, ReactElement } from 'react'
 import { utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
 import PoolAvatar from '../../../components/poolAvatar'
 import PoolName from '../../../components/poolName'
-import PoolCardStatus from 'app/components/PoolCardStatus'
 import PoolTVL from '../../../components/poolTVL'
 
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
-
-const CARD_ACTIVE_STYLE: CSSProperties = {
-  borderColor: 'rgba(249,87,94,0.5)',
-  boxShadow:
-    '0 1px 2px -2px rgb(0 0 0 / 64%), 0 3px 6px 0 rgb(0 0 0 / 48%), 0 5px 12px 4px rgb(0 0 0 / 36%)',
-}
 
 const LPTCard = ({
   data,
@@ -30,30 +23,29 @@ const LPTCard = ({
 }) => {
   const { pool: poolAddress, amount } = data
   const lp = utils.undecimalize(amount, 9)
-  const cardStyle = selected ? CARD_ACTIVE_STYLE : {}
+  const cardStyle = selected ? 'card-active' : ''
   const isFrozen = data.state === PoolStatus.Frozen
 
   return (
     <Card
-      bodyStyle={{ padding: 12 }}
+      className={cardStyle}
+      bodyStyle={{ padding: 12, height: 78 }}
       onClick={onClick}
       bordered={selected}
       hoverable
-      style={{ cursor: 'pointer', ...cardStyle }}
     >
       <Row gutter={[12, 12]} align="middle" wrap={false}>
         <Col flex="auto">
           <Space direction="vertical" size={4}>
-            <Space style={{ whiteSpace: 'nowrap' }} size="middle">
+            <Space size="middle">
               <PoolAvatar poolAddress={poolAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
                 <PoolName poolAddress={poolAddress} />
               </Typography.Text>
-              <PoolCardStatus poolAddress={poolAddress} />
             </Space>
-            <Space style={{ whiteSpace: 'nowrap' }}>
+            <Space>
               <Tooltip title="The Total Value Locked is roughly estimated and perhaps inaccurate because unknown tokens ain't involved in the computation.">
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                <Typography.Text type="secondary" className="caption">
                   TVL:
                 </Typography.Text>
               </Tooltip>
@@ -61,7 +53,7 @@ const LPTCard = ({
                 <PoolTVL poolAddress={poolAddress} />
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
-              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+              <Typography.Text type="secondary" className="caption">
                 My LPT:
               </Typography.Text>
               <Typography.Text>
