@@ -1,21 +1,53 @@
 import { useMemo, useState } from 'react'
 
-import {
-  Button,
-  Row,
-  Col,
-  Typography,
-  Card,
-  Badge,
-  Space,
-} from 'antd'
+import { Button, Row, Col, Typography, Card, Badge, Space } from 'antd'
 import { usePool, useWallet } from 'senhub/providers'
 import { explorer } from 'shared/util'
 import IonIcon from 'shared/antd/ionicon'
 
+enum PoolStatus {
+  Frozen = 2,
+  Active = 1,
+}
+const CardDescription = ({
+  poolStatus,
+  description,
+}: {
+  poolStatus: PoolStatus
+  description: string
+}) => {
+  return (
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Space size={0}>
+          <Badge
+            status={poolStatus === PoolStatus.Active ? 'success' : 'error'}
+          />
+          <Typography.Text>
+            Current status:{' '}
+            {poolStatus === PoolStatus.Active ? 'Active' : 'Frozen'}
+          </Typography.Text>
+        </Space>
+      </Col>
+      <Col span={24}>
+        <Card bordered={false} bodyStyle={{ padding: 16 }}>
+          <Space size={4} align="start">
+            <IonIcon name="information-circle-outline" />
+            <Space direction="vertical" size={0}>
+              <Typography.Text>{description}</Typography.Text>
+            </Space>
+          </Space>
+        </Card>
+      </Col>
+    </Row>
+  )
+}
+
 const Freeze = ({ address }: { address: string }) => {
   const { pools } = usePool()
-  const { wallet: { address: walletAddress } } = useWallet()
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
   const [loading, setLoading] = useState(false)
   const poolData = pools[address]
 
@@ -55,45 +87,6 @@ const Freeze = ({ address }: { address: string }) => {
     })
   }
 
-  enum PoolStatus {
-    Frozen = 2,
-    Active = 1,
-  }
-
-  const CardDescription = ({
-    poolStatus,
-    description,
-  }: {
-    poolStatus: PoolStatus
-    description: string
-  }) => {
-    return (
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Space size={0}>
-            <Badge
-              status={poolStatus === PoolStatus.Active ? 'success' : 'error'}
-            />
-            <Typography.Text>
-              Current status:{' '}
-              {poolStatus === PoolStatus.Active ? 'Active' : 'Frozen'}
-            </Typography.Text>
-          </Space>
-        </Col>
-        <Col span={24}>
-          <Card bordered={false} bodyStyle={{ padding: 16 }}>
-            <Space size={4} align="start">
-              <IonIcon name="information-circle-outline" />
-              <Space direction="vertical" size={0}>
-                <Typography.Text>{description}</Typography.Text>
-              </Space>
-            </Space>
-          </Card>
-        </Col>
-      </Row>
-    )
-  }
-
   //Check owner in here
   const description = useMemo(() => {
     const state = poolData?.state
@@ -117,10 +110,10 @@ const Freeze = ({ address }: { address: string }) => {
 
   if (!poolData || walletAddress !== poolData.owner) return null
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[24, 24]}>
       <Col span={24}>{description}</Col>
       <Col span={24}>
-        {poolData?.state === PoolStatus.Active && (
+        {poolData?.state === PoolStatus.Active ? (
           <Button
             type="primary"
             onClick={onFreezePool}
@@ -130,10 +123,7 @@ const Freeze = ({ address }: { address: string }) => {
           >
             Freeze Pool
           </Button>
-        )}
-      </Col>
-      <Col span={24}>
-        {poolData?.state === PoolStatus.Frozen && (
+        ) : (
           <Button
             type="primary"
             onClick={onThawPool}
