@@ -1,10 +1,10 @@
 import { Row, Col } from 'antd'
-
 import SideBar from './sideBar'
 import PoolDetails from './poolDetails'
 
-const Page = () => {
+import 'app/static/styles/index.less'
 
+const Page = () => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={6}>
