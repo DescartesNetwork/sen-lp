@@ -2,13 +2,15 @@ import { Fragment, ReactElement } from 'react'
 import { utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
-import PoolAvatar from '../../../components/poolAvatar'
-import PoolName from '../../../components/poolName'
 import PoolTVL from '../../../components/poolTVL'
 
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
+import { MintAvatar, MintName } from 'app/shared/components/mint'
+import { usePool } from 'senhub/providers'
+
+const DECIMAL = 9
 
 const LPTCard = ({
   data,
@@ -22,9 +24,12 @@ const LPTCard = ({
   selected?: boolean
 }) => {
   const { pool: poolAddress, amount } = data
-  const lp = utils.undecimalize(amount, 9)
+  const lp = utils.undecimalize(amount, DECIMAL)
   const cardStyle = selected ? 'card-active' : ''
   const isFrozen = data.state === PoolStatus.Frozen
+  const { pools } = usePool()
+
+  const mintLptAddress = pools?.[poolAddress]?.mint_lpt || ''
 
   return (
     <Card
@@ -38,9 +43,9 @@ const LPTCard = ({
         <Col flex="auto">
           <Space direction="vertical" size={4}>
             <Space size="middle">
-              <PoolAvatar poolAddress={poolAddress} size={24} />
+              <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
-                <PoolName poolAddress={poolAddress} />
+                <MintName mintAddress={mintLptAddress} />
               </Typography.Text>
             </Space>
             <Space>

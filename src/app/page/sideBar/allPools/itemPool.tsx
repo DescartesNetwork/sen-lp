@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { PoolData } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
-import PoolAvatar from '../../../components/poolAvatar'
-import PoolName from '../../../components/poolName'
 import PoolTVL from '../../../components/poolTVL'
 import PoolCardStatus from 'app/components/PoolCardStatus'
 
@@ -12,6 +10,8 @@ import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
+import { MintAvatar, MintName } from 'app/shared/components/mint'
+import { usePool } from 'senhub/providers'
 
 const ItemPool = ({
   data,
@@ -26,9 +26,12 @@ const ItemPool = ({
 }) => {
   const { address: poolAddress, state: poolState } = data
   const dispatch = useDispatch()
+  const { pools } = usePool()
   const details = useSelector(
     (state: AppState) => state.stat[data.address]?.details,
   )
+
+  const mintLptAddress = pools?.[poolAddress]?.mint_lpt
 
   const apy = useMemo(() => {
     if (!details) return 0
@@ -57,9 +60,9 @@ const ItemPool = ({
         <Col span={24} flex="auto">
           <Space direction="vertical" size={4}>
             <Space>
-              <PoolAvatar poolAddress={poolAddress} size={24} />
+              <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
-                <PoolName poolAddress={poolAddress} />
+                <MintName mintAddress={mintLptAddress} />
               </Typography.Text>
             </Space>
             <Space>
