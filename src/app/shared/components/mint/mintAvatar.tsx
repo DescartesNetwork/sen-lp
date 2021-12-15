@@ -15,7 +15,6 @@ const MintAvatar = ({
   icon?: ReactNode
 }) => {
   const tokens = useTokenProvider(mintAddress)
-  console.log(tokens)
   return (
     <Avatar.Group style={{ display: 'block' }}>
       {tokens.map((token, i) => (
