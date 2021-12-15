@@ -5,6 +5,44 @@ import { usePool, useWallet } from 'senhub/providers'
 import { explorer } from 'shared/util'
 import IonIcon from 'shared/antd/ionicon'
 
+enum PoolStatus {
+  Frozen = 2,
+  Active = 1,
+}
+const CardDescription = ({
+  poolStatus,
+  description,
+}: {
+  poolStatus: PoolStatus
+  description: string
+}) => {
+  return (
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Space size={0}>
+          <Badge
+            status={poolStatus === PoolStatus.Active ? 'success' : 'error'}
+          />
+          <Typography.Text>
+            Current status:{' '}
+            {poolStatus === PoolStatus.Active ? 'Active' : 'Frozen'}
+          </Typography.Text>
+        </Space>
+      </Col>
+      <Col span={24}>
+        <Card bordered={false} bodyStyle={{ padding: 16 }}>
+          <Space size={4} align="start">
+            <IonIcon name="information-circle-outline" />
+            <Space direction="vertical" size={0}>
+              <Typography.Text>{description}</Typography.Text>
+            </Space>
+          </Space>
+        </Card>
+      </Col>
+    </Row>
+  )
+}
+
 const Freeze = ({ address }: { address: string }) => {
   const { pools } = usePool()
   const {
@@ -47,45 +85,6 @@ const Freeze = ({ address }: { address: string }) => {
       description: 'Thaw the pool successfully. Click to view details',
       onClick: () => window.open(explorer(txId), '_blank'),
     })
-  }
-
-  enum PoolStatus {
-    Frozen = 2,
-    Active = 1,
-  }
-
-  const CardDescription = ({
-    poolStatus,
-    description,
-  }: {
-    poolStatus: PoolStatus
-    description: string
-  }) => {
-    return (
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Space size={0}>
-            <Badge
-              status={poolStatus === PoolStatus.Active ? 'success' : 'error'}
-            />
-            <Typography.Text>
-              Current status:{' '}
-              {poolStatus === PoolStatus.Active ? 'Active' : 'Frozen'}
-            </Typography.Text>
-          </Space>
-        </Col>
-        <Col span={24}>
-          <Card bordered={false} bodyStyle={{ padding: 16 }}>
-            <Space size={4} align="start">
-              <IonIcon name="information-circle-outline" />
-              <Space direction="vertical" size={0}>
-                <Typography.Text>{description}</Typography.Text>
-              </Space>
-            </Space>
-          </Card>
-        </Col>
-      </Row>
-    )
   }
 
   //Check owner in here
