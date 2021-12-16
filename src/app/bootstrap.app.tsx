@@ -19,6 +19,7 @@ const {
 
 export const Page = () => {
   return (
+<<<<<<< HEAD
     <UIProvider appId={appId}>
       <MintProvider>
         <PoolProvider>
@@ -31,6 +32,14 @@ export const Page = () => {
           </AccountProvider>
         </PoolProvider>
       </MintProvider>
+=======
+    <UIProvider appId={appId} antd>
+      <WalletProvider>
+        <Provider store={model}>
+          <PageView />
+        </Provider>
+      </WalletProvider>
+>>>>>>> 055ec5df223a67b536b0ccc78520c02af6dc1f08
     </UIProvider>
   )
 }
@@ -42,6 +51,7 @@ export const widgetConfig: WidgetConfig = {
 
 export const Widget = () => {
   return (
+<<<<<<< HEAD
     <MintProvider>
       <UIProvider appId={appId}>
         <PoolProvider>
@@ -55,5 +65,12 @@ export const Widget = () => {
         </PoolProvider>
       </UIProvider>
     </MintProvider>
+=======
+    <UIProvider appId={appId} antd>
+      <Provider store={model}>
+        <WidgetView />
+      </Provider>
+    </UIProvider>
+>>>>>>> 055ec5df223a67b536b0ccc78520c02af6dc1f08
   )
 }
