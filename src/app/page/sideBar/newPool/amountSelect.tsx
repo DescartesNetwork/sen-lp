@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useMint, useWallet } from 'senhub/providers'
-import { TokenInfo } from '@solana/spl-token-registry'
-import { account, AccountData, MintData, utils } from '@senswap/sen-js'
+import { useAccount, useWallet } from 'senhub/providers'
+import { account, AccountData, utils } from '@senswap/sen-js'
 
-import { Row, Col, Select, Button, Typography, Divider, Space } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import { Row, Col, Button, Typography, Space } from 'antd'
 
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import NumericInput from 'shared/antd/numericInput'
 import { numeric } from 'shared/util'
+import useTokenProvider from 'app/shared/hooks/useTokenProvider'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import SelectPools from './selectPools'
 
 interface SuggestMintAmount {
   symbol?: string
@@ -34,15 +34,14 @@ const AmountSelect = ({
   const [amount, setAmount] = useState('')
   const [activeMintAddress, setActiveMintAddress] = useState<string>('Select')
   const [accountData, setAccountData] = useState<AccountData>()
-  const [mintData, setMintData] = useState<MintData>()
-  const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
+  const { accounts } = useAccount()
+  const tokenInfo = useTokenProvider(activeMintAddress)
+  const decimals = useMintDecimals(activeMintAddress)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { tokenProvider } = useMint()
 
-  const { symbol } = tokenInfo || {}
-  const { decimals } = mintData || {}
+  const { symbol } = tokenInfo[0] || {}
 
   const balance = useMemo(() => {
     const { amount } = accountData || {}
@@ -80,63 +79,18 @@ const AmountSelect = ({
 
   const fetchData = useCallback(async () => {
     const { splt } = window.sentre
-    if (!account.isAddress(activeMintAddress)) {
-      setAccountData(undefined)
-      setMintData(undefined)
-      setTokenInfo(undefined)
-    } else {
-      try {
-        const associatedAddress = await account.deriveAssociatedAddress(
-          walletAddress,
-          activeMintAddress,
-          splt.spltProgramId.toBase58(),
-          splt.splataProgramId.toBase58(),
-        )
-        const accountData = await splt.getAccountData(associatedAddress)
-        setAccountData(accountData)
-      } catch (er) {}
-      try {
-        const mintData = await splt.getMintData(activeMintAddress)
-        setMintData(mintData)
-      } catch (er) {}
-      try {
-        const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
-        setTokenInfo(tokenInfo)
-      } catch (er) {}
-    }
-  }, [activeMintAddress, tokenProvider, walletAddress])
-
-  const SelectPools = () => {
-    return (
-      <Select
-        onChange={onSelect}
-        value={activeMintAddress || ''}
-        bordered={false}
-        suffixIcon={<Divider type="vertical" style={{ margin: 0 }} />}
-        style={{ marginLeft: -4, marginRight: -12 }}
-      >
-        <Select.Option value="Select">
-          <Space size={4}>
-            <MintAvatar
-              mintAddress={'Select'}
-              icon={<IonIcon name="help-outline" />}
-            />
-            <Typography.Text>Select</Typography.Text>
-          </Space>
-        </Select.Option>
-        {mintAddresses.map((mintAddress, i) => {
-          return (
-            <Select.Option key={mintAddress + i} value={mintAddress}>
-              <Space size={4}>
-                <MintAvatar mintAddress={mintAddress} />
-                <MintSymbol mintAddress={mintAddress} />
-              </Space>
-            </Select.Option>
-          )
-        })}
-      </Select>
-    )
-  }
+    let associatedAddress = ''
+    try {
+      associatedAddress = await account?.deriveAssociatedAddress(
+        walletAddress,
+        activeMintAddress,
+        splt.spltProgramId.toBase58(),
+        splt.splataProgramId.toBase58(),
+      )
+    } catch (er) {}
+    const accountData = accounts[associatedAddress]
+    setAccountData(accountData)
+  }, [activeMintAddress, accounts, walletAddress])
 
   useEffect(() => {
     fetchData()
@@ -154,7 +108,13 @@ const AmountSelect = ({
         placeholder={`Amount of ${symbol || 'TOKEN'}`}
         value={amount}
         onValue={onAmount}
-        prefix={<SelectPools />}
+        prefix={
+          <SelectPools
+            mintAddresses={mintAddresses}
+            activeMintAddress={activeMintAddress}
+            onSelect={onSelect}
+          />
+        }
         size="large"
         suffix={
           <Button

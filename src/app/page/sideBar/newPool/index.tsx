@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect, useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
-import { useAccount, usePool, useWallet } from 'senhub/providers'
+import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Modal, Button, Typography } from 'antd'
@@ -8,10 +8,10 @@ import IonIcon from 'shared/antd/ionicon'
 import AmountSelect from './amountSelect'
 
 import { notifyError, notifySuccess } from 'app/helper'
-import cgk, { MintInfo } from 'app/helper/cgk'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
-import suggestions from 'app/helper/suggestions'
+import suggestions, { MintInfo } from 'app/helper/suggestions'
+import { fetchCGK } from 'shared/helper'
 
 const {
   sol: { taxmanAddress },
@@ -35,6 +35,7 @@ const NewPool = () => {
     wallet: { address: walletAddress },
   } = useWallet()
   const { pools } = usePool()
+  const { tokenProvider } = useMint()
 
   const lptAddresses = useMemo(
     () =>
@@ -45,20 +46,11 @@ const NewPool = () => {
     [pools, lpts],
   )
 
-  const isPoolLpt = (item: string) => {
-    let isExisted = false
-    lptAddresses.map((i) => {
-      if (i === item) isExisted = true
-      return isExisted
-    })
-    return isExisted
-  }
-
-  const filterMint = () => {
+  const filterMintAddress = () => {
     const mintAddress = []
     for (const accountAddress of Object.keys(accounts)) {
-      if (!isPoolLpt(accounts[accountAddress]?.mint))
-        mintAddress.push(accounts[accountAddress]?.mint)
+      const { mint } = accounts[accountAddress]
+      if (!lptAddresses.includes(mint)) mintAddress.push(mint)
     }
     return mintAddress
   }
@@ -70,8 +62,8 @@ const NewPool = () => {
     return mints
   }, [mintAddressA, mintAddressB])
 
-  const mintAddressesForA = filterMint()
-  const mintAddressesForB = filterMint()
+  const mintAddressesForA = filterMintAddress()
+  const mintAddressesForB = filterMintAddress()
 
   const isValid =
     reserveA &&
@@ -111,6 +103,7 @@ const NewPool = () => {
     if (!mintInfos) return
     const mintInfoA = mintInfos.get(mintAddressA)
     const mintInfoB = mintInfos.get(mintAddressB)
+
     if (!mintInfoA || !mintInfoB) return
     const { address: addressA, symbol: symbolA } = mintInfoA
     const { address: addressB, symbol: symbolB } = mintInfoB
@@ -118,13 +111,19 @@ const NewPool = () => {
     let symbol = ''
     let mintAddress = ''
     if (isMintAChanged) {
-      suggestAmount =
-        suggestions.calculateAmount(reserveA, mintInfoA, mintInfoB) || 0
+      suggestAmount = suggestions.calculateAmount(
+        reserveA,
+        mintInfoA,
+        mintInfoB,
+      )
       symbol = symbolB
       mintAddress = addressB
     } else {
-      suggestAmount =
-        suggestions.calculateAmount(reserveB, mintInfoB, mintInfoA) || 0
+      suggestAmount = suggestions.calculateAmount(
+        reserveB,
+        mintInfoB,
+        mintInfoA,
+      )
       symbol = symbolA
       mintAddress = addressA
     }
@@ -186,13 +185,38 @@ const NewPool = () => {
     setMintAddressB('')
   }
 
+  const getMintInfos = useCallback(
+    async (mintAddress: string[]) => {
+      let promise = mintAddress.map(async (address) => {
+        const data = {} as MintInfo
+        const tokenInfo = await tokenProvider.findByAddress(address)
+        const ticket = tokenInfo?.extensions?.coingeckoId
+        const { price } = (await fetchCGK(ticket)) || 0
+        if (tokenInfo) {
+          data.symbol = tokenInfo.symbol
+          data.decimals = tokenInfo.decimals
+          data.address = tokenInfo.address
+          data.price = price
+        }
+        return data
+      })
+      const mintsDetails = await Promise.all(promise)
+      const mapMintsDetails = new Map<string, MintInfo>()
+      mintsDetails.forEach((mint) => {
+        mapMintsDetails.set(mint.address, mint)
+      })
+      return mapMintsDetails
+    },
+    [tokenProvider],
+  )
+
   useEffect(() => {
     if (!mintsAddress) return
     ;(async () => {
-      const infos = await cgk.getMintInfos(mintsAddress)
+      const infos = await getMintInfos(mintsAddress)
       setMintInfos(infos)
     })()
-  }, [mintsAddress])
+  }, [mintsAddress, getMintInfos])
 
   return (
     <Fragment>
