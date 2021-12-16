@@ -13,13 +13,17 @@ import WidgetView from 'app/widget'
 import model from 'app/model'
 import configs from 'app/configs'
 
+import 'app/static/styles/index.less'
+import 'app/static/styles/light.less'
+import 'app/static/styles/dark.less'
+
 const {
   manifest: { appId },
 } = configs
 
 export const Page = () => {
   return (
-    <UIProvider appId={appId}>
+    <UIProvider appId={appId} antd>
       <MintProvider>
         <PoolProvider>
           <AccountProvider>
@@ -43,7 +47,7 @@ export const widgetConfig: WidgetConfig = {
 export const Widget = () => {
   return (
     <MintProvider>
-      <UIProvider appId={appId}>
+      <UIProvider appId={appId} antd>
         <PoolProvider>
           <AccountProvider>
             <WalletProvider>
