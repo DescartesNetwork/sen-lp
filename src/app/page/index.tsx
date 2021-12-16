@@ -2,8 +2,9 @@ import { Row, Col } from 'antd'
 import SideBar from './sideBar'
 import PoolDetails from './poolDetails'
 
-import 'app/static/styles/index.less'
 import { useUI } from 'senhub/providers'
+
+import 'app/static/styles/index.less'
 
 const Page = () => {
   const {
