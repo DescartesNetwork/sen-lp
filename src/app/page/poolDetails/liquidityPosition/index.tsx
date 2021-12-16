@@ -36,7 +36,7 @@ const Title = ({
 }) => {
   return (
     <Space size={4} align="baseline">
-      <Typography.Title level={3}>{value}</Typography.Title>
+      <Typography.Title level={4}>{value}</Typography.Title>
       {sub && (
         <Typography.Text className="caption" type="secondary">
           {sub}
@@ -46,10 +46,10 @@ const Title = ({
   )
 }
 
-const InservePrice = () => {
+const InservePrice = ({ mintAddress }: { mintAddress: string }) => {
   return (
     <Space>
-      <MintAvatar mintAddress="mint" />
+      <MintAvatar mintAddress={mintAddress} />
       <Typography.Text>0.5 BTC/SEN</Typography.Text>
       <Button type="text" icon={<IonIcon name="swap-horizontal-outline" />} />
     </Space>
@@ -63,15 +63,18 @@ const LiquidityPosition = () => {
         <Col span={24}>
           <Typography.Title level={4}>Liquidity Position</Typography.Title>
         </Col>
-        <Col span={21}>
+        <Col span={24}>
           <Row gutter={[20, 20]}>
-            <Col span={8}>
+            <Col span={24}>
+              <Content label="APY" title={<Title value="15%" />} />
+            </Col>
+            <Col span={12}>
               <Content
                 label="My LPT"
                 title={<Title value={8.192} sub="LPT" />}
               />
             </Col>
-            <Col span={16}>
+            <Col span={12}>
               <Content
                 label="Pool Share Composition"
                 title={
@@ -83,20 +86,24 @@ const LiquidityPosition = () => {
                 }
               />
             </Col>
-            <Col span={8}>
+            <Col span={12}>
               <Content
                 label="My Portion"
                 title={<Title value="0.13%" />}
                 subTitle="Over 6.26k LPT"
               />
             </Col>
-            <Col span={16}>
-              <Content label="In - Pool Price" title={<InservePrice />} />
+            <Col span={12}>
+              <Content
+                label="In - Pool Price"
+                title={
+                  <InservePrice
+                    mintAddress={'h73Yd9mAzNsvfGDSYk1kPVmkKhSWcuscte44Knn4iJQ'}
+                  />
+                }
+              />
             </Col>
           </Row>
-        </Col>
-        <Col span={3}>
-          <Content label="APY" title={<Title value="15%" />} />
         </Col>
         <Col span={24}>
           <LiquidityAction />

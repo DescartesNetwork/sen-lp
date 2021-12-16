@@ -9,6 +9,7 @@ enum PoolStatus {
   Frozen = 2,
   Active = 1,
 }
+
 const CardDescription = ({
   poolStatus,
   description,
@@ -16,16 +17,14 @@ const CardDescription = ({
   poolStatus: PoolStatus
   description: string
 }) => {
+  const status = poolStatus === PoolStatus.Active
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space size={0}>
-          <Badge
-            status={poolStatus === PoolStatus.Active ? 'success' : 'error'}
-          />
+          <Badge status={status ? 'success' : 'error'} />
           <Typography.Text>
-            Current status:{' '}
-            {poolStatus === PoolStatus.Active ? 'Active' : 'Frozen'}
+            Current status: {status ? 'Active' : 'Frozen'}
           </Typography.Text>
         </Space>
       </Col>
