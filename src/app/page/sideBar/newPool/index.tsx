@@ -1,16 +1,17 @@
 import { Fragment, useState, useEffect, useCallback, useMemo } from 'react'
+import { useSelector } from 'react-redux'
+import { useAccount, usePool, useWallet } from 'senhub/providers'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Modal, Button, Typography } from 'antd'
-import AmountSelect from './amountSelect'
-import configs from 'app/configs'
-import { useAccount, usePool, useWallet } from 'senhub/providers'
-import { notifyError, notifySuccess } from 'app/helper'
-import suggestions from 'app/helper/suggestions'
-import cgk, { MintInfo } from 'app/helper/cgk'
 import IonIcon from 'shared/antd/ionicon'
+import AmountSelect from './amountSelect'
+
+import { notifyError, notifySuccess } from 'app/helper'
+import cgk, { MintInfo } from 'app/helper/cgk'
 import { AppState } from 'app/model'
-import { useSelector } from 'react-redux'
+import configs from 'app/configs'
+import suggestions from 'app/helper/suggestions'
 
 const {
   sol: { taxmanAddress },
@@ -204,7 +205,7 @@ const NewPool = () => {
       <Modal
         visible={visible}
         onCancel={onClose}
-        closeIcon={<IonIcon name="close" />}
+        title={<Typography.Title level={4}>New Pool</Typography.Title>}
         footer={
           <Button
             type="primary"
@@ -221,22 +222,19 @@ const NewPool = () => {
       >
         <Row gutter={[16, 12]}>
           <Col span={24}>
-            <Typography.Title level={5}>New Pool</Typography.Title>
-          </Col>
-          <Col span={24}>
-            <Typography.Paragraph type="secondary">
+            <Typography.Text type="secondary">
               This is your first time adding liquidity. It is the rate you add
               that sets the price for that LP token pair. If you feel satisfied
               with the rate please press the Supply button.
-            </Typography.Paragraph>
+            </Typography.Text>
           </Col>
           <Col span={24}>
-            <Typography.Paragraph type="secondary">
-              <span className="content">Liquidity provider incentive.</span>{' '}
+            <Typography.Text type="secondary">
+              <strong className="content">Liquidity provider incentive.</strong>{' '}
               Liquidity providers earn a 0.25% fee on all trades proportional to
               their share of the pool. Fees are accrued into the pool and can be
               claimed by withdrawing your liquidity.
-            </Typography.Paragraph>
+            </Typography.Text>
           </Col>
           <Col span={24}>
             <AmountSelect

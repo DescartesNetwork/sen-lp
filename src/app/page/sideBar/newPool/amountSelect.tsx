@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMint, useWallet } from 'senhub/providers'
 import { TokenInfo } from '@solana/spl-token-registry'
+import { account, AccountData, MintData, utils } from '@senswap/sen-js'
 
 import { Row, Col, Select, Button, Typography, Divider, Space } from 'antd'
+import IonIcon from 'shared/antd/ionicon'
 
-import { account, AccountData, MintData, utils } from '@senswap/sen-js'
-import { useMint, useWallet } from 'senhub/providers'
 import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import NumericInput from 'shared/antd/numericInput'
 import { numeric } from 'shared/util'
-import IonIcon from 'shared/antd/ionicon'
 
 interface SuggestMintAmount {
   symbol?: string
