@@ -187,18 +187,18 @@ const NewPool = () => {
 
   const getMintInfos = useCallback(
     async (mintAddress: string[]) => {
-      let promise = mintAddress.map(async (address) => {
-        const data = {} as MintInfo
-        const tokenInfo = await tokenProvider.findByAddress(address)
+      let promise = mintAddress.map(async (mint) => {
+        const mintInfo = {} as MintInfo
+        const tokenInfo = await tokenProvider.findByAddress(mint)
         const ticket = tokenInfo?.extensions?.coingeckoId
         const { price } = (await fetchCGK(ticket)) || 0
         if (tokenInfo) {
-          data.symbol = tokenInfo.symbol
-          data.decimals = tokenInfo.decimals
-          data.address = tokenInfo.address
-          data.price = price
+          mintInfo.symbol = tokenInfo.symbol
+          mintInfo.decimals = tokenInfo.decimals
+          mintInfo.address = tokenInfo.address
+          mintInfo.price = price
         }
-        return data
+        return mintInfo
       })
       const mintsDetails = await Promise.all(promise)
       const mapMintsDetails = new Map<string, MintInfo>()
