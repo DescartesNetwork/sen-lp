@@ -6,7 +6,6 @@ import SideBar from './sideBar'
 import PoolDetails from './poolDetails'
 import ViewPoolButton from 'app/components/viewPoolButton'
 import LptWatcher from 'app/components/lptWatcher'
-import IonIcon from 'shared/antd/ionicon'
 
 import { useUI } from 'senhub/providers'
 import { AppState } from 'app/model'
