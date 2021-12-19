@@ -62,9 +62,6 @@ const NewPool = () => {
     return mints
   }, [mintAddressA, mintAddressB])
 
-  const mintAddressesForA = filterMintAddress()
-  const mintAddressesForB = filterMintAddress()
-
   const isValid =
     reserveA &&
     reserveB &&
@@ -107,6 +104,7 @@ const NewPool = () => {
     if (!mintInfoA || !mintInfoB) return
     const { address: addressA, symbol: symbolA } = mintInfoA
     const { address: addressB, symbol: symbolB } = mintInfoB
+
     let suggestAmount = 0
     let symbol = ''
     let mintAddress = ''
@@ -191,7 +189,10 @@ const NewPool = () => {
         const mintInfo = {} as MintInfo
         const tokenInfo = await tokenProvider.findByAddress(mint)
         const ticket = tokenInfo?.extensions?.coingeckoId
-        const { price } = (await fetchCGK(ticket)) || 0
+        let price = 0
+        if (ticket) {
+          price = (await fetchCGK(ticket)).price
+        }
         if (tokenInfo) {
           mintInfo.symbol = tokenInfo.symbol
           mintInfo.decimals = tokenInfo.decimals
@@ -262,21 +263,21 @@ const NewPool = () => {
           </Col>
           <Col span={24}>
             <AmountSelect
-              mintAddresses={mintAddressesForA}
+              mintAddresses={filterMintAddress()}
               onChange={onSelectForA}
               suggestInfo={suggestInfo}
             />
           </Col>
           <Col span={24}>
             <AmountSelect
-              mintAddresses={mintAddressesForB}
+              mintAddresses={filterMintAddress()}
               onChange={onSelectForB}
               suggestInfo={suggestInfo}
             />
           </Col>
           {isExist && (
             <Col span={24}>
-              <Typography.Text style={{ fontSize: 12 }} type="danger">
+              <Typography.Text className="caption" type="danger">
                 The pool you want to create with selected mints already exists.
                 We hightly recomment to deposit your liquidity to the pool
                 instead.

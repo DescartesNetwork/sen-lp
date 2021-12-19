@@ -33,13 +33,14 @@ const AmountSelect = ({
 }) => {
   const [amount, setAmount] = useState('')
   const [activeMintAddress, setActiveMintAddress] = useState<string>('Select')
-  const [accountData, setAccountData] = useState<AccountData>()
+  const [associatedAddress, setAssociatedAddress] = useState('')
   const { accounts } = useAccount()
   const tokenInfo = useTokenProvider(activeMintAddress)
   const decimals = useMintDecimals(activeMintAddress)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const accountData: AccountData = accounts?.[associatedAddress]
 
   const { symbol } = tokenInfo[0] || {}
 
@@ -48,6 +49,20 @@ const AmountSelect = ({
     if (!amount || !decimals) return '0'
     return utils.undecimalize(amount, decimals) || '0'
   }, [accountData, decimals])
+
+  const getAssociatedAddress = useCallback(async () => {
+    const { splt } = window.sentre
+    let associatedAdd = ''
+    try {
+      associatedAdd = await account?.deriveAssociatedAddress(
+        walletAddress,
+        activeMintAddress,
+        splt.spltProgramId.toBase58(),
+        splt.splataProgramId.toBase58(),
+      )
+    } catch (er) {}
+    setAssociatedAddress(associatedAdd)
+  }, [activeMintAddress, walletAddress])
 
   const onAmount = useCallback(
     async (val: string) => {
@@ -77,30 +92,16 @@ const AmountSelect = ({
     [onChange, decimals, amount],
   )
 
-  const fetchData = useCallback(async () => {
-    const { splt } = window.sentre
-    let associatedAddress = ''
-    try {
-      associatedAddress = await account?.deriveAssociatedAddress(
-        walletAddress,
-        activeMintAddress,
-        splt.spltProgramId.toBase58(),
-        splt.splataProgramId.toBase58(),
-      )
-    } catch (er) {}
-    const accountData = accounts[associatedAddress]
-    setAccountData(accountData)
-  }, [activeMintAddress, accounts, walletAddress])
-
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    getAssociatedAddress()
+  }, [getAssociatedAddress])
   const {
     symbol: suggestSymbol,
     amount: suggestAmount,
     address: suggestAddr,
   } = suggestInfo || {}
   const isAddr = activeMintAddress === suggestAddr
+  console.log(suggestInfo)
 
   return (
     <Row gutter={[4, 4]}>
@@ -132,7 +133,7 @@ const AmountSelect = ({
           <Col span={24} flex="auto">
             {isAddr && suggestAmount ? (
               <Space size={4}>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                <Typography.Text type="secondary" className="caption">
                   Recommend:
                 </Typography.Text>
                 <Typography.Text
@@ -142,14 +143,14 @@ const AmountSelect = ({
                 >
                   {numeric(suggestAmount).format('0,0.[00000]a')}
                 </Typography.Text>
-                <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                <Typography.Text type="secondary" className="caption">
                   {suggestSymbol || 'TOKEN'}
                 </Typography.Text>
               </Space>
             ) : null}
           </Col>
           <Col>
-            <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+            <Typography.Text type="secondary" className="caption">
               Available: {numeric(balance).format('0,0.[0000]')}{' '}
               {symbol || 'TOKEN'}
             </Typography.Text>
