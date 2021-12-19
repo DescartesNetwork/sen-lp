@@ -107,7 +107,7 @@ const SenChart = ({
   const getBackground = useCallback(() => {
     if (!chartRef || !backgroundColor) return DEFAULT_BACKGROUND_COLOR
     const ctx = chartRef?.current?.canvas?.getContext('2d')
-    const gradient = ctx?.createLinearGradient(0, 0, 0, 180)
+    const gradient = ctx?.createLinearGradient(0, 0, 0, 270)
     gradient?.addColorStop(0, backgroundColor)
     gradient?.addColorStop(1, `${backgroundColor}00`)
     const background = type === 'line' ? gradient : backgroundColor
@@ -124,7 +124,7 @@ const SenChart = ({
     }
   }, [chartData, formatData, getBackground, labels])
 
-  return <canvas id={chartId} height="180px" ref={canvasCallback}></canvas>
+  return <canvas id={chartId} height="270" ref={canvasCallback}></canvas>
 }
 
 export default SenChart

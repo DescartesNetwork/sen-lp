@@ -1,19 +1,53 @@
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Modal, Row } from 'antd'
+import Deposit from 'app/components/deposit'
+import Withdraw from 'app/components/withdraw'
+import { useState } from 'react'
 import IonIcon from 'shared/antd/ionicon'
 
 const LiquidityAction = () => {
+  const [depositVisible, setDepositVisible] = useState(false)
+  const [withdrawVisible, setWithdrawVisible] = useState(false)
   return (
     <Row gutter={[12, 12]}>
       <Col span={12}>
-        <Button icon={<IonIcon name="log-out-outline" />} block>
+        <Button
+          onClick={() => setWithdrawVisible(true)}
+          icon={<IonIcon name="log-out-outline" />}
+          block
+        >
           Withdraw
         </Button>
       </Col>
       <Col span={12}>
-        <Button type="primary" icon={<IonIcon name="log-in-outline" />} block>
+        <Button
+          onClick={() => setDepositVisible(true)}
+          type="primary"
+          icon={<IonIcon name="log-in-outline" />}
+          block
+        >
           Deposit
         </Button>
       </Col>
+      <Modal
+        visible={depositVisible}
+        onCancel={() => setDepositVisible(false)}
+        closeIcon={<IonIcon name="close" />}
+        footer={null}
+        destroyOnClose={true}
+        centered={true}
+      >
+        <Deposit poolAddress={''} onClose={() => setDepositVisible(false)} />
+      </Modal>
+      <Modal
+        visible={withdrawVisible}
+        onCancel={() => setWithdrawVisible(false)}
+        closeIcon={<IonIcon name="close" />}
+        footer={null}
+        destroyOnClose={true}
+        centered={true}
+      >
+        <Withdraw lptAddress={''} onClose={() => setWithdrawVisible(false)} />
+      </Modal>
     </Row>
   )
 }
