@@ -1,0 +1,29 @@
+.chart-tooltip {
+  min-width: 80px;
+  min-height: 50px;
+  background-color: #222342;
+  border: none !important;
+  padding: 12px;
+}
+.apexcharts-xaxistooltip {
+  width: 150px;
+  height: 40px;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: 0 0 10px #0a0a14;
+  .chart-tooltip-x {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #222342;
+    border: none !important;
+    color: #fff;
+    padding: 12px;
+  }
+  &::before,
+  &::after {
+    border-bottom-color: #222342 !important;
+  }
+}

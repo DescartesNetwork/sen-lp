@@ -1,4 +1,5 @@
 import { Card, Col, Row, Typography } from 'antd'
+import ApexChart from 'app/components/apexChart'
 import SenChart from 'app/components/chart'
 
 const CHART_CONFIGS = {
@@ -21,7 +22,7 @@ const TotalValueLocked = () => {
   }
 
   return (
-    <Card bordered={false} style={{ height: 384 }}>
+    <Card bordered={false} style={{ height: 'auto' }}>
       <Row gutter={[24, 24]}>
         <Col flex="auto">
           <Typography.Title level={4}>Total Value Locked</Typography.Title>
@@ -35,6 +36,9 @@ const TotalValueLocked = () => {
             labels={['20/10', '21/10', '22/10', '23/10', '24/10', '25/10']}
             configs={tvlChartConfigs}
           />
+        </Col>
+        <Col span={24}>
+          <ApexChart />
         </Col>
       </Row>
     </Card>
