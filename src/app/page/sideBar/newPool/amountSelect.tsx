@@ -101,7 +101,6 @@ const AmountSelect = ({
     address: suggestAddr,
   } = suggestInfo || {}
   const isAddr = activeMintAddress === suggestAddr
-  console.log(suggestInfo)
 
   return (
     <Row gutter={[4, 4]}>
