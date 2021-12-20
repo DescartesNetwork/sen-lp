@@ -37,9 +37,6 @@ const TotalValueLocked = () => {
             configs={tvlChartConfigs}
           />
         </Col>
-        <Col span={24}>
-          <ApexChart />
-        </Col>
       </Row>
     </Card>
   )
