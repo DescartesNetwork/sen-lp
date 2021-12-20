@@ -1,7 +1,17 @@
-import { Fragment, ReactElement } from 'react'
+import { Fragment, ReactElement, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 
-import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
+import {
+  Row,
+  Col,
+  Card,
+  Space,
+  Typography,
+  Divider,
+  Tooltip,
+  Collapse,
+  Button,
+} from 'antd'
 import PoolTVL from '../../../components/poolTVL'
 
 import { LPTData } from 'app/model/lpts.controller'
@@ -9,40 +19,40 @@ import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
 import { MintAvatar, MintName } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
+import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
 
 const DECIMAL = 9
 
-const LPTCard = ({
+const ItemLPT = ({
   data,
   onClick = () => {},
   action = <Fragment />,
-  selected = false,
+  keyExpand,
 }: {
   data: LPTData
   onClick?: () => void
   action: ReactElement
-  selected?: boolean
+  keyExpand: number
 }) => {
   const { pool: poolAddress, amount } = data
+  const [isActive, setIsActive] = useState(false)
   const lp = utils.undecimalize(amount, DECIMAL)
-  const cardStyle = selected ? 'card-active' : ''
-  const isFrozen = data.state === PoolStatus.Frozen
   const { pools } = usePool()
 
+  const isFrozen = data.state === PoolStatus.Frozen
   const mintLptAddress = pools?.[poolAddress]?.mint_lpt || ''
-
+  const expandClass = isActive ? '' : 'expandHidden'
+  const defaultKey = keyExpand.toString()
   return (
     <Card
-      className={cardStyle}
-      bodyStyle={{ padding: 12, height: 78 }}
+      bodyStyle={{ padding: 12, minHeight: 78 }}
       onClick={onClick}
-      bordered={selected}
       hoverable
     >
-      <Row gutter={[12, 12]} align="middle" wrap={false}>
+      <Row gutter={[12, 12]} align="top">
         <Col flex="auto">
-          <Space direction="vertical" size={4}>
+          <Space direction="vertical">
             <Space size="middle">
               <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
@@ -70,12 +80,47 @@ const LPTCard = ({
         </Col>
         <Col>
           <Space size={2}>
-            <PoolCardStatus poolAddress={poolAddress} /> {action}
+            <PoolCardStatus poolAddress={poolAddress} />
+            {action}
+            <Button
+              size="small"
+              type="text"
+              icon={
+                <IonIcon
+                  name={
+                    isActive
+                      ? 'chevron-down-outline'
+                      : 'chevron-forward-outline'
+                  }
+                />
+              }
+              onClick={() => setIsActive(!isActive)}
+            />
           </Space>
         </Col>
       </Row>
+      <Collapse
+        className={expandClass}
+        style={{ marginTop: 16 }}
+        ghost={true}
+        activeKey={defaultKey}
+        bordered={false}
+      >
+        <Collapse.Panel header="" key={defaultKey}>
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
+              <Button block>Swap</Button>
+            </Col>
+            <Col span={12}>
+              <Button block type="primary">
+                Detail
+              </Button>
+            </Col>
+          </Row>
+        </Collapse.Panel>
+      </Collapse>
     </Card>
   )
 }
 
-export default LPTCard
+export default ItemLPT
