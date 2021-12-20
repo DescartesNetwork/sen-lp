@@ -1,5 +1,4 @@
 import { utils } from '@senswap/sen-js'
-//import { MintInfo } from './cgk'
 
 export interface MintPrice {
   price: number
