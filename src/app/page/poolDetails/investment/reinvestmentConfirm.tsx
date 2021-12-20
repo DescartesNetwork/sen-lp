@@ -1,6 +1,7 @@
+import { ReactNode } from 'react'
+
 import { Button, Col, Divider, Modal, Row, Space, Typography } from 'antd'
 import { MintAvatar } from 'app/shared/components/mint'
-import { ReactNode } from 'react'
 import IonIcon from 'shared/antd/ionicon'
 
 const Content = ({
