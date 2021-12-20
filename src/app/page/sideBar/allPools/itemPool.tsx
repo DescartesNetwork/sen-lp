@@ -58,7 +58,7 @@ const ItemPool = ({
     >
       <Row gutter={[12, 12]} wrap={false} align="middle">
         <Col span={24} flex="auto">
-          <Space direction="vertical" size={4}>
+          <Space direction="vertical">
             <Space>
               <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
