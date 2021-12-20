@@ -1,7 +1,8 @@
+import { useState } from 'react'
+
 import { Button, Col, Modal, Row } from 'antd'
 import Deposit from 'app/components/deposit'
 import Withdraw from 'app/components/withdraw'
-import { useState } from 'react'
 import IonIcon from 'shared/antd/ionicon'
 
 const LiquidityAction = () => {

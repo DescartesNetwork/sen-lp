@@ -21,7 +21,7 @@ const TotalValueLocked = () => {
   }
 
   return (
-    <Card bordered={false} style={{ height: 384 }}>
+    <Card bordered={false} style={{ height: 'auto' }}>
       <Row gutter={[24, 24]}>
         <Col flex="auto">
           <Typography.Title level={4}>Total Value Locked</Typography.Title>

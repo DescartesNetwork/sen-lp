@@ -1,5 +1,6 @@
 import { Row, Col, Button, Checkbox } from 'antd'
 import { useState } from 'react'
+import Amount from '../amount'
 import LPT from './lpt'
 /**
  * Main
@@ -12,8 +13,30 @@ const FullSide = ({
   onClose?: () => void
 }) => {
   const [acceptable, setAcceptable] = useState(false)
+  const [amounts, setAmounts] = useState<bigint[]>([BigInt(0), BigInt(0)])
+
+  const onAmounts = (i: number, amount: bigint) => {
+    let newAmounts = [...amounts]
+    newAmounts[i] = amount
+    setAmounts(newAmounts)
+  }
+
   return (
     <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Amount
+          mintAddress={''}
+          value={amounts[0]}
+          onChange={(amount) => onAmounts(0, amount)}
+        />
+      </Col>
+      <Col span={24}>
+        <Amount
+          mintAddress={''}
+          value={amounts[0]}
+          onChange={(amount) => onAmounts(0, amount)}
+        />
+      </Col>
       <Col span={24}>
         <LPT value={''} poolAddress={''} />
       </Col>

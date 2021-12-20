@@ -1,5 +1,6 @@
-import { Card, Col, Popover, Row, Space, Typography } from 'antd'
 import { ReactNode, useState } from 'react'
+
+import { Card, Col, Popover, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ReinvestmentConfirm from './reinvestmentConfirm'
 import ReinvestmentFrom from './reinvestmentForm'
