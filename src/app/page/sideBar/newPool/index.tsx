@@ -72,7 +72,7 @@ const NewPool = () => {
   const mint_b_a = `${mintAddressB}${mintAddressA}`
   const isExist = mapMints.has(mint_a_b) || mapMints.has(mint_b_a)
 
-  const onSelectForA = ({
+  const onSelectMintA = ({
     amount,
     mintAddress,
   }: {
@@ -84,7 +84,7 @@ const NewPool = () => {
     setIsMintAChanged(true)
   }
 
-  const onSelectForB = async ({
+  const onSelectMintB = async ({
     amount,
     mintAddress,
   }: {
@@ -264,14 +264,14 @@ const NewPool = () => {
           <Col span={24}>
             <AmountSelect
               mintAddresses={filterMintAddress()}
-              onChange={onSelectForA}
+              onChange={onSelectMintA}
               suggestInfo={suggestInfo}
             />
           </Col>
           <Col span={24}>
             <AmountSelect
               mintAddresses={filterMintAddress()}
-              onChange={onSelectForB}
+              onChange={onSelectMintB}
               suggestInfo={suggestInfo}
             />
           </Col>
