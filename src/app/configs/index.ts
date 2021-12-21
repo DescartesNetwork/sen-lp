@@ -1,12 +1,14 @@
-import { env, net } from 'shared/runtime'
+import { env } from 'shared/runtime'
 import manifest from './manifest.config'
 import sol from './sol.config'
 import stat from './stat.config'
+import fee from './fee'
 
 const configs = {
   manifest: manifest[env],
-  sol: sol[net],
+  sol: sol[env],
   stat: stat[env],
+  fee: fee[env],
 }
 
 /**

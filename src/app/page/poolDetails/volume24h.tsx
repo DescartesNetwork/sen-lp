@@ -20,7 +20,7 @@ const Volume24h = () => {
     backgroundColor: CHART_CONFIGS.color,
   }
   return (
-    <Card bordered={false} style={{ height: 318 }}>
+    <Card bordered={false} style={{ height: 384 }}>
       <Row gutter={[24, 24]}>
         <Col flex="auto">
           <Typography.Title level={4}>24h Volume</Typography.Title>

@@ -42,7 +42,7 @@ const LPTCard = ({
     >
       <Row gutter={[12, 12]} align="middle" wrap={false}>
         <Col flex="auto">
-          <Space direction="vertical" size={4}>
+          <Space direction="vertical">
             <Space size="middle">
               <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
