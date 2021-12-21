@@ -7,16 +7,13 @@ import { handleOpenDrawer } from 'app/model/main.controller'
 
 const ViewPoolButton = ({ width }: { width: number }) => {
   const dispatch = useDispatch()
-  const onOpen = () => {
-    dispatch(handleOpenDrawer(true))
-  }
 
   if (width > 1200) return null
   return (
     <Affix style={{ position: 'fixed', bottom: 80, right: 0 }}>
       <Button
         type="primary"
-        onClick={() => onOpen()}
+        onClick={() => dispatch(handleOpenDrawer(true))}
         icon={<IonIcon name="list-outline" />}
       >
         Pools

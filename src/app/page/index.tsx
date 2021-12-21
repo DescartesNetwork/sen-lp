@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Modal, Typography } from 'antd'
@@ -22,10 +21,6 @@ const Page = () => {
   const dispatch = useDispatch()
   const visible = useSelector((state: AppState) => state.main?.visible)
 
-  const onClose = useCallback(() => {
-    dispatch(handleOpenDrawer(false))
-  }, [dispatch])
-
   return (
     <Row gutter={[24, 24]}>
       {!hideSidebar ? (
@@ -35,7 +30,7 @@ const Page = () => {
       ) : (
         <Modal
           visible={visible}
-          onCancel={onClose}
+          onCancel={() => dispatch(handleOpenDrawer(false))}
           footer={null}
           centered={true}
           forceRender={true}
