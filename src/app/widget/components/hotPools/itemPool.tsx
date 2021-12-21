@@ -12,6 +12,7 @@ import {
   Tooltip,
   Collapse,
   Button,
+  Popover,
 } from 'antd'
 
 import { numeric } from 'shared/util'
@@ -23,6 +24,7 @@ import { usePool } from 'senhub/providers'
 import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
+import SwapAction from 'app/page/sideBar/swapAction'
 
 const ItemPool = ({
   data,
@@ -126,7 +128,18 @@ const ItemPool = ({
         <Collapse.Panel header="" key={defaultKey}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <Button block>Swap</Button>
+              <Popover
+                trigger="click"
+                placement="bottomLeft"
+                content={
+                  <SwapAction
+                    mintAddress={mintLptAddress}
+                    poolAddress={poolAddress}
+                  />
+                }
+              >
+                <Button block>Swap</Button>
+              </Popover>
             </Col>
             <Col span={12}>
               <Button block type="primary">
