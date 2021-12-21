@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { Row, Col, Tooltip, Switch, Divider, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -9,14 +10,23 @@ import Keystore from './keystore'
 import SecretKey from './secretKey'
 import Slope from './slope'
 
-const WalletConnection = () => {
-  const [advance, setAdvance] = useState(false)
+import { RootState } from 'os/store'
 
+const WalletConnection = ({ textAlert = '' }: { textAlert?: string }) => {
+  const [advance, setAdvance] = useState(false)
+  const { width } = useSelector((state: RootState) => state.ui)
+
+  const spacing = width <= 992 ? 16 : 24
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[spacing, spacing]}>
       <Col span={24}>
         <Typography.Title level={5}>Wallet Connection</Typography.Title>
       </Col>
+      {textAlert && (
+        <Col span={24}>
+          <Typography.Text type="danger">{textAlert}</Typography.Text>
+        </Col>
+      )}
       <Col xs={{ span: 12 }} sm={{ span: 8 }}>
         <Coin98 />
       </Col>

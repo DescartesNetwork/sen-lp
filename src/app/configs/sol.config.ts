@@ -1,44 +1,80 @@
-import { Net } from 'shared/runtime'
+import { Env } from 'shared/runtime'
+
+const SOLVARS = {
+  spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+}
 
 /**
  * Contructor
  */
-type Conf = {
+type Config = {
   node: string
-  spltAddress: string
-  splataAddress: string
-}
+  cluster: 'devnet' | 'testnet' | 'mainnet'
+  chainId: 101 | 102 | 103
+  senAddress: string
+  swapAddress: string
+  taxmanAddress: string
+  blackPoolAddresses: string[]
+  senPoolAddress: string
+} & typeof SOLVARS
 
-const conf: Record<Net, Conf> = {
+const configs: Record<Env, Config> = {
   /**
    * Development configurations
    */
-  devnet: {
+  development: {
     node: 'https://api.devnet.solana.com',
-    spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-    splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    chainId: 103,
+    cluster: 'devnet',
+    senAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
+    ...SOLVARS,
+    swapAddress: '4erFSLP7oBFSVC1t35jdxmbfxEhYCKfoM6XdG2BLR3UF',
+    taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
+    blackPoolAddresses: [
+      'FaHQpdp87S7d7PBJZjaty514rrEtmStaf1FcDst9GPY4',
+      '5V7sDTzYmjkyg7zXLTTcY8Ls6AAusLRX27CpWEJiqriE',
+      'G8BEKsiKPiazG623piXynTSr89TXLTgWycByvDR9bPii',
+    ],
+    senPoolAddress: '3EUPL7YQLbU6DNU5LZeQeHPXTf1MigJ2yASXA9rH5Ku4',
   },
 
   /**
    * Staging configurations
    */
-  testnet: {
-    node: 'https://api.testnet.solana.com',
-    spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-    splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+  staging: {
+    node: 'https://api.devnet.solana.com',
+    cluster: 'devnet',
+    chainId: 103,
+    senAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
+    ...SOLVARS,
+    swapAddress: '4erFSLP7oBFSVC1t35jdxmbfxEhYCKfoM6XdG2BLR3UF',
+    taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
+    blackPoolAddresses: [
+      'FaHQpdp87S7d7PBJZjaty514rrEtmStaf1FcDst9GPY4',
+      '5V7sDTzYmjkyg7zXLTTcY8Ls6AAusLRX27CpWEJiqriE',
+      'G8BEKsiKPiazG623piXynTSr89TXLTgWycByvDR9bPii',
+    ],
+    senPoolAddress: '3EUPL7YQLbU6DNU5LZeQeHPXTf1MigJ2yASXA9rH5Ku4',
   },
 
   /**
    * Production configurations
    */
-  mainnet: {
+  production: {
     node: 'https://api.mainnet-beta.solana.com',
-    spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-    splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+    cluster: 'mainnet',
+    chainId: 101,
+    senAddress: 'SENBBKVCM7homnf5RX9zqpf1GFe935hnbU4uVzY1Y6M',
+    ...SOLVARS,
+    swapAddress: 'SSW7ooZ1EbEognq5GosbygA3uWW1Hq1NsFq6TsftCFV',
+    taxmanAddress: '9doo2HZQEmh2NgfT3Yx12M89aoBheycYqH1eaR5gKb3e',
+    blackPoolAddresses: [],
+    senPoolAddress: '',
   },
 }
 
 /**
  * Module exports
  */
-export default conf
+export default configs

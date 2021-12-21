@@ -3,27 +3,27 @@ import Chart from 'chart.js'
 import isEqual from 'react-fast-compare'
 
 import { numeric } from 'shared/util'
-
 interface Props {
   labels?: (number | string)[]
   chartData?: (number | string)[]
-  configs?: object
+  configs?: { backgroundColor?: string } & object
   type?: string
-  backgroundColor?: string
   disableAxe?: boolean
   chartHeight?: string
   chartId?: string
 }
+
+const DEFAULT_BACKGROUND_COLOR = '#dadada'
 
 const SenChart = ({
   chartData = [],
   labels = [],
   type = 'line',
   configs,
-  backgroundColor = '#dadada',
   disableAxe = false,
   chartId = 'sen_chart',
 }: Props) => {
+  const { backgroundColor } = configs || {}
   const [isRebuildChart, setRebuildChart] = useState<boolean>(false)
 
   const formatData = useCallback(
@@ -33,7 +33,7 @@ const SenChart = ({
       background?: string | CanvasGradient | undefined,
     ): Chart.ChartData => ({
       labels: label,
-      datasets: [{ data, backgroundColor: background, ...configs }],
+      datasets: [{ ...configs, data, backgroundColor: background }],
     }),
     [configs],
   )
@@ -79,7 +79,7 @@ const SenChart = ({
                 },
                 ticks: {
                   display: !disableAxe,
-                  beginAtZero: true,
+                  beginAtZero: false,
                   maxTicksLimit: 8,
                   callback: function (value, index, values) {
                     return numeric(value).format('0,0.[0]a')
@@ -105,9 +105,9 @@ const SenChart = ({
   }
 
   const getBackground = useCallback(() => {
-    if (!chartRef) return
+    if (!chartRef || !backgroundColor) return DEFAULT_BACKGROUND_COLOR
     const ctx = chartRef?.current?.canvas?.getContext('2d')
-    const gradient = ctx?.createLinearGradient(0, 0, 0, 150)
+    const gradient = ctx?.createLinearGradient(0, 0, 0, 270)
     gradient?.addColorStop(0, backgroundColor)
     gradient?.addColorStop(1, `${backgroundColor}00`)
     const background = type === 'line' ? gradient : backgroundColor
@@ -124,7 +124,7 @@ const SenChart = ({
     }
   }, [chartData, formatData, getBackground, labels])
 
-  return <canvas id={chartId} height="170px" ref={canvasCallback}></canvas>
+  return <canvas id={chartId} height="270" ref={canvasCallback}></canvas>
 }
 
 export default SenChart

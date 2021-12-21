@@ -1,0 +1,33 @@
+.side-bar {
+  max-height: calc(100vh - 185px);
+  overflow: auto !important;
+}
+
+.card-active {
+  border-color: rgba(249, 87, 94, 0.5) !important;
+  cursor: pointer;
+}
+
+.caption {
+  font-size: 12px;
+}
+
+.deposit-tag {
+  position: relative;
+  background: #f9575e1a !important;
+  color: #f9575e !important;
+  border-radius: 4px !important;
+  border: none !important;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -4px;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-right: 4px solid #f9575e1a;
+  }
+}
