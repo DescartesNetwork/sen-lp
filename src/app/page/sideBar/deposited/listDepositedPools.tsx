@@ -29,8 +29,8 @@ const ListMyPools = ({
     () =>
       Object.keys(lpts).filter((lptAddress) => {
         const { pool: poolAddress } = lpts[lptAddress]
-        if (pools[poolAddress].owner !== walletAddress)
-          return pools[poolAddress]
+        if (pools?.[poolAddress]?.owner !== walletAddress)
+          return pools?.[poolAddress]
         return ''
       }),
     [pools, lpts, walletAddress],

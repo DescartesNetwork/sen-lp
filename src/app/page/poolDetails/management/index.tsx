@@ -6,9 +6,9 @@ import Freeze from './freeze'
 import TransferOwner from './transferOwner'
 
 export default function PoolManagement({
-  address: poolAddress,
+  poolAddress,
 }: {
-  address: string
+  poolAddress: string
 }) {
   const {
     wallet: { address: walletAddress },
