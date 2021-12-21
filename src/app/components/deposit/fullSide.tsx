@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
 
-import { Row, Col, Button, Radio, Tooltip, Space, Tag } from 'antd'
-import { useMint, usePool, useWallet } from 'senhub/providers'
+import { Row, Col, Button, Radio, Space, Tag } from 'antd'
+import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
 import Amount from '../amount'
 import LPT from './lpt'
 import { explorer } from 'shared/util'
 import { MintSymbol } from 'app/shared/components/mint'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
 /**
  * Main
  */
@@ -19,13 +20,15 @@ const FullSide = ({
 }) => {
   const [loading, setLoading] = useState(false)
   const [lpt, setLPT] = useState('')
-  const [selectMint, setSelectMint] = useState('all')
   const [amounts, setAmounts] = useState<bigint[]>([BigInt(0), BigInt(0)])
+  const [selectMint, setSelectMint] = useState<string>('all')
+  const [disabled, setDisabled] = useState(true)
   const { pools } = usePool()
   const {
     wallet: { address: walletAddress },
   } = useWallet()
   const { getMint } = useMint()
+  const { accounts } = useAccount()
 
   const {
     mint_a,
@@ -37,12 +40,42 @@ const FullSide = ({
     tax_ratio,
   } = pools[poolAddress]
   const mintAddresses = [mint_a, mint_b]
+  const decimalA = useMintDecimals(mint_a)
+  const decimalB = useMintDecimals(mint_b)
+  const decimals = useMemo(() => {
+    return [decimalA, decimalB]
+  }, [decimalA, decimalB])
+  const ratio = useMemo(() => {
+    return (
+      Number(utils.undecimalize(reserve_a, decimalA)) /
+      Number(utils.undecimalize(reserve_b, decimalB))
+    )
+  }, [decimalA, decimalB, reserve_a, reserve_b])
 
-  const onAmounts = (i: number, amount: bigint) => {
+  const getSuggestMintAmount = useCallback(
+    (amount: bigint, index: number) => {
+      if (!decimals) return BigInt(0)
+      const suggestDecimal = index === 0 ? decimals[1] : decimals[0]
+      const parseAmount = Number(utils.undecimalize(amount, decimals[index]))
+      let suggestAmount = parseAmount * ratio
+      if (index === 0) suggestAmount = parseAmount / ratio
+      return utils.decimalize(suggestAmount, suggestDecimal)
+    },
+    [decimals, ratio],
+  )
+
+  const onAmounts = (mintAddress: string, amount: bigint) => {
+    if (!account.isAddress(mintAddress) || !amount)
+      return setAmounts([BigInt(0), BigInt(0)])
+    const index = mintAddresses.findIndex((mint) => mint === mintAddress)
+    if (index === -1) return
     let newAmounts = [...amounts]
-    newAmounts[i] = amount
+    if (selectMint === 'all')
+      newAmounts[0] = newAmounts[1] = getSuggestMintAmount(amount, index)
+    newAmounts[index] = amount
     setAmounts(newAmounts)
   }
+
   const estimateLPT = useCallback(async () => {
     if (!account.isAddress(walletAddress)) return setLPT('')
     try {
@@ -108,6 +141,33 @@ const FullSide = ({
     estimateLPT()
   }, [estimateLPT])
 
+  useEffect(() => {
+    setAmounts([BigInt(0), BigInt(0)])
+  }, [selectMint])
+
+  const validateInput = useCallback(async () => {
+    const { splt } = window.sentre
+    // get wallet account mint A
+    const accAddrMintA = await splt.deriveAssociatedAddress(
+      walletAddress,
+      mint_a,
+    )
+    const accMintA = accounts[accAddrMintA]
+    // get wallet account mint B
+    const accAddrMintB = await splt.deriveAssociatedAddress(
+      walletAddress,
+      mint_b,
+    )
+    const accMintB = accounts[accAddrMintB]
+    if (!accMintA || !accMintB) return setDisabled(true)
+    const disabled =
+      amounts[0] > accMintA.amount || amounts[1] > accMintB.amount
+    setDisabled(disabled)
+  }, [accounts, amounts, mint_a, mint_b, walletAddress])
+
+  useEffect(() => {
+    validateInput()
+  }, [validateInput])
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -117,14 +177,14 @@ const FullSide = ({
         >
           <Radio value={'all'}>
             <Space size={4}>
-              Add <MintSymbol mintAddress={mint_lpt} separator="+" />
+              <MintSymbol mintAddress={mint_lpt} separator="+" />
               <Tag className="deposit-tag">0 Fee</Tag>
             </Space>
           </Radio>
 
           {mintAddresses.map((mintAddress, idx) => (
             <Radio value={mintAddress} key={mintAddress + idx}>
-              Add <MintSymbol mintAddress={mintAddress} />
+              <MintSymbol mintAddress={mintAddress} />
             </Radio>
           ))}
         </Radio.Group>
@@ -136,7 +196,7 @@ const FullSide = ({
               <Amount
                 mintAddress={mintAddress}
                 value={amounts[i]}
-                onChange={(amount) => onAmounts(i, amount)}
+                onChange={(amount) => onAmounts(mintAddress, amount)}
               />
             </Col>
           ),
@@ -148,7 +208,7 @@ const FullSide = ({
         <Button
           type="primary"
           onClick={onDeposit}
-          disabled={!Number(lpt)}
+          disabled={!Number(lpt) || disabled}
           block
           loading={loading}
         >

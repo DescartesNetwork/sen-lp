@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Typography, Space, Button, Divider } from 'antd'
-import { useAccount, useMint, useWallet } from 'senhub/providers'
+import { useAccount, useWallet } from 'senhub/providers'
 import NumericInput from 'shared/antd/numericInput'
 import { MintAvatar } from 'app/shared/components/mint'
 import { numeric } from 'shared/util'
@@ -77,8 +77,10 @@ const Amount = ({
     setAmountFromProps()
   }, [setAmountFromProps])
 
+  const notEnoughBalance = Number(amount) > Number(balance)
+
   return (
-    <Row gutter={[4, 4]} justify="end">
+    <Row gutter={[4, 4]}>
       <Col span={24}>
         <Card
           style={{ borderRadius: 8 }}
@@ -110,6 +112,13 @@ const Amount = ({
             max={balance}
           />
         </Card>
+      </Col>
+      <Col flex="auto">
+        {notEnoughBalance && (
+          <Typography.Text style={{ fontSize: 12 }} type="danger">
+            Not enough balance.
+          </Typography.Text>
+        )}
       </Col>
       <Col>
         <Typography.Text style={{ fontSize: 12 }} type="secondary">
