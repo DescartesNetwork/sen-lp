@@ -158,7 +158,7 @@ const LPT = ({
                 {listMintDetail.map((mintDetail, idx) => {
                   const mintAmount = calcMintAmount(mintDetail)
                   return (
-                    <Fragment>
+                    <Fragment key={mintAmount + idx}>
                       <Typography.Text>
                         {numeric(mintAmount).format('0,0.[00]a')}
                         {mintDetail.symbol}
