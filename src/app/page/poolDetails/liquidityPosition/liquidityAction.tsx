@@ -51,7 +51,10 @@ const LiquidityAction = ({ poolAddress }: { poolAddress: string }) => {
         destroyOnClose={true}
         centered={true}
       >
-        <Withdraw lptAddress={''} onClose={() => setWithdrawVisible(false)} />
+        <Withdraw
+          poolAddress={poolAddress}
+          onClose={() => setWithdrawVisible(false)}
+        />
       </Modal>
     </Row>
   )
