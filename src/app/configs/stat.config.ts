@@ -12,7 +12,7 @@ const config: Record<Env, Config> = {
    * Development configurations
    */
   development: {
-    baseURL: 'http://3.141.200.97:9090',
+    baseURL: 'https://stat-dev.sentre.io',
   },
 
   /**

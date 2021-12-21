@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { TokenInfo } from '@solana/spl-token-registry'
-import { account, AccountData, MintData, utils } from '@senswap/sen-js'
+import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Typography, Space, Button, Divider } from 'antd'
-import { useMint, useWallet } from 'senhub/providers'
+import { useAccount, useMint, useWallet } from 'senhub/providers'
 import NumericInput from 'shared/antd/numericInput'
 import { MintAvatar } from 'app/shared/components/mint'
 import { numeric } from 'shared/util'
+import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useTokenProvider from 'app/shared/hooks/useTokenProvider'
 
 /**
  * Single amount input
@@ -21,15 +22,16 @@ const Amount = ({
   value: bigint
 }) => {
   const [amount, setAmount] = useState('')
-  const [accountData, setAccountData] = useState<AccountData>()
-  const [mintData, setMintData] = useState<MintData>()
-  const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
-  const { tokenProvider } = useMint()
+  const [associatedAddress, setAssociatedAddress] = useState<string>('')
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const { decimals } = mintData || {}
-  const { symbol } = tokenInfo || {}
+  const { accounts } = useAccount()
+  const tokenInfos = useTokenProvider(mintAddress)
+  const decimals = useMintDecimals(mintAddress)
+
+  const symbols = tokenInfos.map((token) => token?.symbol).join('/')
+  const accountData = accounts?.[associatedAddress]
 
   const balance = useMemo(() => {
     const { amount } = accountData || {}
@@ -54,7 +56,7 @@ const Amount = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [decimals, value])
 
-  const fetchData = useCallback(async () => {
+  const fetchAssociatedAddress = useCallback(async () => {
     const { splt } = window.sentre
     try {
       const associatedAddress = await account.deriveAssociatedAddress(
@@ -63,22 +65,13 @@ const Amount = ({
         splt.spltProgramId.toBase58(),
         splt.splataProgramId.toBase58(),
       )
-      const accountData = await splt.getAccountData(associatedAddress)
-      setAccountData(accountData)
+      setAssociatedAddress(associatedAddress)
     } catch (er) {}
-    try {
-      const mintData = await splt.getMintData(mintAddress)
-      setMintData(mintData)
-    } catch (er) {}
-    try {
-      const tokenInfo = await tokenProvider.findByAddress(mintAddress)
-      setTokenInfo(tokenInfo)
-    } catch (er) {}
-  }, [mintAddress, tokenProvider, walletAddress])
+  }, [mintAddress, walletAddress])
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData])
+    fetchAssociatedAddress()
+  }, [fetchAssociatedAddress])
 
   useEffect(() => {
     setAmountFromProps()
@@ -93,7 +86,7 @@ const Amount = ({
           bordered={false}
         >
           <NumericInput
-            placeholder={`Amount of ${symbol || 'TOKEN'}`}
+            placeholder={`Amount of ${symbols || 'TOKEN'}`}
             value={amount}
             onValue={onAmount}
             size="small"
@@ -120,7 +113,8 @@ const Amount = ({
       </Col>
       <Col>
         <Typography.Text style={{ fontSize: 12 }} type="secondary">
-          Available: {numeric(balance).format('0,0.[0000]')} {symbol || 'TOKEN'}
+          Available: {numeric(balance).format('0,0.[0000]')}{' '}
+          {symbols || 'TOKEN'}
         </Typography.Text>
       </Col>
     </Row>
