@@ -1,6 +1,7 @@
 import { Col, Select, Row, Typography } from 'antd'
 import { AppDispatch } from 'app/model'
 import { selectCategoryPool } from 'app/model/main.controller'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 const Header = () => {
@@ -9,6 +10,10 @@ const Header = () => {
   const handleChange = (value: string) => {
     dispatch(selectCategoryPool(value))
   }
+
+  useEffect(() => {
+    dispatch(selectCategoryPool('hot'))
+  }, [dispatch])
 
   return (
     <Row gutter={24} align="middle" className="header-widget">
