@@ -1,5 +1,5 @@
 .side-bar {
-  height: calc(100vh - 115px);
+  max-height: calc(100vh - 185px);
   overflow: auto !important;
 }
 
@@ -48,5 +48,24 @@
   }
   &-content-box {
     padding: 0 !important;
+  }
+}
+.deposit-tag {
+  position: relative;
+  background: #f9575e1a !important;
+  color: #f9575e !important;
+  border-radius: 4px !important;
+  border: none !important;
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -4px;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-right: 4px solid #f9575e1a;
   }
 }

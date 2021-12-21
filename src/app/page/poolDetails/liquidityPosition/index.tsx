@@ -1,9 +1,15 @@
-import { ReactNode } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { account, utils } from '@senswap/sen-js'
 
-import { Button, Card, Col, Row, Space, Typography } from 'antd'
-import { MintAvatar } from 'app/shared/components/mint'
-import IonIcon from 'shared/antd/ionicon'
+import { Card, Col, Row, Space, Typography } from 'antd'
 import LiquidityAction from './liquidityAction'
+import { AppState } from 'app/model'
+import { numeric } from 'shared/util'
+import { useMint, usePool } from 'senhub/providers'
+import InservePrice from './inversePrice'
+
+const APY_DATE = 365
 
 const Content = ({
   label = 'label',
@@ -46,17 +52,45 @@ const Title = ({
   )
 }
 
-const InservePrice = ({ mintAddress }: { mintAddress: string }) => {
-  return (
-    <Space>
-      <MintAvatar mintAddress={mintAddress} />
-      <Typography.Text>0.5 BTC/SEN</Typography.Text>
-      <Button type="text" icon={<IonIcon name="swap-horizontal-outline" />} />
-    </Space>
+const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
+  const roi = useSelector(
+    (state: AppState) => state.stat?.[poolAddress]?.details?.roi,
   )
-}
+  const [supply, setSupply] = useState<number>(0)
+  const lpts = useSelector((state: AppState) => state.lpts)
+  const { getMint } = useMint()
+  const { pools } = usePool()
+  const { mint_lpt } = pools?.[poolAddress] || {}
 
-const LiquidityPosition = () => {
+  const lptAddress =
+    Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
+  const { amount } = lpts[lptAddress] || {}
+  const lpt = Number(utils.undecimalize(amount || BigInt(0), 9))
+
+  const calculateRoi = useCallback(
+    (date: number) => {
+      if (!roi || !date) return 0
+      return Math.pow(roi / 100 + 1, date) - 1
+    },
+    [roi],
+  )
+
+  const formatNumber = (value: number | string, format: string) => {
+    return numeric(value).format(format)
+  }
+
+  const getSupply = useCallback(async () => {
+    if (!account.isAddress(mint_lpt)) return 0
+    const {
+      [mint_lpt]: { decimals, supply },
+    } = await getMint({ address: mint_lpt })
+    setSupply(Number(utils.undecimalize(supply, decimals)))
+  }, [getMint, mint_lpt])
+
+  useEffect(() => {
+    getSupply()
+  }, [getSupply])
+
   return (
     <Card bordered={false}>
       <Row gutter={[24, 24]}>
@@ -66,12 +100,21 @@ const LiquidityPosition = () => {
         <Col span={24}>
           <Row gutter={[20, 20]}>
             <Col span={24}>
-              <Content label="APY" title={<Title value="15%" />} />
+              <Content
+                label="APY"
+                title={
+                  <Title
+                    value={formatNumber(calculateRoi(APY_DATE), '0,0.[00]%')}
+                  />
+                }
+              />
             </Col>
             <Col span={12}>
               <Content
-                label="My LPT"
-                title={<Title value={8.192} sub="LPT" />}
+                label="Your LPT"
+                title={
+                  <Title value={formatNumber(lpt, '0,0.[0000]a')} sub="LPT" />
+                }
               />
             </Col>
             <Col span={12}>
@@ -89,24 +132,22 @@ const LiquidityPosition = () => {
             <Col span={12}>
               <Content
                 label="My Portion"
-                title={<Title value="0.13%" />}
-                subTitle="Over 6.26k LPT"
+                title={
+                  <Title value={formatNumber(lpt / supply, '0,0.[00]%')} />
+                }
+                subTitle={formatNumber(supply, '0,0.[0000]a')}
               />
             </Col>
             <Col span={12}>
               <Content
                 label="In - Pool Price"
-                title={
-                  <InservePrice
-                    mintAddress={'h73Yd9mAzNsvfGDSYk1kPVmkKhSWcuscte44Knn4iJQ'}
-                  />
-                }
+                title={<InservePrice poolAddress={poolAddress} />}
               />
             </Col>
           </Row>
         </Col>
         <Col span={24}>
-          <LiquidityAction />
+          <LiquidityAction poolAddress={poolAddress} />
         </Col>
       </Row>
     </Card>

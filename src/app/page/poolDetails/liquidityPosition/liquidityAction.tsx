@@ -5,9 +5,10 @@ import Deposit from 'app/components/deposit'
 import Withdraw from 'app/components/withdraw'
 import IonIcon from 'shared/antd/ionicon'
 
-const LiquidityAction = () => {
+const LiquidityAction = ({ poolAddress }: { poolAddress: string }) => {
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
+
   return (
     <Row gutter={[12, 12]}>
       <Col span={12}>
@@ -37,7 +38,10 @@ const LiquidityAction = () => {
         destroyOnClose={true}
         centered={true}
       >
-        <Deposit poolAddress={''} onClose={() => setDepositVisible(false)} />
+        <Deposit
+          poolAddress={poolAddress}
+          onClose={() => setDepositVisible(false)}
+        />
       </Modal>
       <Modal
         visible={withdrawVisible}
@@ -47,7 +51,10 @@ const LiquidityAction = () => {
         destroyOnClose={true}
         centered={true}
       >
-        <Withdraw lptAddress={''} onClose={() => setWithdrawVisible(false)} />
+        <Withdraw
+          poolAddress={poolAddress}
+          onClose={() => setWithdrawVisible(false)}
+        />
       </Modal>
     </Row>
   )

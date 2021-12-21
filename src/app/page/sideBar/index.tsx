@@ -2,7 +2,6 @@ import { Card, Tabs } from 'antd'
 import AllPools from './allPools'
 import MyPools from './deposited'
 import NewPool from './newPool'
-import LptWatcher from 'app/components/lptWatcher'
 
 const SideBar = () => {
   return (
@@ -19,7 +18,6 @@ const SideBar = () => {
           <MyPools />
         </Tabs.TabPane>
       </Tabs>
-      <LptWatcher />
     </Card>
   )
 }
