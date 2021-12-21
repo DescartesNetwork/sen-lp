@@ -14,6 +14,10 @@ import {
   Button,
   Popover,
 } from 'antd'
+import PoolTVL from 'app/components/poolTVL'
+import IonIcon from 'shared/antd/ionicon'
+import PoolCardStatus from 'app/components/PoolCardStatus'
+import SwapAction from 'app/widget/components/swapAction'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
@@ -21,10 +25,6 @@ import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
 import { MintAvatar, MintName } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
-import PoolTVL from 'app/components/poolTVL'
-import IonIcon from 'shared/antd/ionicon'
-import PoolCardStatus from 'app/components/PoolCardStatus'
-import SwapAction from 'app/page/sideBar/swapAction'
 
 const ItemPool = ({
   data,
@@ -64,11 +64,7 @@ const ItemPool = ({
   const defaultKey = keyExpand.toString()
 
   return (
-    <Card
-      bodyStyle={{ padding: 12, minHeight: 78 }}
-      onClick={onClick}
-      hoverable
-    >
+    <Card bodyStyle={{ padding: 12, minHeight: 78 }} hoverable>
       <Row gutter={[12, 12]} align="top">
         <Col flex="auto">
           <Space direction="vertical">
@@ -142,7 +138,7 @@ const ItemPool = ({
               </Popover>
             </Col>
             <Col span={12}>
-              <Button block type="primary">
+              <Button onClick={onClick} block type="primary">
                 Detail
               </Button>
             </Col>

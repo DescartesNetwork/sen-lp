@@ -1,8 +1,10 @@
-import { Col, Select, Row, Typography } from 'antd'
-import { AppDispatch } from 'app/model'
-import { selectCategoryPool } from 'app/model/main.controller'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+
+import { Col, Select, Row, Typography } from 'antd'
+
+import { AppDispatch } from 'app/model'
+import { selectCategoryPool } from 'app/model/main.controller'
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>()

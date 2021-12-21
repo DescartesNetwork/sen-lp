@@ -14,7 +14,7 @@ const LptsPools = ({
   action = () => <Fragment />,
 }: {
   onInit?: (poolAddress: string) => void
-  onClick?: (lptAddress: string, poolAddress: string) => void
+  onClick?: (poolAddress: string) => void
   action?: (lptAddress: string, poolAddress: string) => ReactElement
 }) => {
   const lpts = useSelector((state: AppState) => state.lpts)
@@ -58,7 +58,7 @@ const LptsPools = ({
                 keyExpand={i + 1}
                 data={lpts[lptAddress]}
                 action={action(lptAddress, poolAddress)}
-                onClick={() => onClick(lptAddress, poolAddress)}
+                onClick={() => onClick(poolAddress)}
               />
             </LazyLoad>
           </Col>

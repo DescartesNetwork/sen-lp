@@ -14,15 +14,15 @@ import {
   Popover,
 } from 'antd'
 import PoolTVL from '../../../components/poolTVL'
+import IonIcon from 'shared/antd/ionicon'
+import PoolCardStatus from 'app/components/PoolCardStatus'
+import SwapAction from 'app/widget/components/swapAction'
 
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
 import { MintAvatar, MintName } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
-import IonIcon from 'shared/antd/ionicon'
-import PoolCardStatus from 'app/components/PoolCardStatus'
-import SwapAction from 'app/page/sideBar/swapAction'
 
 const DECIMAL = 9
 
@@ -47,11 +47,7 @@ const ItemLPT = ({
   const expandClass = isActive ? '' : 'expandHidden'
   const defaultKey = keyExpand.toString()
   return (
-    <Card
-      bodyStyle={{ padding: 12, minHeight: 78 }}
-      onClick={onClick}
-      hoverable
-    >
+    <Card bodyStyle={{ padding: 12, minHeight: 78 }} hoverable>
       <Row gutter={[12, 12]} align="top">
         <Col flex="auto">
           <Space direction="vertical">
@@ -125,7 +121,7 @@ const ItemLPT = ({
               </Popover>
             </Col>
             <Col span={12}>
-              <Button block type="primary">
+              <Button onClick={onClick} block type="primary">
                 Detail
               </Button>
             </Col>
