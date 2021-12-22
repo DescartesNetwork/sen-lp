@@ -4,7 +4,7 @@ import { Env } from 'shared/runtime'
  * Contructor
  */
 type Config = {
-  swapRoute: string
+  route: string
 }
 
 const config: Record<Env, Config> = {
@@ -12,21 +12,21 @@ const config: Record<Env, Config> = {
    * Development configurations
    */
   development: {
-    swapRoute: '/app/senhub',
+    route: '/app/senhub',
   },
 
   /**
    * Staging configurations
    */
   staging: {
-    swapRoute: '/app/senhub',
+    route: '/app/senhub',
   },
 
   /**
    * Production configurations
    */
   production: {
-    swapRoute: '/app/senhub',
+    route: '/app/senhub',
   },
 }
 

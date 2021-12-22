@@ -7,7 +7,7 @@ import config from 'app/configs'
 const SwapAction = ({ poolAddress }: { poolAddress: string }) => {
   const history = useHistory()
   const {
-    route: { swapRoute },
+    swapRoute: { swapRoute },
   } = config
   const onSwap = (isBestRoute: boolean) => {
     history.push({
