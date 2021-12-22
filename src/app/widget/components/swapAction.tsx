@@ -2,12 +2,16 @@ import { useHistory } from 'react-router-dom'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import config from 'app/configs'
 
 const SwapAction = ({ poolAddress }: { poolAddress: string }) => {
   const history = useHistory()
+  const {
+    swapRoute: { swapRoute },
+  } = config
   const onSwap = (isBestRoute: boolean) => {
     history.push({
-      pathname: '/app/sen_swap',
+      pathname: swapRoute,
       state: { poolAddress, isBestRoute },
     })
   }
