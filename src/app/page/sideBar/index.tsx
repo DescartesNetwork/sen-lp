@@ -14,7 +14,7 @@ const SideBar = () => {
         <Tabs.TabPane key="all-pools" tab="All pools">
           <AllPools />
         </Tabs.TabPane>
-        <Tabs.TabPane key="deposited" tab="Deposited">
+        <Tabs.TabPane key="your-pools" tab="Your pools">
           <MyPools />
         </Tabs.TabPane>
       </Tabs>

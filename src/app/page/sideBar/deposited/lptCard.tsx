@@ -9,6 +9,7 @@ import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
 import { MintAvatar, MintName } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
+import PoolCardStatus from 'app/components/PoolCardStatus'
 
 const DECIMAL = 9
 
@@ -67,7 +68,11 @@ const LPTCard = ({
             </Space>
           </Space>
         </Col>
-        <Col>{action}</Col>
+        <Col>
+          <Space size={2}>
+            <PoolCardStatus poolAddress={poolAddress} /> {action}
+          </Space>
+        </Col>
       </Row>
     </Card>
   )
