@@ -26,7 +26,7 @@ const ListMyPools = ({
     () =>
       Object.keys(lpts).filter((lptAddress) => {
         const { pool: poolAddress } = lpts[lptAddress]
-        return pools[poolAddress]
+        return pools?.[poolAddress]
       }),
     [pools, lpts],
   )

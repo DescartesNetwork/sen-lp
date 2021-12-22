@@ -48,10 +48,10 @@ const ItemPool = ({
   const mintLptAddress = pools?.[poolAddress]?.mint_lpt
 
   const apy = useMemo(() => {
-    if (!details) return 0
+    if (!details || !details.roi) return 0
 
     const roi = details.roi
-    return Math.pow(1 + Number(roi || 0) / 100, 365) - 1
+    return Math.pow(1 + Number(roi) / 100, 365) - 1
   }, [details])
 
   useEffect(() => {
