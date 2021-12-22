@@ -3,18 +3,12 @@ import { useHistory } from 'react-router-dom'
 import { Button, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
-const SwapAction = ({
-  mintAddress,
-  poolAddress,
-}: {
-  mintAddress: string
-  poolAddress: string
-}) => {
+const SwapAction = ({ poolAddress }: { poolAddress: string }) => {
   const history = useHistory()
   const onSwap = (isBestRoute: boolean) => {
     history.push({
       pathname: '/app/sen_swap',
-      state: { mintAddress, poolAddress, isBestRoute },
+      state: { poolAddress, isBestRoute },
     })
   }
   return (

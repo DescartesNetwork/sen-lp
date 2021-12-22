@@ -127,12 +127,7 @@ const ItemPool = ({
               <Popover
                 trigger="click"
                 placement="bottomLeft"
-                content={
-                  <SwapAction
-                    mintAddress={mintLptAddress}
-                    poolAddress={poolAddress}
-                  />
-                }
+                content={<SwapAction poolAddress={poolAddress} />}
               >
                 <Button block>Swap</Button>
               </Popover>
