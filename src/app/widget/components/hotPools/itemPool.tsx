@@ -17,13 +17,13 @@ import {
 import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
-import SwapAction from 'app/widget/components/swapAction'
+import SwapAction from '../swapAction'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
-import { MintAvatar, MintName } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const ItemPool = ({
@@ -70,7 +70,7 @@ const ItemPool = ({
             <Space>
               <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
-                <MintName mintAddress={mintLptAddress} />
+                <MintSymbol mintAddress={mintLptAddress} />
               </Typography.Text>
             </Space>
             <Space>

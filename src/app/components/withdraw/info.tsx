@@ -16,7 +16,7 @@ const Info = ({
           <Typography.Text>You will receive</Typography.Text>
         </Col>
         {mintAddresses.map((mintAddress, i) => (
-          <Col span={24} key={mintAddress + i}>
+          <Col span={24} key={i}>
             <Row gutter={[8, 8]} justify="space-between">
               <Col>
                 <MintAvatar mintAddress={mintAddress} size={32} />

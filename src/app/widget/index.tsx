@@ -36,7 +36,7 @@ const Widget = () => {
       <Col span={24}>
         <Header />
       </Col>
-      <Col>
+      <Col className="body-widget">
         {selectedCategoryPool === 'hot' ? (
           <HotPools onClick={setActiveAddress} />
         ) : (
