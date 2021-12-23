@@ -7,6 +7,7 @@ import Header from './header'
 import LptWatcher from 'app/components/lptWatcher'
 import LptsPools from './components/lptsPools'
 import HotPools from './components/hotPools'
+import configs from 'app/configs'
 
 import { AppDispatch, AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
@@ -17,14 +18,17 @@ const Widget = () => {
     (state: AppState) => state.main.selectedCategoryPool,
   )
   const history = useHistory()
+  const {
+    manifest: { appId },
+  } = configs
 
   const setActiveAddress = useCallback(
     (address: string) => {
       dispatch(selectPool(address))
       dispatch(handleOpenDrawer(false))
-      history.push('app/senhub')
+      history.push(`app/${appId}`)
     },
-    [dispatch, history],
+    [dispatch, history, appId],
   )
 
   return (
