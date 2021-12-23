@@ -1,5 +1,13 @@
 import { Card, Col, Row, Typography } from 'antd'
+import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import moment from 'moment'
+
 import SenChart from 'app/components/chart'
+
+import PoolService from 'app/stat/logic/pool/pool'
+import { AppState } from 'app/model'
+import { numeric } from 'shared/util'
 
 const CHART_CONFIGS = {
   color: '#40A9FF',
@@ -10,6 +18,10 @@ const CHART_CONFIGS = {
 }
 
 const TotalValueLocked = () => {
+  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const [chartData, setChartData] = useState<{ data: number; label: string }[]>(
+    [],
+  )
   const tvlChartConfigs = {
     borderColor: CHART_CONFIGS.transparent,
     borderRadius: CHART_CONFIGS.radius,
@@ -20,6 +32,22 @@ const TotalValueLocked = () => {
     backgroundColor: CHART_CONFIGS.color,
   }
 
+  const fetchChart = useCallback(async () => {
+    if (!selectedPoolAddress) return
+    const poolService = new PoolService(selectedPoolAddress)
+    const poolStat = await poolService.getDailyInfo()
+    const chartData = Object.keys(poolStat).map((time) => {
+      return {
+        data: poolStat[time].tvl,
+        label: moment(time, 'YYYYMMDD').format('DD/MM'),
+      }
+    })
+    return setChartData(chartData)
+  }, [selectedPoolAddress])
+  useEffect(() => {
+    fetchChart()
+  }, [fetchChart])
+
   return (
     <Card bordered={false} style={{ height: 'auto' }}>
       <Row gutter={[24, 24]}>
@@ -27,12 +55,14 @@ const TotalValueLocked = () => {
           <Typography.Title level={4}>Total Value Locked</Typography.Title>
         </Col>
         <Col>
-          <Typography.Title level={2}>$123.5M</Typography.Title>
+          <Typography.Title level={2}>
+            {numeric(chartData.at(-1)?.data).format('0,0.[0]m')}
+          </Typography.Title>
         </Col>
         <Col span={24}>
           <SenChart
-            chartData={[12, 3, 4, 12, 51, 2]}
-            labels={['20/10', '21/10', '22/10', '23/10', '24/10', '25/10']}
+            chartData={chartData.map((e) => e.data)}
+            labels={chartData.map((e) => e.label)}
             configs={tvlChartConfigs}
           />
         </Col>
