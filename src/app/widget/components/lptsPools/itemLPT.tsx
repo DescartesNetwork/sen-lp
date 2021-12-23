@@ -42,7 +42,7 @@ const ItemLPT = ({
   const lp = utils.undecimalize(amount, DECIMAL)
   const { pools } = usePool()
 
-  const isFrozen = data.state === PoolStatus.Frozen
+  const isFrozen = pools?.[poolAddress].state === PoolStatus.Frozen
   const mintLptAddress = pools?.[poolAddress]?.mint_lpt || ''
   const expandClass = isActive ? '' : 'expandHidden'
   const defaultKey = keyExpand.toString()
@@ -110,7 +110,9 @@ const ItemLPT = ({
               <Popover
                 trigger="click"
                 placement="bottomLeft"
-                content={<SwapAction poolAddress={poolAddress} />}
+                content={
+                  <SwapAction isDisabled={isFrozen} poolAddress={poolAddress} />
+                }
               >
                 <Button block>Swap</Button>
               </Popover>
