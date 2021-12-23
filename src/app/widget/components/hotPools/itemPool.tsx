@@ -37,7 +37,7 @@ const ItemPool = ({
   action?: ReactElement
   keyExpand: number
 }) => {
-  const { address: poolAddress, state: poolState } = data
+  const { address: poolAddress } = data
   const dispatch = useDispatch()
   const [isActive, setIsActive] = useState(false)
   const { pools } = usePool()
@@ -59,10 +59,9 @@ const ItemPool = ({
     dispatch(fetchStatPoolData({ address: poolAddress }))
   }, [dispatch, poolAddress])
 
-  const isFrozen = poolState === PoolStatus.Frozen
+  const isFrozen = pools?.[poolAddress].state === PoolStatus.Frozen
   const expandClass = isActive ? '' : 'expandHidden'
   const defaultKey = keyExpand.toString()
-
   return (
     <Card bodyStyle={{ padding: 12, minHeight: 78 }} hoverable>
       <Row gutter={[12, 12]} align="top">
@@ -127,7 +126,9 @@ const ItemPool = ({
               <Popover
                 trigger="click"
                 placement="bottomLeft"
-                content={<SwapAction poolAddress={poolAddress} />}
+                content={
+                  <SwapAction isDisabled={isFrozen} poolAddress={poolAddress} />
+                }
               >
                 <Button block>Swap</Button>
               </Popover>
