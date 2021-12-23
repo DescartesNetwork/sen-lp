@@ -15,10 +15,10 @@ const SwapAction = ({
   const {
     swapRoute: { swapRoute },
   } = config
-  const onSwap = (isBestRoute: boolean) => {
+  const onSwap = (originalRoute: boolean) => {
     history.push({
       pathname: swapRoute,
-      state: { poolAddress, isBestRoute },
+      state: { poolAddress, originalRoute },
     })
   }
   return (
@@ -39,11 +39,11 @@ const SwapAction = ({
           <Button
             size="small"
             disabled={isDisabled}
-            onClick={() => onSwap(false)}
+            onClick={() => onSwap(true)}
           >
             Original route
           </Button>
-          <Button size="small" onClick={() => onSwap(true)} type="primary">
+          <Button size="small" onClick={() => onSwap(false)} type="primary">
             Best route
           </Button>
         </Space>
