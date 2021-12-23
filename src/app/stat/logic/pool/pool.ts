@@ -43,7 +43,7 @@ export default class PoolService {
       return 0
     }
   }
-  getDailyInfo = async () => {
+  getDailyInfo =  async () => {
     let timeTo = new DateHelper()
     const timeFrom = new DateHelper().subtractDay(DATE_RANGE)
     const {

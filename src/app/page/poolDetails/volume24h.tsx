@@ -5,6 +5,7 @@ import PoolService from 'app/stat/logic/pool/pool'
 import moment from 'moment'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { DataLoader } from 'shared/dataloader'
 import { numeric } from 'shared/util'
 
 const CHART_CONFIGS = {
@@ -16,7 +17,7 @@ const CHART_CONFIGS = {
 }
 
 const Volume24h = () => {
-  const {selectedPoolAddress} = useSelector((state: AppState) => state.main)
+  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const [chartData, setChartData] = useState<{ data: number; label: string }[]>(
     [],
   )
@@ -33,7 +34,10 @@ const Volume24h = () => {
   const fetchChart = useCallback(async () => {
     if (!selectedPoolAddress) return
     const poolService = new PoolService(selectedPoolAddress)
-    const poolStat = await poolService.getDailyInfo()
+    const poolStat = await DataLoader.load(
+      'getDailyInfo' + selectedPoolAddress,
+      poolService.getDailyInfo,
+    )
     const chartData = Object.keys(poolStat).map((time) => {
       return {
         data: poolStat[time].volume,

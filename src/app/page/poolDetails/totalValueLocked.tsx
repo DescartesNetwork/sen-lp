@@ -8,6 +8,7 @@ import SenChart from 'app/components/chart'
 import PoolService from 'app/stat/logic/pool/pool'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
+import { DataLoader } from 'shared/dataloader'
 
 const CHART_CONFIGS = {
   color: '#40A9FF',
@@ -35,7 +36,10 @@ const TotalValueLocked = () => {
   const fetchChart = useCallback(async () => {
     if (!selectedPoolAddress) return
     const poolService = new PoolService(selectedPoolAddress)
-    const poolStat = await poolService.getDailyInfo()
+    const poolStat = await DataLoader.load(
+      'getDailyInfo' + selectedPoolAddress,
+      poolService.getDailyInfo,
+    )
     const chartData = Object.keys(poolStat).map((time) => {
       return {
         data: poolStat[time].tvl,
