@@ -12,21 +12,21 @@ const config: Record<Env, Config> = {
    * Development configurations
    */
   development: {
-    swapRoute: '/app/senhub',
+    swapRoute: '/app/sen_swap',
   },
 
   /**
    * Staging configurations
    */
   staging: {
-    swapRoute: '/app/senhub',
+    swapRoute: '/app/sen_swap',
   },
 
   /**
    * Production configurations
    */
   production: {
-    swapRoute: '/app/senhub',
+    swapRoute: '/app/sen_swap',
   },
 }
 
