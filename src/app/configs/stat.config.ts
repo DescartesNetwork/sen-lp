@@ -1,4 +1,4 @@
-import { Env } from 'shared/runtime'
+import { Net } from 'shared/runtime'
 
 /**
  * Contructor
@@ -7,25 +7,25 @@ type Config = {
   baseURL: string
 }
 
-const config: Record<Env, Config> = {
+const config: Record<Net, Config> = {
   /**
    * Development configurations
    */
-  development: {
+  devnet: {
     baseURL: 'https://stat-dev.sentre.io',
   },
 
   /**
    * Staging configurations
    */
-  staging: {
+  testnet: {
     baseURL: 'https://stat-dev.sentre.io',
   },
 
   /**
    * Production configurations
    */
-  production: {
+  mainnet: {
     baseURL: 'https://stat.sentre.io',
   },
 }

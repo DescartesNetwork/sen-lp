@@ -14,11 +14,12 @@ const MintSymbol = ({
   const symbols = useMemo(() => {
     return tokens
       .map((token) => {
-        if (!token) return 'UNKN'
+        const shortenAddr = `${mintAddress?.substr(0, 3)}...`
+        if (!token) return shortenAddr
         return token.symbol
       })
       .join(separator)
-  }, [separator, tokens])
+  }, [mintAddress, separator, tokens])
   return <span>{symbols}</span>
 }
 

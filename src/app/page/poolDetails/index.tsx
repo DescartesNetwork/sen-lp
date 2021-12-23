@@ -7,12 +7,16 @@ import LiquidityPosition from './liquidityPosition'
 import PoolManagement from './management'
 import TotalValueLocked from './totalValueLocked'
 import Volume24h from './volume24h'
+import PoolDetailsHeader from './poolDetailsHeader'
 
 const PoolDetails = () => {
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
 
   return (
     <Row gutter={[24, 24]}>
+      <Col span={24}>
+        <PoolDetailsHeader poolAddress={selectedPoolAddress} />
+      </Col>
       <Col xs={24} lg={12}>
         <TotalValueLocked />
       </Col>
