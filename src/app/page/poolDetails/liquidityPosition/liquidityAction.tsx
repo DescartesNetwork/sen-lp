@@ -5,7 +5,13 @@ import Deposit from 'app/components/deposit'
 import Withdraw from 'app/components/withdraw'
 import IonIcon from 'shared/antd/ionicon'
 
-const LiquidityAction = ({ poolAddress }: { poolAddress: string }) => {
+const LiquidityAction = ({
+  poolAddress,
+  lpt,
+}: {
+  poolAddress: string
+  lpt?: number
+}) => {
   const [depositVisible, setDepositVisible] = useState(false)
   const [withdrawVisible, setWithdrawVisible] = useState(false)
 
@@ -15,6 +21,7 @@ const LiquidityAction = ({ poolAddress }: { poolAddress: string }) => {
         <Button
           onClick={() => setWithdrawVisible(true)}
           icon={<IonIcon name="log-out-outline" />}
+          disabled={!lpt}
           block
         >
           Withdraw
