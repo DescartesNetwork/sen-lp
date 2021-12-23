@@ -1,10 +1,12 @@
-import { Card, Col, Row, Typography } from 'antd'
-import SenChart from 'app/components/chart'
-import { AppState } from 'app/model'
-import PoolService from 'app/stat/logic/pool/pool'
-import moment from 'moment'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+import moment from 'moment'
+
+import { Card, Col, Row, Typography } from 'antd'
+import SenChart from 'app/components/chart'
+
+import { AppState } from 'app/model'
+import PoolService from 'app/stat/logic/pool/pool'
 import { DataLoader } from 'shared/dataloader'
 import { numeric } from 'shared/util'
 
