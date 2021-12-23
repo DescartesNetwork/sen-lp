@@ -3,12 +3,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export type State = {
   selectedPoolAddress: string
   visible: boolean
+  selectedCategoryPool: string
 }
 
 const NAME = 'main'
 const initialState: State = {
   selectedPoolAddress: '',
   visible: false,
+  selectedCategoryPool: '',
 }
 
 /**
@@ -19,6 +21,12 @@ export const selectPool = createAsyncThunk(
   `${NAME}/selectPool`,
   async (poolAddress: string) => {
     return { selectedPoolAddress: poolAddress, selectedLptAddress: '' }
+  },
+)
+export const selectCategoryPool = createAsyncThunk(
+  `${NAME}/selectCategoryPool`,
+  async (category: string) => {
+    return { selectedCategoryPool: category }
   },
 )
 export const handleOpenDrawer = createAsyncThunk(
@@ -44,6 +52,10 @@ const slice = createSlice({
       )
       .addCase(
         handleOpenDrawer.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        selectCategoryPool.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

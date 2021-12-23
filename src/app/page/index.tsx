@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Row, Col, Modal, Typography } from 'antd'
+import { Row, Col, Modal, Typography, Card } from 'antd'
 import SideBar from './sideBar'
 import PoolDetails from './poolDetails'
 import ViewPoolButton from 'app/components/viewPoolButton'
@@ -9,8 +9,6 @@ import LptWatcher from 'app/components/lptWatcher'
 import { useUI } from 'senhub/providers'
 import { AppState } from 'app/model'
 import { handleOpenDrawer } from 'app/model/main.controller'
-
-import 'app/static/styles/index.less'
 
 const Page = () => {
   const {
@@ -22,10 +20,16 @@ const Page = () => {
   const visible = useSelector((state: AppState) => state.main?.visible)
 
   return (
-    <Row gutter={[24, 24]}>
+    <Row gutter={[24, 24]} style={{ paddingBottom: 12 }}>
       {!hideSidebar ? (
         <Col lg={8} xl={6}>
-          <SideBar />
+          <Card
+            className="side-bar"
+            bodyStyle={{ padding: 0 }}
+            bordered={false}
+          >
+            <SideBar />
+          </Card>
         </Col>
       ) : (
         <Modal
@@ -35,12 +39,9 @@ const Page = () => {
           centered={true}
           forceRender={true}
           title={<Typography.Title level={4}>Pool Selection</Typography.Title>}
+          bodyStyle={{ maxHeight: 400, overflow: 'auto', padding: 0 }}
         >
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <SideBar />
-            </Col>
-          </Row>
+          <SideBar />
         </Modal>
       )}
       <Col xs={24} lg={24} xl={18}>
