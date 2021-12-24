@@ -98,9 +98,11 @@ export default class PoolService {
       for (const report of reports) {
         const amountOut = await this.getUsd(report.mint, report.amountOut)
         const amountIn = await this.getUsd(report.mint, report.amountIn)
-        if (mapTimeTotal[prevDate.ymd()])
+        if (mapTimeTotal[prevDate.ymd()]) {
           mapTimeTotal[prevDate.ymd()].tvl += amountOut - amountIn
-
+          if (mapTimeTotal[prevDate.ymd()].tvl < 0)
+            mapTimeTotal[prevDate.ymd()].tvl = 0
+        }
         if (report.actionType === SwapActionType.Swap) {
           mapTimeTotal[timeTo.ymd()].volume += amountIn + amountOut
           const fee =
