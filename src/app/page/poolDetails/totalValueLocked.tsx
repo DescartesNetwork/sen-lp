@@ -2,9 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 
-import { Card, Col, Row, Typography } from 'antd'
-import SenChart from 'app/components/chart'
 import { Card, Col, Row, Typography, Spin } from 'antd'
+import SenChart from 'app/components/chart'
 
 import PoolService from 'app/stat/logic/pool/pool'
 import { AppState } from 'app/model'
