@@ -71,7 +71,7 @@ const TotalValueLocked = () => {
           </Col>
           <Col>
             <Typography.Title level={2}>
-              {numeric(chartData.at(-1)?.data).format('0,0.[0]m')}
+              {numeric(chartData.at(-1)?.data).format('0,0.[0]a')}
             </Typography.Title>
           </Col>
           <Col span={24}>

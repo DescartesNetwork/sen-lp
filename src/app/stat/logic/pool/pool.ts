@@ -9,7 +9,7 @@ import { DateHelper } from 'app/stat/helpers/date'
 import DailyReportService from '../daily-report'
 import PoolTransLogService, { SwapActionType } from './poolTranslog'
 
-const DATE_RANGE = 7
+const DATE_RANGE = 11
 
 export default class PoolService {
   poolAddress: string
@@ -43,7 +43,7 @@ export default class PoolService {
       return 0
     }
   }
-  getDailyInfo =  async () => {
+  getDailyInfo = async () => {
     let timeTo = new DateHelper()
     const timeFrom = new DateHelper().subtractDay(DATE_RANGE)
     const {
@@ -88,7 +88,7 @@ export default class PoolService {
       const reports = mapTimeDailyReport[timeTo.ymd()] || []
       const currentReport = mapTimeTotal[timeTo.ymd()]
       const prevDate = timeTo.subtractDay(1)
-      if (!mapTimeTotal[prevDate.ymd()]) {
+      if (!mapTimeTotal[prevDate.ymd()] && prevDate.ymd() >= timeFrom.ymd()) {
         mapTimeTotal[prevDate.ymd()] = {
           tvl: currentReport.tvl,
           fee: 0,
@@ -98,7 +98,8 @@ export default class PoolService {
       for (const report of reports) {
         const amountOut = await this.getUsd(report.mint, report.amountOut)
         const amountIn = await this.getUsd(report.mint, report.amountIn)
-        mapTimeTotal[prevDate.ymd()].tvl += amountOut - amountIn
+        if (mapTimeTotal[prevDate.ymd()])
+          mapTimeTotal[prevDate.ymd()].tvl += amountOut - amountIn
 
         if (report.actionType === SwapActionType.Swap) {
           mapTimeTotal[timeTo.ymd()].volume += amountIn + amountOut
