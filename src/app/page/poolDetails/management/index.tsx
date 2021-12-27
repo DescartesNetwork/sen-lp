@@ -15,7 +15,7 @@ export default function PoolManagement({
   } = useWallet()
   const { pools } = usePool()
   const poolData = pools?.[poolAddress]
-  if (!poolData || walletAddress !== poolData.owner) return null
+  if (!poolData || walletAddress !== poolData?.owner) return null
   return (
     <Col xs={24} lg={12}>
       <Card
