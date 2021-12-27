@@ -10,7 +10,7 @@ const ViewPoolButton = ({ width }: { width: number }) => {
 
   if (width > 1200) return null
   return (
-    <Affix style={{ position: 'fixed', bottom: 80, right: 0 }}>
+    <Affix style={{ position: 'fixed', bottom: 80, right: 16 }}>
       <Button
         type="primary"
         onClick={() => dispatch(handleOpenDrawer(true))}

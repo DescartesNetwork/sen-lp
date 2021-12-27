@@ -6,7 +6,7 @@ import LPTCard from '../components/lptCard'
 import LazyLoad from 'react-lazyload'
 
 import { AppState } from 'app/model'
-import { usePool } from 'senhub/providers'
+import { usePool, useWallet } from 'senhub/providers'
 
 const ListMyPools = ({
   onInit = () => {},
@@ -21,14 +21,19 @@ const ListMyPools = ({
 }) => {
   const lpts = useSelector((state: AppState) => state.lpts)
   const { pools } = usePool()
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
 
   const lptAddresses = useMemo(
     () =>
       Object.keys(lpts).filter((lptAddress) => {
         const { pool: poolAddress } = lpts[lptAddress]
-        return pools?.[poolAddress]
+        if (pools[poolAddress].owner === walletAddress)
+          return pools?.[poolAddress]
+        return null
       }),
-    [pools, lpts],
+    [lpts, pools, walletAddress],
   )
 
   useEffect(() => {

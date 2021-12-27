@@ -3,31 +3,27 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Button } from 'antd'
 import LazyLoad from 'react-lazyload'
-import ItemPool from '../components/itemPool'
 
 import { AppState } from 'app/model'
-import { usePool, useWallet } from 'senhub/providers'
+import { usePool } from 'senhub/providers'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import IonIcon from 'shared/antd/ionicon'
+import LPTCard from '../components/lptCard'
 
 const DepositedPools = () => {
   const dispatch = useDispatch()
   const lpts = useSelector((state: AppState) => state.lpts)
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
 
   const lptAddresses = useMemo(
     () =>
       Object.keys(lpts).filter((lptAddress) => {
-        const { pool: poolAddress } = lpts[lptAddress]
-        if (pools[poolAddress].owner !== walletAddress)
-          return pools[poolAddress]
+        const { pool: poolAddress, amount } = lpts[lptAddress]
+        if (amount !== BigInt(0)) return pools?.[poolAddress]
         return null
       }),
-    [pools, lpts, walletAddress],
+    [pools, lpts],
   )
 
   const setActiveAddress = useCallback(
@@ -63,8 +59,8 @@ const DepositedPools = () => {
         return (
           <Col span={24} key={lptAddress + i}>
             <LazyLoad height={78} overflow>
-              <ItemPool
-                poolAddress={poolAddress}
+              <LPTCard
+                data={lpts[lptAddress]}
                 action={action(poolAddress)}
                 onClick={() => setActiveAddress(poolAddress)}
                 selected={selectedPoolAddress === poolAddress}
