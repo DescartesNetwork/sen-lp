@@ -49,7 +49,7 @@ const TotalValueLocked = () => {
       const chartData = Object.keys(poolStat).map((time) => {
         return {
           data: poolStat[time].tvl,
-          label: moment(time, 'YYYYMMDD').format('DD/MM'),
+          label: moment(time, 'YYYYMMDD').format('MM/DD'),
         }
       })
       setChartData(chartData)

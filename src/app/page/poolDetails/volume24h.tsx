@@ -49,7 +49,7 @@ const Volume24h = () => {
       const chartData = Object.keys(poolStat).map((time) => {
         return {
           data: poolStat[time].volume,
-          label: moment(time, 'YYYYMMDD').format('DD/MM'),
+          label: moment(time, 'YYYYMMDD').format('MM/DD'),
         }
       })
       setChartData(chartData)
