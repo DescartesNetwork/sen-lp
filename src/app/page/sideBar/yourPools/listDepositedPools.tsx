@@ -2,7 +2,7 @@ import { ReactElement, Fragment, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 
 import { Row, Col } from 'antd'
-import LPTCard from './lptCard'
+import LPTCard from '../components/lptCard'
 import LazyLoad from 'react-lazyload'
 
 import { AppState } from 'app/model'

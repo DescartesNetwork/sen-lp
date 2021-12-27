@@ -1,4 +1,4 @@
-import { Env } from 'shared/runtime'
+import { Net } from 'shared/runtime'
 
 const SOLVARS = {
   spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
@@ -17,13 +17,14 @@ type Config = {
   taxmanAddress: string
   blackPoolAddresses: string[]
   senPoolAddress: string
+  senOwner: string[]
 } & typeof SOLVARS
 
-const configs: Record<Env, Config> = {
+const configs: Record<Net, Config> = {
   /**
    * Development configurations
    */
-  development: {
+  devnet: {
     node: 'https://api.devnet.solana.com',
     chainId: 103,
     cluster: 'devnet',
@@ -37,12 +38,13 @@ const configs: Record<Env, Config> = {
       'G8BEKsiKPiazG623piXynTSr89TXLTgWycByvDR9bPii',
     ],
     senPoolAddress: '3EUPL7YQLbU6DNU5LZeQeHPXTf1MigJ2yASXA9rH5Ku4',
+    senOwner: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
   },
 
   /**
    * Staging configurations
    */
-  staging: {
+  testnet: {
     node: 'https://api.devnet.solana.com',
     cluster: 'devnet',
     chainId: 103,
@@ -56,12 +58,13 @@ const configs: Record<Env, Config> = {
       'G8BEKsiKPiazG623piXynTSr89TXLTgWycByvDR9bPii',
     ],
     senPoolAddress: '3EUPL7YQLbU6DNU5LZeQeHPXTf1MigJ2yASXA9rH5Ku4',
+    senOwner: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
   },
 
   /**
    * Production configurations
    */
-  production: {
+  mainnet: {
     node: 'https://api.mainnet-beta.solana.com',
     cluster: 'mainnet',
     chainId: 101,
@@ -71,6 +74,7 @@ const configs: Record<Env, Config> = {
     taxmanAddress: '9doo2HZQEmh2NgfT3Yx12M89aoBheycYqH1eaR5gKb3e',
     blackPoolAddresses: [],
     senPoolAddress: '',
+    senOwner: ['Cs6jYywHTAgdvjxn8xG4VkJJH8DXXy7zbtatzMUWoCMG'],
   },
 }
 

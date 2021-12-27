@@ -1,7 +1,8 @@
 import { Tabs } from 'antd'
 import AllPools from './allPools'
-import MyPools from './deposited'
+import YourPools from './yourPools'
 import NewPool from './newPool'
+import SentrePools from './sentrePools'
 
 const SideBar = () => {
   return (
@@ -13,8 +14,12 @@ const SideBar = () => {
       <Tabs.TabPane key="all-pools" tab="All pools">
         <AllPools />
       </Tabs.TabPane>
+
+      <Tabs.TabPane key="sentre-pools" tab="Sentre Pools">
+        <SentrePools />
+      </Tabs.TabPane>
       <Tabs.TabPane key="your-pools" tab="Your pools">
-        <MyPools />
+        <YourPools />
       </Tabs.TabPane>
     </Tabs>
   )
