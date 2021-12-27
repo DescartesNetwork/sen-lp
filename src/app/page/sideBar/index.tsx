@@ -15,13 +15,13 @@ const SideBar = () => {
       <Tabs.TabPane key="sentre-pools" tab="Sentre Pools">
         <SentrePools />
       </Tabs.TabPane>
-      <Tabs.TabPane key="all-pools" tab="Community pools">
+      <Tabs.TabPane key="all-pools" tab="Community Pools">
         <AllPools />
       </Tabs.TabPane>
       <Tabs.TabPane key="deposited" tab="Deposited">
         <DepositedPools />
       </Tabs.TabPane>
-      <Tabs.TabPane key="your-pools" tab="Your pools">
+      <Tabs.TabPane key="your-pools" tab="Your Pools">
         <YourPools />
       </Tabs.TabPane>
     </Tabs>
