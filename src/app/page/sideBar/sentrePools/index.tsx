@@ -1,5 +1,7 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { account } from '@senswap/sen-js'
+import { useLocation } from 'react-router-dom'
 
 import { Button, Col, Row } from 'antd'
 import ItemPool from '../components/itemPool'
@@ -14,6 +16,8 @@ const SentrePools = () => {
   const dispatch = useDispatch()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const { pools } = usePool()
+  const query = new URLSearchParams(useLocation().search)
+  const poolAddress = query.get('poolAddress') || ''
   const senOwner = configs.sol.senOwner
 
   const listSentrePools = Object.keys(pools).filter((poolAddr) => {
@@ -47,6 +51,19 @@ const SentrePools = () => {
     },
     [setActiveAddress],
   )
+
+  const onInit = useCallback(
+    (address) => {
+      const addr = account.isAddress(poolAddress) ? poolAddress : address
+      return dispatch(selectPool(addr))
+    },
+    [dispatch, poolAddress],
+  )
+
+  useEffect(() => {
+    if (!listSentrePools.length || selectedPoolAddress) return
+    onInit(listSentrePools[0])
+  }, [listSentrePools, onInit, selectedPoolAddress])
 
   return (
     <Row gutter={[16, 16]}>

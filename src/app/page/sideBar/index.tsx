@@ -8,7 +8,7 @@ import DepositedPools from './depositedPools'
 const SideBar = () => {
   return (
     <Tabs
-      defaultActiveKey="all-pools"
+      defaultActiveKey="sentre-pools"
       tabBarExtraContent={<NewPool />}
       style={{ padding: 16 }}
     >

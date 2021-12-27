@@ -114,7 +114,7 @@ const Freeze = ({ address }: { address: string }) => {
       <Col span={24}>
         {poolData?.state === PoolStatus.Active ? (
           <Button
-            type="primary"
+            style={{ background: '#40A9FF', color: '#fff' }}
             onClick={onFreezePool}
             icon={<IonIcon name="snow-outline" />}
             block
