@@ -3,6 +3,7 @@ import AllPools from './allPools'
 import YourPools from './yourPools'
 import NewPool from './newPool'
 import SentrePools from './sentrePools'
+import DepositedPools from './depositedPools'
 
 const SideBar = () => {
   return (
@@ -20,6 +21,9 @@ const SideBar = () => {
       </Tabs.TabPane>
       <Tabs.TabPane key="your-pools" tab="Your pools">
         <YourPools />
+      </Tabs.TabPane>
+      <Tabs.TabPane key="deposited" tab="Deposited">
+        <DepositedPools />
       </Tabs.TabPane>
     </Tabs>
   )

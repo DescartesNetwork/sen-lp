@@ -29,6 +29,7 @@ const SentrePools = () => {
     },
     [dispatch],
   )
+
   const action = useCallback(
     (poolAddress) => {
       return (

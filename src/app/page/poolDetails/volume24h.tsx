@@ -79,7 +79,7 @@ const Volume24h = () => {
           </Col>
           <Col>
             <Typography.Title level={2}>
-              {numeric(vol24h).format('0,0.[0]a')}
+              ${numeric(vol24h).format('0,0.[0]a')}
             </Typography.Title>
           </Col>
           <Col span={24}>
