@@ -10,7 +10,7 @@ import ListAllPools from './listPools'
 import { AppDispatch, AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 
-const AllPools = () => {
+const CommunityPools = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const query = new URLSearchParams(useLocation().search)
@@ -63,4 +63,4 @@ const AllPools = () => {
   )
 }
 
-export default AllPools
+export default CommunityPools

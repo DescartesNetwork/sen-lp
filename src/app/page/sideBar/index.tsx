@@ -1,5 +1,5 @@
 import { Tabs } from 'antd'
-import AllPools from './allPools'
+import CommunityPools from './communityPools'
 import YourPools from './yourPools'
 import NewPool from './newPool'
 import SentrePools from './sentrePools'
@@ -10,13 +10,14 @@ const SideBar = () => {
     <Tabs
       defaultActiveKey="sentre-pools"
       tabBarExtraContent={<NewPool />}
-      style={{ padding: 16 }}
+      style={{ maxHeight: 'calc(100vh - 112px)', padding: '16px 24px' }}
+      className="scrollbar"
     >
       <Tabs.TabPane key="sentre-pools" tab="Sentre Pools">
         <SentrePools />
       </Tabs.TabPane>
-      <Tabs.TabPane key="all-pools" tab="Community Pools">
-        <AllPools />
+      <Tabs.TabPane key="community-pools" tab="Community Pools">
+        <CommunityPools />
       </Tabs.TabPane>
       <Tabs.TabPane key="deposited" tab="Deposited">
         <DepositedPools />
