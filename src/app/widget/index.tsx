@@ -6,7 +6,7 @@ import { Col, Row } from 'antd'
 import Header from './header'
 import LptWatcher from 'app/components/lptWatcher'
 import LptsPools from './components/lptsPools'
-import HotPools from './components/hotPools'
+import HotPools from './components/pools'
 import configs from 'app/configs'
 
 import { AppDispatch, AppState } from 'app/model'
