@@ -14,7 +14,7 @@ const Header = () => {
   }
 
   useEffect(() => {
-    dispatch(selectCategoryPool('hot'))
+    dispatch(selectCategoryPool('sentre'))
   }, [dispatch])
 
   return (
@@ -26,11 +26,12 @@ const Header = () => {
       </Col>
       <Col>
         <Select
-          defaultValue="hot"
+          defaultValue="sentre"
           onChange={handleChange}
           className="header-select"
         >
-          <Select.Option value="hot">Hot</Select.Option>
+          <Select.Option value="sentre">Sentre</Select.Option>
+          <Select.Option value="community">Community</Select.Option>
           <Select.Option value="deposited">Deposited</Select.Option>
           <Select.Option value="your-pools">Your pools</Select.Option>
         </Select>

@@ -157,13 +157,13 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
                 }
               />
             </Col>
-            <Col xs={8} sm={12}>
+            <Col xs={7} sm={12}>
               <Content
                 label="Your LPT"
                 title={<Title value={lpt} sub="LPT" format="0,0.[0000]a" />}
               />
             </Col>
-            <Col xs={16} sm={12}>
+            <Col xs={17} sm={12}>
               <Content
                 label="Pool Share Composition"
                 title={
@@ -187,14 +187,14 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
                 }
               />
             </Col>
-            <Col xs={8} sm={12}>
+            <Col xs={7} sm={12}>
               <Content
                 label="My Portion"
                 title={<Title value={lpt / supply} format="0,0.[00]%" />}
                 subTitle={numeric(supply).format('0,0.[0000]a')}
               />
             </Col>
-            <Col xs={16} sm={12}>
+            <Col xs={17} sm={12}>
               <Content
                 label="In - Pool Price"
                 title={<InservePrice poolAddress={poolAddress} />}
