@@ -12,18 +12,17 @@ const SideBar = () => {
       tabBarExtraContent={<NewPool />}
       style={{ padding: 16 }}
     >
-      <Tabs.TabPane key="all-pools" tab="All pools">
-        <AllPools />
-      </Tabs.TabPane>
-
       <Tabs.TabPane key="sentre-pools" tab="Sentre Pools">
         <SentrePools />
       </Tabs.TabPane>
-      <Tabs.TabPane key="your-pools" tab="Your pools">
-        <YourPools />
+      <Tabs.TabPane key="all-pools" tab="Community pools">
+        <AllPools />
       </Tabs.TabPane>
       <Tabs.TabPane key="deposited" tab="Deposited">
         <DepositedPools />
+      </Tabs.TabPane>
+      <Tabs.TabPane key="your-pools" tab="Your pools">
+        <YourPools />
       </Tabs.TabPane>
     </Tabs>
   )
