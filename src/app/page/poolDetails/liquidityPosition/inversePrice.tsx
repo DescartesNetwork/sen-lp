@@ -39,7 +39,7 @@ const DEFAULT_TOKEN_INFO: TokenInfo = {
 const InservePrice = ({ poolAddress }: { poolAddress: string }) => {
   const { pools } = usePool()
   const { tokenProvider } = useMint()
-  const [isReverse, setIsReverse] = useState(false)
+  const [isReverse, setIsReverse] = useState(true)
   const [tokenInfos, setTokenInfos] = useState<TokenInfo[]>()
 
   const poolData = useMemo(() => {

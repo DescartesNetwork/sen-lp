@@ -19,7 +19,7 @@ const MintSymbol = ({
       if (!token) return shortenAddr
       return token.symbol
     })
-    if (!isReverse) symbols.reverse()
+    if (isReverse) symbols.reverse()
 
     return symbols.join(separator)
   }, [isReverse, mintAddress, separator, tokens])
