@@ -1,6 +1,5 @@
 import { Fragment, ReactElement, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { PoolData } from '@senswap/sen-js'
 
 import {
   Row,
@@ -27,29 +26,27 @@ import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const ItemPool = ({
-  data,
+  poolAddress,
   onClick = () => {},
   action = <Fragment />,
   keyExpand,
 }: {
-  data: PoolData & { address: string }
+  poolAddress: string
   onClick?: () => void
   action?: ReactElement
   keyExpand: number
 }) => {
-  const { address: poolAddress } = data
   const dispatch = useDispatch()
   const [isActive, setIsActive] = useState(false)
   const { pools } = usePool()
   const details = useSelector(
-    (state: AppState) => state.stat[data.address]?.details,
+    (state: AppState) => state.stat[poolAddress]?.details,
   )
-
-  const mintLptAddress = pools?.[poolAddress]?.mint_lpt
+  const poolData = pools?.[poolAddress] || {}
+  const { mint_lpt: mintLptAddress, state: poolState } = poolData
 
   const apy = useMemo(() => {
     if (!details || !details.roi) return 0
-
     const roi = details.roi
     return Math.pow(1 + Number(roi) / 100, 365) - 1
   }, [details])
@@ -59,9 +56,10 @@ const ItemPool = ({
     dispatch(fetchStatPoolData({ address: poolAddress }))
   }, [dispatch, poolAddress])
 
-  const isFrozen = pools?.[poolAddress].state === PoolStatus.Frozen
+  const isFrozen = poolState === PoolStatus.Frozen
   const expandClass = isActive ? '' : 'expandHidden'
   const defaultKey = keyExpand.toString()
+
   return (
     <Card bodyStyle={{ padding: 12, minHeight: 78 }} hoverable>
       <Row gutter={[12, 12]} align="top">

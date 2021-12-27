@@ -29,13 +29,14 @@ const ListPools = ({
     if (!sortedPools.length) return
     onInit(sortedPools[0]?.address)
   }, [onInit, sortedPools])
+
   return (
     <Row gutter={[12, 12]}>
       {sortedPools.map((poolData, i) => (
         <Col span={24} key={poolData.address + i}>
           <LazyLoad height={78} overflow>
             <ItemPool
-              data={poolData}
+              poolAddress={poolData.address}
               action={action(poolData.address)}
               onClick={() => onClick(poolData.address)}
               keyExpand={i + 1}

@@ -1,6 +1,5 @@
 import { Fragment, ReactElement, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { PoolData } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
 import PoolTVL from '../../../components/poolTVL'
@@ -14,22 +13,23 @@ import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const ItemPool = ({
-  data,
+  poolAddress,
   onClick = () => {},
   action = <Fragment />,
   selected = false,
 }: {
-  data: PoolData & { address: string }
+  poolAddress: string
   onClick?: () => void
   action?: ReactElement
   selected?: boolean
 }) => {
-  const { address: poolAddress, state: poolState } = data
   const dispatch = useDispatch()
   const { pools } = usePool()
   const details = useSelector(
-    (state: AppState) => state.stat[data.address]?.details,
+    (state: AppState) => state.stat[poolAddress]?.details,
   )
+  const poolData = pools?.[poolAddress] || {}
+  const { state: poolState } = poolData
 
   const mintLptAddress = pools?.[poolAddress]?.mint_lpt
 

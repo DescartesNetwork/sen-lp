@@ -5,21 +5,24 @@ import useTokenProvider from 'app/shared/hooks/useTokenProvider'
 const MintSymbol = ({
   mintAddress,
   separator = ' • ',
+  isReverse = false,
 }: {
   mintAddress: string
   separator?: string
+  isReverse?: boolean
 }) => {
   const tokens = useTokenProvider(mintAddress)
 
   const symbols = useMemo(() => {
-    return tokens
-      .map((token) => {
-        const shortenAddr = `${mintAddress?.substr(0, 3)}...`
-        if (!token) return shortenAddr
-        return token.symbol
-      })
-      .join(separator)
-  }, [mintAddress, separator, tokens])
+    const symbols = tokens.map((token) => {
+      const shortenAddr = `${mintAddress?.substr(0, 3)}...`
+      if (!token) return shortenAddr
+      return token.symbol
+    })
+    if (!isReverse) symbols.reverse()
+
+    return symbols.join(separator)
+  }, [isReverse, mintAddress, separator, tokens])
   return <span>{symbols}</span>
 }
 

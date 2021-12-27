@@ -3,7 +3,7 @@ import { PoolData } from '@senswap/sen-js'
 
 import { Row, Col } from 'antd'
 import Search from './search'
-import ItemPool from './itemPool'
+import ItemPool from '../components/itemPool'
 import LazyLoad from 'react-lazyload'
 
 import { usePool } from 'senhub/providers'
@@ -57,7 +57,7 @@ const ListAllPools = ({
         <Col span={24} key={poolData.address + i}>
           <LazyLoad height={78} overflow>
             <ItemPool
-              data={poolData}
+              poolAddress={poolData.address}
               action={action(poolData.address)}
               onClick={() => onClick(poolData.address)}
               selected={selectedPoolAddress === poolData.address}
