@@ -12,7 +12,7 @@ const PoolCardStatus = ({ poolAddress }: { poolAddress: string }) => {
   } = useWallet()
 
   const isFrozen = poolData.state === PoolStatus.Frozen
-  const isOwner = walletAddress === poolData.owner
+  const isOwner = walletAddress === poolData?.owner
 
   return (
     <Space>

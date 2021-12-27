@@ -34,7 +34,7 @@ const LptsPools = ({
           return pools[poolAddress]
         else if (
           selectedCategoryPool === 'your-pools' &&
-          pools[poolAddress].owner === walletAddress
+          pools?.[poolAddress]?.owner === walletAddress
         )
           return pools[poolAddress]
         return null

@@ -107,7 +107,7 @@ const Freeze = ({ address }: { address: string }) => {
     return 'Pool is closed'
   }, [poolData?.state])
 
-  if (!poolData || walletAddress !== poolData.owner) return null
+  if (!poolData || walletAddress !== poolData?.owner) return null
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>{description}</Col>
