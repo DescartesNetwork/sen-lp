@@ -1,10 +1,22 @@
-import { Fragment, ReactElement, useEffect, useMemo } from 'react'
+import { Fragment, ReactElement, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { PoolData } from '@senswap/sen-js'
 
-import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
-import PoolTVL from '../../../components/poolTVL'
+import {
+  Row,
+  Col,
+  Card,
+  Space,
+  Typography,
+  Divider,
+  Tooltip,
+  Collapse,
+  Button,
+  Popover,
+} from 'antd'
+import PoolTVL from 'app/components/poolTVL'
+import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
+import SwapAction from '../swapAction'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
@@ -14,30 +26,29 @@ import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const ItemPool = ({
-  data,
+  poolAddress,
   onClick = () => {},
   action = <Fragment />,
-  selected = false,
+  keyExpand,
 }: {
-  data: PoolData & { address: string }
+  poolAddress: string
   onClick?: () => void
   action?: ReactElement
-  selected?: boolean
+  keyExpand: number
 }) => {
-  const { address: poolAddress, state: poolState } = data
   const dispatch = useDispatch()
+  const [isActive, setIsActive] = useState(false)
   const { pools } = usePool()
   const details = useSelector(
-    (state: AppState) => state.stat[data.address]?.details,
+    (state: AppState) => state.stat[poolAddress]?.details,
   )
-
-  const mintLptAddress = pools?.[poolAddress]?.mint_lpt
+  const poolData = pools?.[poolAddress] || {}
+  const { mint_lpt: mintLptAddress, state: poolState } = poolData
 
   const apy = useMemo(() => {
-    if (!details) return 0
-
+    if (!details || !details.roi) return 0
     const roi = details.roi
-    return Math.pow(1 + Number(roi || 0) / 100, 365) - 1
+    return Math.pow(1 + Number(roi) / 100, 365) - 1
   }, [details])
 
   useEffect(() => {
@@ -46,18 +57,13 @@ const ItemPool = ({
   }, [dispatch, poolAddress])
 
   const isFrozen = poolState === PoolStatus.Frozen
-  const cardStyle = selected ? 'card-active' : ''
+  const expandClass = isActive ? '' : 'expandHidden'
+  const defaultKey = keyExpand.toString()
 
   return (
-    <Card
-      className={cardStyle}
-      bodyStyle={{ padding: 12, height: 78 }}
-      onClick={onClick}
-      bordered={selected}
-      hoverable
-    >
-      <Row gutter={[12, 12]} wrap={false} align="middle">
-        <Col span={24} flex="auto">
+    <Card bodyStyle={{ padding: 12, minHeight: 78 }} hoverable>
+      <Row gutter={[12, 12]} align="top">
+        <Col flex="auto">
           <Space direction="vertical">
             <Space>
               <MintAvatar mintAddress={mintLptAddress} size={24} />
@@ -88,9 +94,51 @@ const ItemPool = ({
           <Space size={2}>
             <PoolCardStatus poolAddress={poolAddress} />
             {action}
+            <Button
+              size="small"
+              type="text"
+              icon={
+                <IonIcon
+                  name={
+                    isActive
+                      ? 'chevron-down-outline'
+                      : 'chevron-forward-outline'
+                  }
+                />
+              }
+              onClick={() => setIsActive(!isActive)}
+            />
           </Space>
         </Col>
       </Row>
+      <Collapse
+        className={expandClass}
+        style={{ marginTop: 16 }}
+        ghost={true}
+        activeKey={defaultKey}
+        bordered={false}
+      >
+        <Collapse.Panel header="" key={defaultKey}>
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
+              <Popover
+                trigger="click"
+                placement="bottomLeft"
+                content={
+                  <SwapAction isDisabled={isFrozen} poolAddress={poolAddress} />
+                }
+              >
+                <Button block>Swap</Button>
+              </Popover>
+            </Col>
+            <Col span={12}>
+              <Button onClick={onClick} block type="primary">
+                Detail
+              </Button>
+            </Col>
+          </Row>
+        </Collapse.Panel>
+      </Collapse>
     </Card>
   )
 }

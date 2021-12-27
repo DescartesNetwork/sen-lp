@@ -6,7 +6,7 @@ import { Col, Row } from 'antd'
 import Header from './header'
 import LptWatcher from 'app/components/lptWatcher'
 import LptsPools from './components/lptsPools'
-import HotPools from './components/hotPools'
+import HotPools from './components/pools'
 import configs from 'app/configs'
 
 import { AppDispatch, AppState } from 'app/model'
@@ -30,19 +30,20 @@ const Widget = () => {
     },
     [dispatch, history, appId],
   )
-
   return (
     <Row>
       <Col span={24}>
         <Header />
       </Col>
-      <Col className="body-widget">
-        {selectedCategoryPool === 'hot' ? (
+      <Col span={24} className="body-widget">
+        {selectedCategoryPool === 'sentre' ||
+        selectedCategoryPool === 'community' ? (
           <HotPools onClick={setActiveAddress} />
         ) : (
           <LptsPools onClick={setActiveAddress} />
         )}
       </Col>
+      <Col span={24} style={{ height: 16 }} />
       <LptWatcher />
     </Row>
   )

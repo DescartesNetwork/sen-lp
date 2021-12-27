@@ -7,7 +7,7 @@ import swapRoute from './swapRoute'
 
 const configs = {
   manifest: manifest[env],
-  sol: sol[env],
+  sol: sol[net],
   stat: stat[net],
   fee: fee[env],
   swapRoute: swapRoute[env],

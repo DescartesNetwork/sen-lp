@@ -1,8 +1,8 @@
 import { ReactElement, Fragment, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import LazyLoad from 'react-lazyload'
 
 import { Row, Col } from 'antd'
-import LazyLoad from 'react-lazyload'
 import ItemLPT from './itemLPT'
 
 import { AppState } from 'app/model'
@@ -29,13 +29,13 @@ const LptsPools = ({
   const lptAddresses = useMemo(
     () =>
       Object.keys(lpts).filter((lptAddress) => {
-        const { pool: poolAddress } = lpts[lptAddress]
-        if (
-          selectedCategoryPool === 'deposited' &&
-          pools[poolAddress].owner !== walletAddress
-        )
+        const { pool: poolAddress, amount } = lpts[lptAddress]
+        if (selectedCategoryPool === 'deposited' && amount !== BigInt(0))
           return pools[poolAddress]
-        else if (selectedCategoryPool === 'your-pools')
+        else if (
+          selectedCategoryPool === 'your-pools' &&
+          pools[poolAddress].owner === walletAddress
+        )
           return pools[poolAddress]
         return null
       }),

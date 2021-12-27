@@ -8,7 +8,7 @@ import ListMyPools from './listDepositedPools'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppDispatch, AppState } from 'app/model'
 
-const MyPools = () => {
+const YourPools = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
 
@@ -49,4 +49,4 @@ const MyPools = () => {
   )
 }
 
-export default MyPools
+export default YourPools
