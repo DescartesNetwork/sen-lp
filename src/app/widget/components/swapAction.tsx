@@ -4,15 +4,21 @@ import { Button, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import config from 'app/configs'
 
-const SwapAction = ({ poolAddress }: { poolAddress: string }) => {
+const SwapAction = ({
+  poolAddress,
+  isDisabled,
+}: {
+  poolAddress: string
+  isDisabled: boolean
+}) => {
   const history = useHistory()
   const {
     swapRoute: { swapRoute },
   } = config
-  const onSwap = (isBestRoute: boolean) => {
+  const onSwap = (originalRoute: boolean) => {
     history.push({
       pathname: swapRoute,
-      state: { poolAddress, isBestRoute },
+      state: { poolAddress, originalRoute },
     })
   }
   return (
@@ -30,10 +36,14 @@ const SwapAction = ({ poolAddress }: { poolAddress: string }) => {
       </Col>
       <Col style={{ textAlign: 'right' }} span={24}>
         <Space>
-          <Button size="small" onClick={() => onSwap(false)}>
+          <Button
+            size="small"
+            disabled={isDisabled}
+            onClick={() => onSwap(true)}
+          >
             Original route
           </Button>
-          <Button size="small" onClick={() => onSwap(true)} type="primary">
+          <Button size="small" onClick={() => onSwap(false)} type="primary">
             Best route
           </Button>
         </Space>

@@ -1,23 +1,16 @@
 import { useState } from 'react'
 
-import {
-  Button,
-  Row,
-  Col,
-  Input,
-  Card,
-  Space,
-  Typography,
-} from 'antd'
+import { Button, Row, Col, Input, Card, Space, Typography } from 'antd'
 import { account } from '@senswap/sen-js'
 import { usePool, useWallet } from 'senhub/providers'
 import { explorer } from 'shared/util'
 import IonIcon from 'shared/antd/ionicon'
 
-
 const TransferOwner = ({ address: poolAddress }: { address: string }) => {
   const { pools } = usePool()
-  const { wallet: { address: walletAddress } } = useWallet();
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
   const [newOwner, setNewOwner] = useState('')
   const [loading, setLoading] = useState(false)
   const poolData = pools[poolAddress]
@@ -33,7 +26,10 @@ const TransferOwner = ({ address: poolAddress }: { address: string }) => {
     )
     setLoading(false)
     if (!txId)
-      return window.notify({ type: 'error', description: 'Transfer make failure.' })
+      return window.notify({
+        type: 'error',
+        description: 'Transfer make failure.',
+      })
     return window.notify({
       type: 'success',
       description: 'Transfer successfully. Click to view details',
@@ -41,7 +37,7 @@ const TransferOwner = ({ address: poolAddress }: { address: string }) => {
     })
   }
 
-  if (!poolData || walletAddress !== poolData.owner) return null
+  if (!poolData || walletAddress !== poolData?.owner) return null
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>

@@ -1,24 +1,31 @@
-import { Card, Tabs } from 'antd'
-import AllPools from './allPools'
-import MyPools from './deposited'
+import { Tabs } from 'antd'
+import CommunityPools from './communityPools'
+import YourPools from './yourPools'
 import NewPool from './newPool'
+import SentrePools from './sentrePools'
+import DepositedPools from './depositedPools'
 
 const SideBar = () => {
   return (
-    <Card className="side-bar" bodyStyle={{ padding: 0 }} bordered={false}>
-      <Tabs
-        defaultActiveKey="all-pools"
-        tabBarExtraContent={<NewPool />}
-        style={{ padding: 16 }}
-      >
-        <Tabs.TabPane key="all-pools" tab="All pools">
-          <AllPools />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="your-pools" tab="Your pools">
-          <MyPools />
-        </Tabs.TabPane>
-      </Tabs>
-    </Card>
+    <Tabs
+      defaultActiveKey="sentre-pools"
+      tabBarExtraContent={<NewPool />}
+      style={{ maxHeight: 'calc(100vh - 112px)', padding: '16px 24px' }}
+      className="scrollbar"
+    >
+      <Tabs.TabPane key="sentre-pools" tab="Sentre Pools">
+        <SentrePools />
+      </Tabs.TabPane>
+      <Tabs.TabPane key="community-pools" tab="Community Pools">
+        <CommunityPools />
+      </Tabs.TabPane>
+      <Tabs.TabPane key="deposited" tab="Deposited">
+        <DepositedPools />
+      </Tabs.TabPane>
+      <Tabs.TabPane key="your-pools" tab="Your Pools">
+        <YourPools />
+      </Tabs.TabPane>
+    </Tabs>
   )
 }
 

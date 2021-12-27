@@ -107,14 +107,14 @@ const Freeze = ({ address }: { address: string }) => {
     return 'Pool is closed'
   }, [poolData?.state])
 
-  if (!poolData || walletAddress !== poolData.owner) return null
+  if (!poolData || walletAddress !== poolData?.owner) return null
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>{description}</Col>
       <Col span={24}>
         {poolData?.state === PoolStatus.Active ? (
           <Button
-            type="primary"
+            style={{ background: '#40A9FF', color: '#fff' }}
             onClick={onFreezePool}
             icon={<IonIcon name="snow-outline" />}
             block

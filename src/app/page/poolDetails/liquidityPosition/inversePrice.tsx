@@ -5,10 +5,9 @@ import { TokenInfo } from '@solana/spl-token-registry'
 import { Button, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
-import { MintAvatar } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { useMint, usePool } from 'senhub/providers'
 import { numeric } from 'shared/util'
-import useTokenProvider from 'app/shared/hooks/useTokenProvider'
 
 export type MarketInfo = {
   icon: any
@@ -40,13 +39,12 @@ const DEFAULT_TOKEN_INFO: TokenInfo = {
 const InservePrice = ({ poolAddress }: { poolAddress: string }) => {
   const { pools } = usePool()
   const { tokenProvider } = useMint()
-  const [isReverse, setIsReverse] = useState(false)
+  const [isReverse, setIsReverse] = useState(true)
   const [tokenInfos, setTokenInfos] = useState<TokenInfo[]>()
 
   const poolData = useMemo(() => {
     return pools?.[poolAddress] || {}
   }, [poolAddress, pools])
-  const tokens = useTokenProvider(poolData?.mint_lpt)
 
   const extractReserve = (mintAddress: string, poolData: PoolData): bigint => {
     const { mint_a, mint_b, reserve_a, reserve_b } = poolData
@@ -95,23 +93,18 @@ const InservePrice = ({ poolAddress }: { poolAddress: string }) => {
     return inPoolPrice
   }
 
-  const symbols = useMemo(() => {
-    const symbol = tokens.map((token) => {
-      if (!token) return 'UNKN'
-      return token.symbol
-    })
-    if (isReverse) symbol.reverse()
-    return symbol.join('/')
-  }, [isReverse, tokens])
-
   return (
     <Space>
-      <MintAvatar mintAddress={poolData?.mint_lpt} />
+      <MintAvatar mintAddress={poolData?.mint_lpt} isReserve={isReverse} />
       <Space>
         <Typography.Text>
           {numeric(calcInPoolPrice()).format('0,0.[0000]')}
         </Typography.Text>
-        <Typography.Text>{symbols}</Typography.Text>
+        <MintSymbol
+          mintAddress={poolData?.mint_lpt}
+          isReverse={isReverse}
+          separator="/"
+        />
       </Space>
       <Button
         type="text"

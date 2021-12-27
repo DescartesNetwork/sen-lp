@@ -7,7 +7,7 @@ import PoolTVL from '../../../components/poolTVL'
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
-import { MintAvatar, MintName } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 import PoolCardStatus from 'app/components/PoolCardStatus'
 
@@ -46,7 +46,7 @@ const LPTCard = ({
             <Space size="middle">
               <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
-                <MintName mintAddress={mintLptAddress} />
+                <MintSymbol mintAddress={mintLptAddress} />
               </Typography.Text>
             </Space>
             <Space>

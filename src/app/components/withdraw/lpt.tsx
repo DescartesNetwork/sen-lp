@@ -21,8 +21,8 @@ const LPT = ({
   const [lpt, setLPT] = useState('')
   const lpts = useSelector((state: AppState) => state.lpts)
   const { pools } = usePool()
-  const { amount, pool } = lpts[lptAddress]
-  const { mint_lpt } = pools?.[pool]
+  const { amount, pool } = lpts?.[lptAddress] || {}
+  const { mint_lpt } = pools?.[pool] || {}
 
   const balance = useMemo(() => {
     if (!amount) return '0'

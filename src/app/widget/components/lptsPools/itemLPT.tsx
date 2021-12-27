@@ -21,7 +21,7 @@ import SwapAction from 'app/widget/components/swapAction'
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
-import { MintAvatar, MintName } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const DECIMAL = 9
@@ -42,7 +42,7 @@ const ItemLPT = ({
   const lp = utils.undecimalize(amount, DECIMAL)
   const { pools } = usePool()
 
-  const isFrozen = data.state === PoolStatus.Frozen
+  const isFrozen = pools?.[poolAddress].state === PoolStatus.Frozen
   const mintLptAddress = pools?.[poolAddress]?.mint_lpt || ''
   const expandClass = isActive ? '' : 'expandHidden'
   const defaultKey = keyExpand.toString()
@@ -51,10 +51,10 @@ const ItemLPT = ({
       <Row gutter={[12, 12]} align="top">
         <Col flex="auto">
           <Space direction="vertical">
-            <Space size="middle">
+            <Space>
               <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
-                <MintName mintAddress={mintLptAddress} />
+                <MintSymbol mintAddress={mintLptAddress} />
               </Typography.Text>
             </Space>
             <Space>
@@ -68,7 +68,7 @@ const ItemLPT = ({
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <Typography.Text type="secondary" className="caption">
-                My LPT:
+                Your LPT:
               </Typography.Text>
               <Typography.Text>
                 {numeric(lp).format('0,0.[00]')}
@@ -110,7 +110,9 @@ const ItemLPT = ({
               <Popover
                 trigger="click"
                 placement="bottomLeft"
-                content={<SwapAction poolAddress={poolAddress} />}
+                content={
+                  <SwapAction isDisabled={isFrozen} poolAddress={poolAddress} />
+                }
               >
                 <Button block>Swap</Button>
               </Popover>

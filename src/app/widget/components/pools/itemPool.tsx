@@ -1,6 +1,5 @@
 import { Fragment, ReactElement, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { PoolData } from '@senswap/sen-js'
 
 import {
   Row,
@@ -17,39 +16,37 @@ import {
 import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
-import SwapAction from 'app/widget/components/swapAction'
+import SwapAction from '../swapAction'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
-import { MintAvatar, MintName } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const ItemPool = ({
-  data,
+  poolAddress,
   onClick = () => {},
   action = <Fragment />,
   keyExpand,
 }: {
-  data: PoolData & { address: string }
+  poolAddress: string
   onClick?: () => void
   action?: ReactElement
   keyExpand: number
 }) => {
-  const { address: poolAddress, state: poolState } = data
   const dispatch = useDispatch()
   const [isActive, setIsActive] = useState(false)
   const { pools } = usePool()
   const details = useSelector(
-    (state: AppState) => state.stat[data.address]?.details,
+    (state: AppState) => state.stat[poolAddress]?.details,
   )
-
-  const mintLptAddress = pools?.[poolAddress]?.mint_lpt
+  const poolData = pools?.[poolAddress] || {}
+  const { mint_lpt: mintLptAddress, state: poolState } = poolData
 
   const apy = useMemo(() => {
     if (!details || !details.roi) return 0
-
     const roi = details.roi
     return Math.pow(1 + Number(roi) / 100, 365) - 1
   }, [details])
@@ -71,7 +68,7 @@ const ItemPool = ({
             <Space>
               <MintAvatar mintAddress={mintLptAddress} size={24} />
               <Typography.Text type={isFrozen ? 'secondary' : undefined}>
-                <MintName mintAddress={mintLptAddress} />
+                <MintSymbol mintAddress={mintLptAddress} />
               </Typography.Text>
             </Space>
             <Space>
@@ -127,7 +124,9 @@ const ItemPool = ({
               <Popover
                 trigger="click"
                 placement="bottomLeft"
-                content={<SwapAction poolAddress={poolAddress} />}
+                content={
+                  <SwapAction isDisabled={isFrozen} poolAddress={poolAddress} />
+                }
               >
                 <Button block>Swap</Button>
               </Popover>

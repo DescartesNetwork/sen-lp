@@ -1,5 +1,14 @@
-import { Card, Col, Row, Typography } from 'antd'
+import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import moment from 'moment'
+
+import { Card, Col, Row, Typography, Spin } from 'antd'
 import SenChart from 'app/components/chart'
+
+import PoolService from 'app/stat/logic/pool/pool'
+import { AppState } from 'app/model'
+import { numeric } from 'shared/util'
+import { DataLoader } from 'shared/dataloader'
 
 const CHART_CONFIGS = {
   color: '#40A9FF',
@@ -8,8 +17,15 @@ const CHART_CONFIGS = {
   tooltip: 'TVL',
   transparent: 'transparent',
 }
+const TTL_5_MIN = 300000
 
 const TotalValueLocked = () => {
+  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const [chartData, setChartData] = useState<{ data: number; label: string }[]>(
+    [],
+  )
+  const [isLoading, setIsLoading] = useState(false)
+
   const tvlChartConfigs = {
     borderColor: CHART_CONFIGS.transparent,
     borderRadius: CHART_CONFIGS.radius,
@@ -20,23 +36,53 @@ const TotalValueLocked = () => {
     backgroundColor: CHART_CONFIGS.color,
   }
 
+  const fetchChart = useCallback(async () => {
+    if (!selectedPoolAddress) return
+    try {
+      setIsLoading(true)
+      const poolService = new PoolService(selectedPoolAddress)
+      const poolStat = await DataLoader.load(
+        'getDailyInfo' + selectedPoolAddress,
+        poolService.getDailyInfo,
+        { cache: { ttl: TTL_5_MIN } },
+      )
+      const chartData = Object.keys(poolStat).map((time) => {
+        return {
+          data: poolStat[time].tvl,
+          label: moment(time, 'YYYYMMDD').format('MM/DD'),
+        }
+      })
+      setChartData(chartData)
+    } catch (error) {
+    } finally {
+      setIsLoading(false)
+    }
+  }, [selectedPoolAddress])
+  useEffect(() => {
+    fetchChart()
+  }, [fetchChart])
+
   return (
     <Card bordered={false} style={{ height: 'auto' }}>
-      <Row gutter={[24, 24]}>
-        <Col flex="auto">
-          <Typography.Title level={4}>Total Value Locked</Typography.Title>
-        </Col>
-        <Col>
-          <Typography.Title level={2}>$123.5M</Typography.Title>
-        </Col>
-        <Col span={24}>
-          <SenChart
-            chartData={[12, 3, 4, 12, 51, 2]}
-            labels={['20/10', '21/10', '22/10', '23/10', '24/10', '25/10']}
-            configs={tvlChartConfigs}
-          />
-        </Col>
-      </Row>
+      <Spin tip="Loading..." spinning={isLoading}>
+        <Row gutter={[24, 24]}>
+          <Col flex="auto">
+            <Typography.Title level={4}>Total Value Locked</Typography.Title>
+          </Col>
+          <Col>
+            <Typography.Title level={2}>
+              ${numeric(chartData.at(-1)?.data).format('0,0.[0]a')}
+            </Typography.Title>
+          </Col>
+          <Col span={24}>
+            <SenChart
+              chartData={chartData.map((e) => e.data)}
+              labels={chartData.map((e) => e.label)}
+              configs={tvlChartConfigs}
+            />
+          </Col>
+        </Row>
+      </Spin>
     </Card>
   )
 }

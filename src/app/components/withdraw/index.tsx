@@ -26,7 +26,7 @@ const Withdraw = ({
 
   const lptAddress =
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
-  const lptPoolAddress = lpts?.[lptAddress].pool
+  const lptPoolAddress = lpts?.[lptAddress]?.pool
 
   const {
     wallet: { address: walletAddress },
@@ -35,7 +35,7 @@ const Withdraw = ({
   const { getMint } = useMint()
 
   const { mint_a, mint_b, mint_lpt, reserve_a, reserve_b } =
-    pools?.[lptPoolAddress]
+    pools?.[lptPoolAddress] || {}
   const mintAddresses = [mint_a, mint_b]
 
   const fetchData = useCallback(async () => {
@@ -123,7 +123,7 @@ const Withdraw = ({
         <Button
           type="primary"
           onClick={onWithdraw}
-          disabled={false}
+          disabled={!lpt}
           block
           loading={loading}
         >

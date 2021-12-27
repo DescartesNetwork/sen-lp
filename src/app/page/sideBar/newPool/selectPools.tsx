@@ -17,7 +17,7 @@ const SelectPools = ({
       value={activeMintAddress || ''}
       bordered={false}
       suffixIcon={<Divider type="vertical" style={{ margin: 0 }} />}
-      style={{ marginLeft: -4, marginRight: -12 }}
+      style={{ marginLeft: -7 }}
     >
       <Select.Option value="Select">
         <Space size={4}>
