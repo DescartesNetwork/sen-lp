@@ -1,14 +1,14 @@
 import { useMemo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import LazyLoad from 'react-lazyload'
 
 import { Row, Col, Button } from 'antd'
-import LazyLoad from 'react-lazyload'
+import LPTCard from '../components/lptCard'
 
 import { AppState } from 'app/model'
 import { usePool } from 'senhub/providers'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import IonIcon from 'shared/antd/ionicon'
-import LPTCard from '../components/lptCard'
 
 const DepositedPools = () => {
   const dispatch = useDispatch()

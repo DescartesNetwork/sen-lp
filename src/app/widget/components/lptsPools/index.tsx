@@ -1,8 +1,8 @@
 import { ReactElement, Fragment, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
+import LazyLoad from 'react-lazyload'
 
 import { Row, Col } from 'antd'
-import LazyLoad from 'react-lazyload'
 import ItemLPT from './itemLPT'
 
 import { AppState } from 'app/model'
