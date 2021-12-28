@@ -7,7 +7,9 @@ import { DailyReport } from 'app/stat/entities/daily-report'
 import { DateHelper } from 'app/stat/helpers/date'
 
 import DailyReportService from '../daily-report'
+import PDB from 'shared/pdb'
 import PoolTransLogService, { SwapActionType } from './poolTranslog'
+import { TransLog } from 'app/stat/entities/trans-log'
 
 const DATE_RANGE = 11
 
@@ -43,6 +45,39 @@ export default class PoolService {
       return 0
     }
   }
+
+  fetchTransLog = async (timeFrom: number, timeTo: number) => {
+    const db = new PDB(this.poolAddress).createInstance('stat')
+    let cacheTransLog: TransLog[] = (await db.getItem('translogs')) || []
+    cacheTransLog = cacheTransLog.sort((a, b) => b.blockTime - a.blockTime)
+    const fistTransLog = cacheTransLog[0]
+    const lastTransLog = cacheTransLog.at(-1)
+
+    if (fistTransLog && lastTransLog) {
+      const [beginTransLogs, afterTransLog] = await Promise.all([
+        this.poolTransLogService.collect(this.poolAddress, {
+          secondFrom: fistTransLog.blockTime,
+          secondTo: timeTo,
+        }),
+        this.poolTransLogService.collect(this.poolAddress, {
+          secondFrom: timeFrom,
+          secondTo: lastTransLog.blockTime,
+          lastSignature: lastTransLog.signature,
+        }),
+      ])
+      cacheTransLog = cacheTransLog.filter(
+        (trans) => trans.blockTime > timeFrom,
+      )
+      cacheTransLog = [...beginTransLogs, ...cacheTransLog, ...afterTransLog]
+    } else {
+      cacheTransLog = await this.poolTransLogService.collect(this.poolAddress, {
+        secondFrom: timeFrom,
+        secondTo: timeTo,
+      })
+    }
+    await db.setItem('translogs', cacheTransLog)
+    return cacheTransLog
+  }
   getDailyInfo = async () => {
     let timeTo = new DateHelper()
     const timeFrom = new DateHelper().subtractDay(DATE_RANGE)
@@ -58,10 +93,10 @@ export default class PoolService {
     } = await this.getPoolData()
 
     // fetch transLog
-    const transLogs = await this.poolTransLogService.collect(this.poolAddress, {
-      secondFrom: timeFrom.seconds(),
-      secondTo: timeTo.seconds(),
-    })
+    const transLogs = await this.fetchTransLog(
+      timeFrom.seconds(),
+      timeTo.seconds(),
+    )
     // parse daily + create map time
     const dailyReports = this.dailyReportService.parserDailyReport(transLogs)
     const mapTimeDailyReport: Record<number, DailyReport[]> = {}

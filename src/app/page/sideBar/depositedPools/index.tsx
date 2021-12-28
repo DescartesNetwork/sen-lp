@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import LazyLoad from 'react-lazyload'
+import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col, Button } from 'antd'
 import LPTCard from '../components/lptCard'
