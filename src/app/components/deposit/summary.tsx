@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
 import { TokenInfo } from '@solana/spl-token-registry'
@@ -23,7 +23,7 @@ const Summary = ({
   const [totalLPT, setTotalLPT] = useState('0')
   const [ratio, setRatio] = useState(0)
   const lpts = useSelector((state: AppState) => state.lpts)
-  const { getMint } = useMint()
+  const { getMint, getDecimals } = useMint()
   const { pools } = usePool()
 
   const poolData = pools?.[poolAddress]
@@ -34,19 +34,6 @@ const Summary = ({
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
   const { amount } = lpts[lptAddress] || {}
   const lpt = Number(utils.undecimalize(amount || BigInt(0), 9))
-  // Reserves
-  const reserveA = useMemo(async () => {
-    const {
-      [mint_a]: { decimals: decimals_a },
-    } = await getMint({ address: mint_a })
-    return Number(utils.undecimalize(reserve_a, decimals_a))
-  }, [getMint, mint_a, reserve_a])
-  const reserveB = useMemo(async () => {
-    const {
-      [mint_b]: { decimals: decimals_b },
-    } = await getMint({ address: mint_b })
-    return Number(utils.undecimalize(reserve_b, decimals_b))
-  }, [getMint, mint_b, reserve_b])
   // Symbols
   let symbols = tokenInfos.map((token) => (!token ? 'TOKN' : token.symbol))
   if (isReverse) symbols.reverse()
@@ -62,18 +49,29 @@ const Summary = ({
 
   useEffect(() => {
     ;(async () => {
-      const ratio = isReverse
-        ? (await reserveB) / (await reserveA)
-        : (await reserveA) / (await reserveB)
-      setRatio(ratio)
+      try {
+        const reserveA = Number(
+          utils.undecimalize(reserve_a, await getDecimals(mint_a)),
+        )
+        const reserveB = Number(
+          utils.undecimalize(reserve_b, await getDecimals(mint_b)),
+        )
+        const ratio = isReverse
+          ? (await reserveB) / (await reserveA)
+          : (await reserveA) / (await reserveB)
+        return setRatio(ratio)
+      } catch (er: any) {
+        return setRatio(0)
+      }
     })()
-  }, [isReverse, reserveA, reserveB])
+  }, [isReverse, mint_a, reserve_a, mint_b, reserve_b, getDecimals])
+
   useEffect(() => {
     ;(async () => {
       const {
         [mint_lpt]: { supply, decimals },
       } = await getMint({ address: mint_lpt })
-      setTotalLPT(utils.undecimalize(supply, decimals))
+      return setTotalLPT(utils.undecimalize(supply, decimals))
     })()
   }, [mint_lpt, getMint])
 
