@@ -1,8 +1,9 @@
 import { utils } from '@senswap/sen-js'
-import { Row, Col, Typography } from 'antd'
-import { usePool } from 'senhub/providers'
 
+import { Row, Col, Typography } from 'antd'
 import FullSide from './fullSide'
+
+import { usePool } from 'senhub/providers'
 
 const FEE_DECIMALS_PERCENT = 7
 
@@ -31,7 +32,7 @@ const Deposit = ({
       <Col span={24}>
         <Typography.Paragraph type="secondary">
           <strong>Liquidity provider incentive.</strong> Liquidity providers
-          earn a {totalRatio}%% fee on all trades proportional to their share of
+          earn a {totalRatio}% fee on all trades proportional to their share of
           the pool. Fees are accrued into the pool and can be claimed by
           withdrawing your liquidity.
         </Typography.Paragraph>

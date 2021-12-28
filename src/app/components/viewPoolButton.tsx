@@ -21,7 +21,7 @@ const ViewPoolButton = () => {
         icon={<IonIcon name="list-outline" />}
         size="large"
       >
-        Pools
+        Pools List
       </Button>
     </Affix>
   )

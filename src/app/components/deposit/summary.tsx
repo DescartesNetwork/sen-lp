@@ -1,30 +1,18 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { PoolData, utils } from '@senswap/sen-js'
+import { account, utils } from '@senswap/sen-js'
+import { TokenInfo } from '@solana/spl-token-registry'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { AppState } from 'app/model'
 import { useMint, usePool } from 'senhub/providers'
-import { numeric, fetchCGK } from 'shared/util'
-import useTokenProvider from 'app/shared/hooks/useTokenProvider'
-import { MintDetail } from 'app/page/poolDetails/liquidityPosition/inversePrice'
-import { TokenInfo } from '@solana/spl-token-registry'
+import { numeric } from 'shared/util'
+import useTokenProvider from 'app/hooks/useTokenProvider'
+import { extractReserve } from 'app/helper'
 
-const MARKET_DEFAULT = {
-  icon: '',
-  symbol: '',
-  name: '',
-  address: '',
-  rank: '',
-  price: 0,
-  priceChange: 0,
-  totalVolume: 0,
-  decimals: 0,
-}
-
-const LPT = ({
+const Summary = ({
   value = '0',
   poolAddress,
 }: {
@@ -33,7 +21,6 @@ const LPT = ({
 }) => {
   const [isReverse, setIsReverse] = useState(false)
   const [totalLPT, setTotalLPT] = useState('0')
-  const [listMintDetail, setListMintDetail] = useState<MintDetail[]>([])
   const [ratio, setRatio] = useState(0)
   const lpts = useSelector((state: AppState) => state.lpts)
   const { getMint } = useMint()
@@ -47,6 +34,7 @@ const LPT = ({
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
   const { amount } = lpts[lptAddress] || {}
   const lpt = Number(utils.undecimalize(amount || BigInt(0), 9))
+  // Reserves
   const reserveA = useMemo(async () => {
     const {
       [mint_a]: { decimals: decimals_a },
@@ -59,27 +47,17 @@ const LPT = ({
     } = await getMint({ address: mint_b })
     return Number(utils.undecimalize(reserve_b, decimals_b))
   }, [getMint, mint_b, reserve_b])
-  const symbols = useMemo(() => {
-    const symbol = tokenInfos.map((token) => {
-      if (!token) return 'UNKN'
-      return token.symbol
-    })
-    if (isReverse) symbol.reverse()
-    return symbol.join('/')
-  }, [isReverse, tokenInfos])
+  // Symbols
+  let symbols = tokenInfos.map((token) => (!token ? 'TOKN' : token.symbol))
+  if (isReverse) symbols.reverse()
+  symbols.join(' / ')
 
-  const extractReserve = (mintAddress: string, poolData: PoolData) => {
-    const { mint_a, mint_b, reserve_a, reserve_b } = poolData
-    if (mintAddress === mint_a) return reserve_a
-    if (mintAddress === mint_b) return reserve_b
-    return BigInt(0)
-  }
-  const calcMintAmount = (mintDetail: MintDetail | TokenInfo) => {
-    if (!mintDetail || !poolData) return 0
-    const { address, decimals } = mintDetail
-    const reserve = extractReserve(address, poolData)
-    const amount = Number(utils.undecimalize(reserve, decimals))
-    return amount
+  const getReserve = (tokenInfo: TokenInfo | undefined) => {
+    if (!tokenInfo || !poolData) return 0
+    const { address: mintAddress, decimals } = tokenInfo
+    if (!account.isAddress(mintAddress) || !decimals) return 0
+    const reserve = extractReserve(mintAddress, poolData)
+    return Number(utils.undecimalize(reserve, decimals))
   }
 
   useEffect(() => {
@@ -99,35 +77,13 @@ const LPT = ({
     })()
   }, [mint_lpt, getMint])
 
-  const fetchMintDetails = useCallback(async () => {
-    if (!tokenInfos) return
-    const promises = tokenInfos.map(async (tokenInfo): Promise<MintDetail> => {
-      const ticket = tokenInfo?.extensions?.coingeckoId
-      if (!ticket) return MARKET_DEFAULT
-      const marketInfo = await fetchCGK(ticket)
-      return {
-        ...marketInfo,
-        decimals: tokenInfo.decimals,
-        address: tokenInfo.address,
-      }
-    })
-    const listMintDetail = await Promise.all(promises)
-    setListMintDetail(listMintDetail)
-  }, [tokenInfos])
-
-  useEffect(() => {
-    fetchMintDetails()
-  }, [fetchMintDetails])
-
   return (
     <Card bordered={false}>
       <Row gutter={[12, 12]}>
         <Col span={24}>
           <Row gutter={[12, 12]}>
             <Col flex="auto">
-              <Typography.Text type="secondary">
-                In - Pool Price
-              </Typography.Text>
+              <Typography.Text type="secondary">In-Pool Price</Typography.Text>
             </Col>
             <Col>
               <Space>
@@ -149,25 +105,22 @@ const LPT = ({
           <Row gutter={[12, 12]}>
             <Col flex="auto">
               <Typography.Text type="secondary">
-                Pool Share Composition
+                Pool Composition
               </Typography.Text>
             </Col>
             <Col>
               <Space size={4}>
-                {listMintDetail.map((mintDetail, idx) => {
-                  const mintAmount = calcMintAmount(mintDetail)
-                  return (
-                    <Fragment key={mintAmount + idx}>
-                      <Typography.Text>
-                        {numeric(mintAmount).format('0,0.[00]a')}
-                        {mintDetail.symbol}
-                      </Typography.Text>
-                      {listMintDetail.length > idx + 1 && (
-                        <Typography.Text>+</Typography.Text>
-                      )}
-                    </Fragment>
-                  )
-                })}
+                {tokenInfos.map((tokenInfo, i) => (
+                  <Fragment key={i}>
+                    <Typography.Text>
+                      {numeric(getReserve(tokenInfo)).format('0,0.[00]a')}{' '}
+                      {tokenInfo?.symbol || 'TOKN'}
+                    </Typography.Text>
+                    {tokenInfos.length > i + 1 && (
+                      <Typography.Title level={5}>+</Typography.Title>
+                    )}
+                  </Fragment>
+                ))}
               </Space>
             </Col>
           </Row>
@@ -175,7 +128,7 @@ const LPT = ({
         <Col span={24}>
           <Row gutter={[12, 12]}>
             <Col flex="auto">
-              <Typography.Text type="secondary">Your LP Tokens</Typography.Text>
+              <Typography.Text type="secondary">My Current LP</Typography.Text>
             </Col>
             <Col>
               <Typography.Text>
@@ -191,7 +144,7 @@ const LPT = ({
             </Col>
             <Col>
               <Typography.Text>
-                {numeric(totalLPT).format('0,0.[0000]')}
+                {numeric(totalLPT).format('0,0.[0000]')} LP
               </Typography.Text>
             </Col>
           </Row>
@@ -218,4 +171,4 @@ const LPT = ({
   )
 }
 
-export default LPT
+export default Summary

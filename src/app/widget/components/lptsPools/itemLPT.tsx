@@ -13,15 +13,15 @@ import {
   Button,
   Popover,
 } from 'antd'
-import PoolTVL from '../../../components/poolTVL'
+import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
 import SwapAction from 'app/widget/components/swapAction'
+import { MintAvatar, MintSymbol } from 'app/components/mint'
 
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const DECIMAL = 9

@@ -6,8 +6,8 @@ import { Row, Col, Button, Typography, Space } from 'antd'
 
 import NumericInput from 'shared/antd/numericInput'
 import { numeric } from 'shared/util'
-import useTokenProvider from 'app/shared/hooks/useTokenProvider'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
+import useTokenProvider from 'app/hooks/useTokenProvider'
+import useMintDecimals from 'app/hooks/useMintDecimals'
 import SelectPools from './selectPools'
 
 interface SuggestMintAmount {

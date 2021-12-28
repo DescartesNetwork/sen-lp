@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-
-import useTokenProvider from 'app/shared/hooks/useTokenProvider'
 import { account } from '@senswap/sen-js'
+
+import useTokenProvider from 'app/hooks/useTokenProvider'
 
 const MintSymbol = ({
   mintAddress,

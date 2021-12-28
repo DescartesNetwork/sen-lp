@@ -22,7 +22,7 @@ import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
+import { MintAvatar, MintSymbol } from 'app/components/mint'
 import { usePool } from 'senhub/providers'
 
 const ItemPool = ({

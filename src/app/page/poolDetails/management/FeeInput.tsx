@@ -1,12 +1,12 @@
 import { Row, Card, Col, Typography, Space } from 'antd'
-import NumericInput from 'app/shared/components/numericInput'
+import NumericInput from 'shared/antd/numericInput'
 
 const FeeInput = ({
   title,
   label,
   ratio,
   currentRatio = '0',
-  onChange = () => { },
+  onChange = () => {},
 }: {
   title: string
   label: string
@@ -22,9 +22,9 @@ const FeeInput = ({
       <Col span={24}>
         <Card bodyStyle={{ padding: 4 }} bordered={false}>
           <NumericInput
-            placeholder={0}
+            placeholder="0"
             value={ratio}
-            onChange={onChange}
+            onValue={onChange}
             bordered={false}
           />
         </Card>

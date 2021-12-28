@@ -4,8 +4,8 @@ import { TokenInfo } from '@solana/spl-token-registry'
 
 import { Button, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import { MintAvatar, MintSymbol } from 'app/components/mint'
 
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { useMint, usePool } from 'senhub/providers'
 import { numeric } from 'shared/util'
 
