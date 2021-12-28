@@ -175,11 +175,11 @@ const LPT = ({
         <Col span={24}>
           <Row gutter={[12, 12]}>
             <Col flex="auto">
-              <Typography.Text type="secondary">Your LPT</Typography.Text>
+              <Typography.Text type="secondary">Your LP Tokens</Typography.Text>
             </Col>
             <Col>
               <Typography.Text>
-                {numeric(lpt).format('0,0.[0000]')}LPT
+                {numeric(lpt).format('0,0.[0000]')} LP
               </Typography.Text>
             </Col>
           </Row>
@@ -187,7 +187,7 @@ const LPT = ({
         <Col span={24}>
           <Row gutter={[8, 8]}>
             <Col flex="auto">
-              <Typography.Text type="secondary">Total LPT</Typography.Text>
+              <Typography.Text type="secondary">Total LP</Typography.Text>
             </Col>
             <Col>
               <Typography.Text>
@@ -208,7 +208,7 @@ const LPT = ({
                 <Typography.Title level={5}>
                   {numeric(value).format('0,0.[0000]')}
                 </Typography.Title>
-                <Typography.Title level={5}>LPT</Typography.Title>
+                <Typography.Title level={5}>LP</Typography.Title>
               </Space>
             </Col>
           </Row>

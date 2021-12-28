@@ -43,7 +43,7 @@ const LPT = ({
       <Col span={24}>
         <Card bodyStyle={{ padding: 8 }} bordered={false}>
           <NumericInput
-            placeholder="Amount of LPT"
+            placeholder="Amount of LP"
             value={lpt}
             onValue={onLPT}
             size="small"

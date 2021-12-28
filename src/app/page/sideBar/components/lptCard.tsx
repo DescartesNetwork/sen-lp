@@ -60,7 +60,7 @@ const LPTCard = ({
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <Typography.Text type="secondary" className="caption">
-                My LPT:
+                My LP:
               </Typography.Text>
               <Typography.Text>
                 {numeric(lp).format('0,0.[00]')}
