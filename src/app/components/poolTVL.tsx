@@ -3,8 +3,7 @@ import { TokenInfo } from '@solana/spl-token-registry'
 import { account, utils } from '@senswap/sen-js'
 
 import { useMint, usePool } from 'senhub/providers'
-import { fetchCGK } from 'shared/helper'
-import { numeric } from 'shared/util'
+import { numeric, fetchCGK } from 'shared/util'
 
 const PoolTVL = ({ poolAddress }: { poolAddress: string }) => {
   const { tokenProvider } = useMint()
