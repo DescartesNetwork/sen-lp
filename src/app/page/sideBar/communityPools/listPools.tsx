@@ -1,6 +1,6 @@
 import { ReactElement, useMemo, useState, useEffect, Fragment } from 'react'
 import { PoolData } from '@senswap/sen-js'
-import LazyLoad from 'react-lazyload'
+import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col } from 'antd'
 import Search from './search'

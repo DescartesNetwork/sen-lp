@@ -1,6 +1,6 @@
 import { ReactElement, useMemo, useEffect, Fragment } from 'react'
 import { useSelector } from 'react-redux'
-import LazyLoad from 'react-lazyload'
+import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col } from 'antd'
 import ItemPool from './itemPool'
