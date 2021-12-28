@@ -20,10 +20,10 @@ const PoolDetails = () => {
         <TotalValueLocked />
       </Col>
       <Col xs={24} md={12}>
-        <Volume24h />
+        <LiquidityPosition poolAddress={selectedPoolAddress} />
       </Col>
       <Col xs={24} md={12}>
-        <LiquidityPosition poolAddress={selectedPoolAddress} />
+        <Volume24h />
       </Col>
       <PoolManagement poolAddress={selectedPoolAddress} />
     </Row>
