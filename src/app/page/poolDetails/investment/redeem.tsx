@@ -1,5 +1,5 @@
 import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
-import { MintAvatar } from 'app/shared/components/mint'
+import { MintAvatar } from 'app/components/mint'
 import IonIcon from 'shared/antd/ionicon'
 
 const CardContent = ({

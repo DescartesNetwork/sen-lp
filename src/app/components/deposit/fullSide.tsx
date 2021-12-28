@@ -2,15 +2,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
 
 import { Row, Col, Button, Radio, Space, Tag } from 'antd'
-import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
-import Amount from '../amount'
-import LPT from './lpt'
+import Summary from './summary'
+import Amount from 'app/components/amount'
+import { MintSymbol } from 'app/components/mint'
+
 import { explorer } from 'shared/util'
-import { MintSymbol } from 'app/shared/components/mint'
-import useMintDecimals from 'app/shared/hooks/useMintDecimals'
-/**
- * Main
- */
+import useMintDecimals from 'app/hooks/useMintDecimals'
+import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
+
 const FullSide = ({
   poolAddress,
   onClose = () => {},
@@ -168,6 +167,7 @@ const FullSide = ({
   useEffect(() => {
     validateInput()
   }, [validateInput])
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -202,7 +202,7 @@ const FullSide = ({
           ),
       )}
       <Col span={24}>
-        <LPT value={lpt} poolAddress={poolAddress} />
+        <Summary value={lpt} poolAddress={poolAddress} />
       </Col>
       <Col span={24}>
         <Button

@@ -1,12 +1,14 @@
-import { Row, Col, Card, Typography, Space, Button, Divider } from 'antd'
-import NumericInput from 'shared/antd/numericInput'
-import { MintAvatar, MintName } from 'app/shared/components/mint'
-import { numeric } from 'shared/util'
 import { useCallback, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { AppState } from 'app/model'
 import { utils } from '@senswap/sen-js'
+
+import { Row, Col, Card, Typography, Space, Button, Divider } from 'antd'
+import NumericInput from 'shared/antd/numericInput'
+import { MintAvatar, MintName } from 'app/components/mint'
+
+import { numeric } from 'shared/util'
 import { usePool } from 'senhub/providers'
+import { AppState } from 'app/model'
 
 /**
  * Single amount input

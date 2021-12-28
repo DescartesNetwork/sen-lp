@@ -2,14 +2,14 @@ import { Fragment, ReactElement, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
-import PoolTVL from '../../../components/poolTVL'
+import PoolTVL from 'app/components/poolTVL'
 import PoolCardStatus from 'app/components/PoolCardStatus'
+import { MintAvatar, MintSymbol } from 'app/components/mint'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
 import { usePool } from 'senhub/providers'
 
 const ItemPool = ({

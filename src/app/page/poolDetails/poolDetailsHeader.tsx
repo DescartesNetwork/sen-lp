@@ -3,11 +3,11 @@ import { useHistory } from 'react-router-dom'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Button, Col, Popover, Row, Space, Tooltip, Typography } from 'antd'
-
-import { MintAvatar, MintSymbol } from 'app/shared/components/mint'
-import { usePool } from 'senhub/providers'
 import IonIcon from 'shared/antd/ionicon'
+import { MintAvatar, MintSymbol } from 'app/components/mint'
+
 import { asyncWait } from 'shared/util'
+import { usePool } from 'senhub/providers'
 
 const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
   const [copied, setCopied] = useState(false)

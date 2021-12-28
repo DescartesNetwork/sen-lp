@@ -1,3 +1,4 @@
+import { PoolData } from '@senswap/sen-js'
 import { explorer } from 'shared/util'
 
 export const notifySuccess = (content: string, txId: string) => {
@@ -13,4 +14,11 @@ export const notifyError = (er: any) => {
     type: 'error',
     description: er.message,
   })
+}
+
+export const extractReserve = (mintAddress: string, poolData: PoolData) => {
+  const { mint_a, mint_b, reserve_a, reserve_b } = poolData
+  if (mintAddress === mint_a) return reserve_a
+  if (mintAddress === mint_b) return reserve_b
+  return BigInt(0)
 }
