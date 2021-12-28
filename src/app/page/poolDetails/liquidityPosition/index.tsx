@@ -8,9 +8,8 @@ import InservePrice, { MintDetail } from './inversePrice'
 import LiquidityAction from './liquidityAction'
 
 import { AppState } from 'app/model'
-import { numeric } from 'shared/util'
+import { numeric, fetchCGK } from 'shared/util'
 import { useMint, usePool } from 'senhub/providers'
-import { fetchCGK } from 'shared/helper'
 import useTokenProvider from 'app/shared/hooks/useTokenProvider'
 
 const APY_DATE = 365
@@ -157,15 +156,15 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
                 }
               />
             </Col>
-            <Col xs={7} sm={12}>
+            <Col xs={8}>
               <Content
-                label="Your LPT"
-                title={<Title value={lpt} sub="LPT" format="0,0.[0000]a" />}
+                label="My Contribution"
+                title={<Title value={lpt} sub="LP" format="0,0.[0000]a" />}
               />
             </Col>
-            <Col xs={17} sm={12}>
+            <Col xs={16}>
               <Content
-                label="Pool Share Composition"
+                label="Pool Composition"
                 title={
                   <Space size={4} align="baseline">
                     {listMintDetail.map((mintDetail, idx) => {
@@ -187,16 +186,16 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
                 }
               />
             </Col>
-            <Col xs={7} sm={12}>
+            <Col xs={8}>
               <Content
                 label="My Portion"
                 title={<Title value={lpt / supply} format="0,0.[00]%" />}
-                subTitle={numeric(supply).format('0,0.[0000]a')}
+                subTitle={`Over ${numeric(supply).format('0,0.[0000]a')} LP`}
               />
             </Col>
-            <Col xs={17} sm={12}>
+            <Col xs={16}>
               <Content
-                label="In - Pool Price"
+                label="In-Pool Price"
                 title={<InservePrice poolAddress={poolAddress} />}
               />
             </Col>

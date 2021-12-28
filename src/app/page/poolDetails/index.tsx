@@ -16,13 +16,13 @@ const PoolDetails = () => {
       <Col span={24}>
         <PoolDetailsHeader poolAddress={selectedPoolAddress} />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col xs={24} md={12}>
         <TotalValueLocked />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col xs={24} md={12}>
         <Volume24h />
       </Col>
-      <Col xs={24} lg={12}>
+      <Col xs={24} md={12}>
         <LiquidityPosition poolAddress={selectedPoolAddress} />
       </Col>
       <PoolManagement poolAddress={selectedPoolAddress} />

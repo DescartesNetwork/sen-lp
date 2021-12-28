@@ -11,7 +11,7 @@ import { notifyError, notifySuccess } from 'app/helper'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 import suggestions, { MintInfo } from 'app/helper/suggestions'
-import { fetchCGK } from 'shared/helper'
+import { fetchCGK } from 'shared/util'
 
 const {
   sol: { taxmanAddress },

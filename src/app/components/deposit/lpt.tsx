@@ -7,10 +7,9 @@ import IonIcon from 'shared/antd/ionicon'
 
 import { AppState } from 'app/model'
 import { useMint, usePool } from 'senhub/providers'
-import { numeric } from 'shared/util'
+import { numeric, fetchCGK } from 'shared/util'
 import useTokenProvider from 'app/shared/hooks/useTokenProvider'
 import { MintDetail } from 'app/page/poolDetails/liquidityPosition/inversePrice'
-import { fetchCGK } from 'shared/helper'
 import { TokenInfo } from '@solana/spl-token-registry'
 
 const MARKET_DEFAULT = {
