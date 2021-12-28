@@ -39,7 +39,7 @@ const ReinvestmentFrom = ({
       <Col>
         <Space size={4} className="caption">
           <Typography.Text type="secondary">Available:</Typography.Text>
-          <Typography.Text type="secondary">37.8 LPT</Typography.Text>
+          <Typography.Text type="secondary">37.8 LP</Typography.Text>
         </Space>
       </Col>
       <Col span={24}>

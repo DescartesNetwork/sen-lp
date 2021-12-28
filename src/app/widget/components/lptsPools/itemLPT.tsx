@@ -16,7 +16,7 @@ import {
 import PoolTVL from '../../../components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
-import SwapAction from 'app/widget/components/swapAction'
+import SwapAction from 'app/widget/components/swapAction'
 
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
@@ -68,7 +68,7 @@ const ItemLPT = ({
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <Typography.Text type="secondary" className="caption">
-                Your LPT:
+                My LP:
               </Typography.Text>
               <Typography.Text>
                 {numeric(lp).format('0,0.[00]')}

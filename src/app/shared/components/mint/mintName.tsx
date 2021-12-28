@@ -24,9 +24,9 @@ const MintName = ({
     })
     if (isReverse) names.reverse()
     names.join(separator)
-    //Normal token
+    // Normal token
     if (tokens.length === 1) return names
-    //LPT token
+    // LPT token
     return `${names} LP`
   }, [isReverse, mintAddress, separator, tokens])
   return <span>{names}</span>
