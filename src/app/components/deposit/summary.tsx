@@ -34,6 +34,7 @@ const Summary = ({
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
   const { amount } = lpts[lptAddress] || {}
   const lpt = Number(utils.undecimalize(amount || BigInt(0), 9))
+  // Reserves
   const reserveA = useMemo(async () => {
     const {
       [mint_a]: { decimals: decimals_a },
@@ -46,20 +47,16 @@ const Summary = ({
     } = await getMint({ address: mint_b })
     return Number(utils.undecimalize(reserve_b, decimals_b))
   }, [getMint, mint_b, reserve_b])
-  const symbols = useMemo(() => {
-    const symbol = tokenInfos.map((token) => {
-      if (!token) return 'UNKN'
-      return token.symbol
-    })
-    if (isReverse) symbol.reverse()
-    return symbol.join('/')
-  }, [isReverse, tokenInfos])
+  // Symbols
+  let symbols = tokenInfos.map((token) => (!token ? 'TOKN' : token.symbol))
+  if (isReverse) symbols.reverse()
+  symbols.join(' / ')
 
   const getReserve = (tokenInfo: TokenInfo | undefined) => {
     if (!tokenInfo || !poolData) return 0
-    const { address, decimals } = tokenInfo
-    if (!account.isAddress(address) || !decimals) return 0
-    const reserve = extractReserve(address, poolData)
+    const { address: mintAddress, decimals } = tokenInfo
+    if (!account.isAddress(mintAddress) || !decimals) return 0
+    const reserve = extractReserve(mintAddress, poolData)
     return Number(utils.undecimalize(reserve, decimals))
   }
 
@@ -108,7 +105,7 @@ const Summary = ({
           <Row gutter={[12, 12]}>
             <Col flex="auto">
               <Typography.Text type="secondary">
-                Pool Share Composition
+                Pool Composition
               </Typography.Text>
             </Col>
             <Col>
