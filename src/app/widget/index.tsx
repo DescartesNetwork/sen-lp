@@ -6,6 +6,7 @@ import { Col, Row } from 'antd'
 import Header from './header'
 import LptWatcher from 'app/components/lptWatcher'
 import RetailerWatcher from 'app/components/retailerWatcher'
+import OrderWatcher from 'app/components/orderWatcher'
 import LptsPools from './components/lptsPools'
 import HotPools from './components/pools'
 
@@ -47,6 +48,7 @@ const Widget = () => {
       <Col span={24} style={{ height: 16 }} />
       <LptWatcher />
       <RetailerWatcher />
+      <OrderWatcher />
     </Row>
   )
 }

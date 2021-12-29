@@ -5,6 +5,7 @@ import main from 'app/model/main.controller'
 import stat from 'app/model/stat.controller'
 import lpts from 'app/model/lpts.controller'
 import retailers from 'app/model/retailers.controller'
+import orders from 'app/model/orders.controller'
 
 /**
  * Isolated store
@@ -18,6 +19,7 @@ const model = configureStore({
     stat,
     lpts,
     retailers,
+    orders,
   },
 })
 
