@@ -7,11 +7,11 @@ import { Net } from 'shared/runtime'
  */
 type Config = {
   // For lp
-  senAddress: string
   swapAddress: string
   taxmanAddress: string
   senOwner: string[]
   // For purchasing
+  sntrAddress: string
   purchasingAddress: string
   spltAddress: string
   splataAddress: string
@@ -25,11 +25,11 @@ const configs: Record<Net, Config> = {
    */
   devnet: {
     // For lp
-    senAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
     swapAddress: '4erFSLP7oBFSVC1t35jdxmbfxEhYCKfoM6XdG2BLR3UF',
     taxmanAddress: '8UaZw2jDhJzv5V53569JbCd3bD4BnyCfBH3sjwgajGS9',
     senOwner: ['GJLqpmDxxrV9xruee2vFvEoTho7VVQHRtuHH8nfoAE54'],
     // For purchasing
+    sntrAddress: '5YwUkPdXLoujGkZuo9B4LsLKj3hdkDcfP4derpspifSJ',
     purchasingAddress: 'FHeonxeZFH76K57KGRWgsmE97tiupcHDjvWNKMQDmdVd',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
@@ -49,11 +49,11 @@ const configs: Record<Net, Config> = {
    */
   testnet: {
     // For lp
-    senAddress: '',
     swapAddress: '',
     taxmanAddress: '',
     senOwner: [],
     // For purchasing
+    sntrAddress: '',
     purchasingAddress: '',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
@@ -73,11 +73,11 @@ const configs: Record<Net, Config> = {
    */
   mainnet: {
     // For lp
-    senAddress: 'SENBBKVCM7homnf5RX9zqpf1GFe935hnbU4uVzY1Y6M',
     swapAddress: 'SSW7ooZ1EbEognq5GosbygA3uWW1Hq1NsFq6TsftCFV',
     taxmanAddress: '9doo2HZQEmh2NgfT3Yx12M89aoBheycYqH1eaR5gKb3e',
     senOwner: ['Cs6jYywHTAgdvjxn8xG4VkJJH8DXXy7zbtatzMUWoCMG'],
     // For purchasing
+    sntrAddress: 'SENBBKVCM7homnf5RX9zqpf1GFe935hnbU4uVzY1Y6M',
     purchasingAddress: '',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
