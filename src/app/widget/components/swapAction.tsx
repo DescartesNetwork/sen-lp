@@ -2,7 +2,11 @@ import { useHistory } from 'react-router-dom'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import config from 'app/configs'
+import configs from 'app/configs'
+
+const {
+  route: { swapRoute },
+} = configs
 
 const SwapAction = ({
   poolAddress,
@@ -12,11 +16,8 @@ const SwapAction = ({
   isDisabled: boolean
 }) => {
   const history = useHistory()
-  const {
-    swapRoute: { swapRoute },
-  } = config
   const onSwap = (originalRoute: boolean) => {
-    history.push({
+    return history.push({
       pathname: swapRoute,
       state: { poolAddress, originalRoute },
     })

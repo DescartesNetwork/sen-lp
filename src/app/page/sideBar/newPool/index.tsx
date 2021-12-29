@@ -15,8 +15,6 @@ import { fetchCGK } from 'shared/util'
 
 const {
   sol: { taxmanAddress },
-} = configs
-const {
   fee: { exoticFee, exoticTax },
 } = configs
 

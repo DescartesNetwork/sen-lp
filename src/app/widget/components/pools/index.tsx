@@ -9,6 +9,10 @@ import { usePool } from 'senhub/providers'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
 
+const {
+  sol: { senOwner },
+} = configs
+
 const ListPools = ({
   onInit = () => {},
   onClick = () => {},
@@ -22,7 +26,6 @@ const ListPools = ({
   const selectedCategoryPool = useSelector(
     (state: AppState) => state.main.selectedCategoryPool,
   )
-  const senOwner = configs.sol.senOwner
   const sortedPools = useMemo(
     () =>
       Object.keys(pools)
