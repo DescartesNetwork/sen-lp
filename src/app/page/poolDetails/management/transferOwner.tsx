@@ -1,43 +1,40 @@
 import { useState } from 'react'
+import { account } from '@senswap/sen-js'
 
 import { Button, Row, Col, Input, Card, Space, Typography } from 'antd'
-import { account } from '@senswap/sen-js'
-import { usePool, useWallet } from 'senhub/providers'
-import { explorer } from 'shared/util'
 import IonIcon from 'shared/antd/ionicon'
 
+import { explorer } from 'shared/util'
+
 const TransferOwner = ({ address: poolAddress }: { address: string }) => {
-  const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
   const [newOwner, setNewOwner] = useState('')
   const [loading, setLoading] = useState(false)
-  const poolData = pools[poolAddress]
 
   const onTransferOwner = async () => {
-    const { swap, wallet } = window.sentre
-    if (!wallet) return
-    setLoading(true)
-    const { txId } = await swap.transferPoolOwnership(
-      poolAddress,
-      newOwner,
-      wallet,
-    )
-    setLoading(false)
-    if (!txId)
+    await setLoading(true)
+    try {
+      const { swap, wallet } = window.sentre
+      if (!wallet) throw new Error('Wallet is not connected.')
+      const { txId } = await swap.transferPoolOwnership(
+        poolAddress,
+        newOwner,
+        wallet,
+      )
+      return window.notify({
+        type: 'success',
+        description: 'Transfer successfully. Click to view details.',
+        onClick: () => window.open(explorer(txId), '_blank'),
+      })
+    } catch (er: any) {
       return window.notify({
         type: 'error',
-        description: 'Transfer make failure.',
+        description: er.message,
       })
-    return window.notify({
-      type: 'success',
-      description: 'Transfer successfully. Click to view details',
-      onClick: () => window.open(explorer(txId), '_blank'),
-    })
+    } finally {
+      return setLoading(false)
+    }
   }
 
-  if (!poolData || walletAddress !== poolData?.owner) return null
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>

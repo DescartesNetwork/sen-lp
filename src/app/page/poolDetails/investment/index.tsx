@@ -9,7 +9,7 @@ const Investment = () => {
       bodyStyle={{ padding: 0 }}
       style={{ minHeight: 384 }}
     >
-      <Tabs style={{ padding: 16 }}>
+      <Tabs style={{ padding: 24 }}>
         <Tabs.TabPane key="investmnet" tab="Reinvestment">
           <ReInvestment />
         </Tabs.TabPane>

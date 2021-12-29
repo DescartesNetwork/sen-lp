@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { Button, Row, Col, Typography, Card, Badge, Space } from 'antd'
-import { usePool, useWallet } from 'senhub/providers'
+import { usePool } from 'senhub/providers'
 import { explorer } from 'shared/util'
 import IonIcon from 'shared/antd/ionicon'
 
@@ -44,9 +44,6 @@ const CardDescription = ({
 
 const Freeze = ({ address }: { address: string }) => {
   const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
   const [loading, setLoading] = useState(false)
   const poolData = pools[address]
 
@@ -86,7 +83,6 @@ const Freeze = ({ address }: { address: string }) => {
     })
   }
 
-  //Check owner in here
   const description = useMemo(() => {
     const state = poolData?.state
     if (state === PoolStatus.Active)
@@ -107,7 +103,6 @@ const Freeze = ({ address }: { address: string }) => {
     return 'Pool is closed'
   }, [poolData?.state])
 
-  if (!poolData || walletAddress !== poolData?.owner) return null
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>{description}</Col>

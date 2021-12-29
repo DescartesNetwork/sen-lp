@@ -1,23 +1,20 @@
 import { useMemo, useState } from 'react'
-
-import { Button, Row, Col } from 'antd'
 import { utils } from '@senswap/sen-js'
 
-import FeeInput from './FeeInput'
-import { usePool, useWallet } from 'senhub/providers'
-import { explorer } from 'shared/util'
+import { Button, Row, Col } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import FeeInput from './FeeInput'
 
-//Fee decimal = 9
-//however feeUI = Fee * 100 (%)
-//-> FEE_DECIMALS_PERCENT = 9 - 2 = 7
+import { usePool } from 'senhub/providers'
+import { explorer } from 'shared/util'
+
+// Fee decimal = 9
+// however feeUI = Fee * 100 (%)
+// -> FEE_DECIMALS_PERCENT = 9 - 2 = 7
 const FEE_DECIMALS_PERCENT = 7
 
 const Fee = ({ address: poolAddress }: { address: string }) => {
   const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
   const [feeRatio, setFeeRatio] = useState<string>('')
   const [taxRatio, setTaxRatio] = useState<string>('')
   const [loading, setLoading] = useState(false)
@@ -68,8 +65,6 @@ const Fee = ({ address: poolAddress }: { address: string }) => {
     return utils.undecimalize(tax_ratio, FEE_DECIMALS_PERCENT)
   }, [tax_ratio])
 
-  //Check owner in here
-  if (!poolData || walletAddress !== poolData?.owner) return null
   return (
     <Row gutter={[16, 24]}>
       <Col span={24}>

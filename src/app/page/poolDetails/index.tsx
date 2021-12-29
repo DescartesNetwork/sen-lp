@@ -1,12 +1,14 @@
 import { useSelector } from 'react-redux'
 
 import { Col, Row } from 'antd'
-import { AppState } from 'app/model'
+import PoolDetailsHeader from './poolDetailsHeader'
 import LiquidityPosition from './liquidityPosition'
 import PoolManagement from './management'
 import TotalValueLocked from './totalValueLocked'
 import Volume24h from './volume24h'
-import PoolDetailsHeader from './poolDetailsHeader'
+import Investment from './investment'
+
+import { AppState } from 'app/model'
 
 const PoolDetails = () => {
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
@@ -25,7 +27,12 @@ const PoolDetails = () => {
       <Col xs={24} md={12}>
         <Volume24h />
       </Col>
-      <PoolManagement poolAddress={selectedPoolAddress} />
+      <Col xs={24} md={12}>
+        <Investment />
+      </Col>
+      <Col xs={24} md={12}>
+        <PoolManagement poolAddress={selectedPoolAddress} />
+      </Col>
     </Row>
   )
 }
