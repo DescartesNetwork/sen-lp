@@ -1,55 +1,32 @@
-import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
-import { MintAvatar } from 'app/components/mint'
-import IonIcon from 'shared/antd/ionicon'
+import { useSelector } from 'react-redux'
+
+import { Col, Row, Typography } from 'antd'
 import Order from './order'
 
-const Redeem = () => {
-  const data = [
-    { label: 'Total Amount (SEN)', value: 37 },
-    { label: 'Locked Periold', value: 7, symbol: 'Days' },
-    { label: 'Accrue Days', value: 1, symbol: 'Days' },
-    { label: 'Start Date', value: '15/12/2021' },
-    { label: 'End Date', value: '22/12/2021' },
-    { label: 'Estimated Interest', value: 1141241215, est: true },
-  ]
+import { AppState } from 'app/model'
+import { usePool } from 'senhub/providers'
+
+const Redeem = ({ poolAddress }: { poolAddress: string }) => {
+  const { orders, retailers } = useSelector((state: AppState) => state)
+  const { pools } = usePool()
+
+  const { mint_lpt } = pools[poolAddress] || {}
+  const orderAddresses = Object.keys(orders).filter((orderAddress) => {
+    const { retailer } = orders[orderAddress] || {}
+    const { mint_bid } = retailers[retailer] || {}
+    return mint_bid === mint_lpt
+  })
+
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Space>
-          <MintAvatar mintAddress={''} size={24} />
-          <Divider type="vertical" />
-          <Typography.Text>Vesting token in 7 Days</Typography.Text>
-        </Space>
-      </Col>
-      <Col span={24}>
-        <Card
-          bodyStyle={{ padding: 24, borderRadius: 8 }}
-          style={{ background: 'transparent' }}
-        >
-          <Row gutter={[16, 16]}>
-            {data?.map((item, idx) => (
-              <Col xs={12} lg={8} key={idx}>
-                <Order
-                  label={item.label}
-                  value={item.value}
-                  est={item.est}
-                  symbol={item.symbol}
-                />
-              </Col>
-            ))}
-          </Row>
-        </Card>
-      </Col>
-      <Col span={24}>
-        <Button
-          type="primary"
-          icon={<IonIcon name="diamond" />}
-          onClick={() => {}}
-          block
-        >
-          Redeem
-        </Button>
-      </Col>
+    <Row gutter={[16, 16]} style={{ maxHeight: 282 }} className="scrollbar">
+      {!orderAddresses.length && (
+        <Typography.Text type="secondary">No available order</Typography.Text>
+      )}
+      {orderAddresses.map((orderAddress) => (
+        <Col span={24} key={orderAddress}>
+          <Order orderAddress={orderAddress} />
+        </Col>
+      ))}
     </Row>
   )
 }

@@ -15,17 +15,13 @@ const Investment = ({ poolAddress }: { poolAddress: string }) => {
   const isOwner = walletAddress === poolData?.owner
 
   return (
-    <Card
-      bordered={false}
-      bodyStyle={{ padding: 0 }}
-      style={{ minHeight: 384 }}
-    >
+    <Card bordered={false} bodyStyle={{ padding: 0 }}>
       <Tabs style={{ padding: '16px 24px 24px 24px' }}>
         <Tabs.TabPane key="investmnet" tab="Reinvestment">
           <ReInvestment poolAddress={poolAddress} />
         </Tabs.TabPane>
         <Tabs.TabPane key="redeem" tab="Redeem">
-          <Redeem />
+          <Redeem poolAddress={poolAddress} />
         </Tabs.TabPane>
         {isOwner ? (
           <Tabs.TabPane key="admin" tab="Admin">

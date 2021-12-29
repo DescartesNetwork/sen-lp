@@ -1,5 +1,7 @@
 import { ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
+import moment from 'moment'
+import { utils } from '@senswap/sen-js'
 
 import { Button, Col, Divider, Modal, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/components/mint'
@@ -9,7 +11,6 @@ import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import configs from 'app/configs'
-import { utils } from '@senswap/sen-js'
 import useMintDecimals from 'app/hooks/useMintDecimals'
 
 const Content = ({
@@ -108,7 +109,7 @@ const Confirm = ({
       if (!wallet) throw new Error('Wallet is not connected')
       await setLoading(true)
       const { txId } = await purchasing.placeOrder(
-        0,
+        1,
         bidAmount,
         askAmount,
         lockedTime,
@@ -174,7 +175,17 @@ const Confirm = ({
           <Divider style={{ margin: 0 }} />
         </Col>
         <Col span={24}>
-          <TimeInfo label="Locked Time" value={`${locktime} Days`} />
+          <Row gutter={[12, 12]}>
+            <Col span={24}>
+              <TimeInfo
+                label="Start Date"
+                value={moment().format('HH:mm DD/MM/YYYY')}
+              />
+            </Col>
+            <Col span={24}>
+              <TimeInfo label="Locked Time" value={`${locktime} Days`} />
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <Button type="primary" onClick={onPlaceOrder} loading={loading} block>

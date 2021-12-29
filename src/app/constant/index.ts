@@ -3,6 +3,15 @@ export enum PoolStatus {
   Active = 1,
 }
 
+export enum OrderStatus {
+  Uninitialized = 0,
+  Open = 1,
+  Approved = 2,
+  Done = 3,
+  Rejected = 4,
+  Canceled = 5,
+}
+
 export const VESTING = [
   { locktime: 7, discount: 0.1 },
   { locktime: 15, discount: 0.25 },
