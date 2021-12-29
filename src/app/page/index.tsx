@@ -6,6 +6,7 @@ import SideBar from './sideBar'
 import PoolDetails from './poolDetails'
 import ViewPoolButton from 'app/components/viewPoolButton'
 import LptWatcher from 'app/components/lptWatcher'
+import RetailerWatcher from 'app/components/retailerWatcher'
 
 import { useUI } from 'senhub/providers'
 import { AppState } from 'app/model'
@@ -47,6 +48,7 @@ const Page = () => {
       </Col>
       <ViewPoolButton />
       <LptWatcher />
+      <RetailerWatcher />
     </Row>
   )
 }

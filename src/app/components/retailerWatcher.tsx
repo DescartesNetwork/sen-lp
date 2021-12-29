@@ -1,50 +1,46 @@
-import { Fragment, useCallback, useEffect, useMemo } from 'react'
+import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
 
 import { notifyError } from 'app/helper'
 import { AppDispatch } from 'app/model'
-import { getLPTs, upsetLPT } from 'app/model/lpts.controller'
-import { useAccount, useWallet } from 'senhub/providers'
+import { getRetailers, upsetRetailer } from 'app/model/retailers.controller'
+import { useWallet } from 'senhub/providers'
+import configs from 'app/configs'
+
+const {
+  sol: { purchasing },
+} = configs
 
 // Watch id
 let watchId = 0
 
-const LptWatcher = () => {
+const RetailerWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { accounts } = useAccount()
   const {
     wallet: { address: walletAddress },
   } = useWallet()
 
   // First-time fetching
-  const accountData = useMemo(
-    () =>
-      Object.keys(accounts).map((accountAddress) => ({
-        address: accountAddress,
-        ...accounts[accountAddress],
-      })),
-    [accounts],
-  )
   const fetchData = useCallback(async () => {
     try {
       if (!account.isAddress(walletAddress)) return
-      await dispatch(getLPTs({ accounts: accountData })).unwrap()
+      await dispatch(getRetailers()).unwrap()
     } catch (er) {
       await notifyError(er)
     }
-  }, [dispatch, accountData, walletAddress])
+  }, [dispatch, walletAddress])
   // Watch account changes
   const watchData = useCallback(async () => {
     if (watchId) return console.warn('Already watched')
     const callback = (er: string | null, re: any) => {
       if (er) return console.error(er)
       const { address, data } = re
-      return dispatch(upsetLPT({ address, data }))
+      return dispatch(upsetRetailer({ address, data }))
     }
-    const filters = [{ memcmp: { bytes: walletAddress, offset: 32 } }]
-    watchId = window.sentre.splt.watch(callback, filters)
-  }, [dispatch, walletAddress])
+    const filters = [{ dataSize: 161 }]
+    watchId = purchasing.watch(callback, filters)
+  }, [dispatch])
 
   useEffect(() => {
     fetchData()
@@ -53,7 +49,7 @@ const LptWatcher = () => {
     return () => {
       ;(async () => {
         try {
-          await window.sentre.splt.unwatch(watchId)
+          await purchasing.unwatch(watchId)
         } catch (er) {}
       })()
       watchId = 0
@@ -63,4 +59,4 @@ const LptWatcher = () => {
   return <Fragment />
 }
 
-export default LptWatcher
+export default RetailerWatcher

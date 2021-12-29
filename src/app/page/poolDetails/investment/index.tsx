@@ -1,8 +1,19 @@
 import { Card, Tabs } from 'antd'
 import Redeem from './redeem'
 import ReInvestment from './reinvestment'
+import Admin from './admin'
+
+import { usePool, useWallet } from 'senhub/providers'
 
 const Investment = ({ poolAddress }: { poolAddress: string }) => {
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+  const { pools } = usePool()
+
+  const poolData = pools[poolAddress]
+  const isOwner = walletAddress === poolData?.owner
+
   return (
     <Card
       bordered={false}
@@ -16,6 +27,11 @@ const Investment = ({ poolAddress }: { poolAddress: string }) => {
         <Tabs.TabPane key="redeem" tab="Redeem">
           <Redeem />
         </Tabs.TabPane>
+        {isOwner ? (
+          <Tabs.TabPane key="admin" tab="Admin">
+            <Admin poolAddress={poolAddress} />
+          </Tabs.TabPane>
+        ) : null}
       </Tabs>
     </Card>
   )

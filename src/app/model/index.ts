@@ -4,6 +4,7 @@ import { devTools, bigintSerializationMiddleware } from 'shared/devTools'
 import main from 'app/model/main.controller'
 import stat from 'app/model/stat.controller'
 import lpts from 'app/model/lpts.controller'
+import retailers from 'app/model/retailers.controller'
 
 /**
  * Isolated store
@@ -16,6 +17,7 @@ const model = configureStore({
     main,
     stat,
     lpts,
+    retailers,
   },
 })
 

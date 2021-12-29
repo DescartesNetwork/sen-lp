@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row } from 'antd'
 import Header from './header'
 import LptWatcher from 'app/components/lptWatcher'
+import RetailerWatcher from 'app/components/retailerWatcher'
 import LptsPools from './components/lptsPools'
 import HotPools from './components/pools'
-import configs from 'app/configs'
 
+import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 
@@ -45,6 +46,7 @@ const Widget = () => {
       </Col>
       <Col span={24} style={{ height: 16 }} />
       <LptWatcher />
+      <RetailerWatcher />
     </Row>
   )
 }
