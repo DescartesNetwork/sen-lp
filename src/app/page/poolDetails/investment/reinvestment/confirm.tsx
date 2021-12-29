@@ -12,6 +12,7 @@ import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import configs from 'app/configs'
 import useMintDecimals from 'app/hooks/useMintDecimals'
+import useNextOrderIndex from 'app/hooks/useNextOrderIndex'
 
 const Content = ({
   label = '',
@@ -93,6 +94,7 @@ const Confirm = ({
   const {
     retailers: { [retailerAddress]: retailerData },
   } = useSelector((state: AppState) => state)
+  const index = useNextOrderIndex(retailerAddress)
   const bidDecimals = useMintDecimals(retailerData.mint_bid)
   const askDecimals = useMintDecimals(retailerData.mint_ask)
 
@@ -109,7 +111,7 @@ const Confirm = ({
       if (!wallet) throw new Error('Wallet is not connected')
       await setLoading(true)
       const { txId } = await purchasing.placeOrder(
-        1,
+        index,
         bidAmount,
         askAmount,
         lockedTime,
