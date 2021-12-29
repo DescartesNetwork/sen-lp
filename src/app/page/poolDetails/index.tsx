@@ -28,7 +28,7 @@ const PoolDetails = () => {
         <Volume24h />
       </Col>
       <Col xs={24} md={12}>
-        <Investment />
+        <Investment poolAddress={selectedPoolAddress} />
       </Col>
       <Col xs={24} md={12}>
         <PoolManagement poolAddress={selectedPoolAddress} />

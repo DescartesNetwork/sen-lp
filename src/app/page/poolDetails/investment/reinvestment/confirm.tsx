@@ -67,19 +67,19 @@ const TimeInfo = ({
   )
 }
 
-const ReinvestmentConfirm = ({
+const Confirm = ({
   visible = false,
   onClose = () => {},
 }: {
   visible?: boolean
-  onClose?: (visible: boolean) => void
+  onClose?: () => void
 }) => {
   return (
     <Modal
       visible={visible}
       footer={false}
       closeIcon={<IonIcon name="close-outline" />}
-      onCancel={() => onClose(false)}
+      onCancel={onClose}
     >
       <Row gutter={[12, 12]}>
         <Col span={24}>
@@ -141,4 +141,4 @@ const ReinvestmentConfirm = ({
     </Modal>
   )
 }
-export default ReinvestmentConfirm
+export default Confirm
