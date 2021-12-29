@@ -3,6 +3,8 @@ import { ReactNode } from 'react'
 import { Col, Popover, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
+import { VESTING } from 'app/constant'
+
 const PriceInfo = ({
   label = '',
   value = '',
@@ -14,9 +16,9 @@ const PriceInfo = ({
   discount?: boolean
   description?: ReactNode
 }) => {
-  const styles = { fontWeight: 700, color: discount ? '#F9575E' : 'inherit' }
+  const styles = { color: discount ? '#F9575E' : 'inherit' }
   return (
-    <Row gutter={[8, 8]}>
+    <Row gutter={[8, 8]} align="bottom">
       <Col flex="auto">
         <Space size={4}>
           <Typography.Text style={styles}>{label}</Typography.Text>
@@ -32,40 +34,35 @@ const PriceInfo = ({
         </Space>
       </Col>
       <Col>
-        <Typography.Text
+        <Typography.Title
           style={{
             ...styles,
             textDecoration: !discount ? 'line-through' : 'unset',
           }}
-          type={!discount ? 'secondary' : undefined}
+          level={!discount ? 5 : 3}
         >
           {value}
           <small>%</small>
-        </Typography.Text>
+        </Typography.Title>
       </Col>
     </Row>
   )
 }
 
 const Discount = ({ locktime }: { locktime: number }) => {
+  const discount =
+    VESTING.find(({ locktime: l }) => l === locktime)?.discount || 0
   return (
     <Row gutter={[5, 5]}>
       <Col span={24}>
-        <PriceInfo label="SNTR Buyback" value="199" discount />
-      </Col>
-      <Col span={24}>
         <PriceInfo
-          label="Farming"
-          value="118"
-          description={<Typography.Text>Farming title</Typography.Text>}
+          label="SNTR Buy-back"
+          value={Math.round((discount + 1) * 100)}
+          discount
         />
       </Col>
       <Col span={24}>
-        <PriceInfo
-          label="Market Buyback"
-          value="100"
-          description={<Typography.Text>Market buyback title</Typography.Text>}
-        />
+        <PriceInfo label="Market Buy-back" value="100" />
       </Col>
     </Row>
   )

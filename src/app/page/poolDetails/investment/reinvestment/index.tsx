@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -6,12 +7,26 @@ import Confirm from './confirm'
 import Form from './form'
 import Discount from './discount'
 
-const LOCKTIMES = [7, 30, 60, 90]
+import { VESTING } from 'app/constant'
+import { AppState } from 'app/model'
+import { usePool } from 'senhub/providers'
+import { account } from '@senswap/sen-js'
+
+const LOCKTIMES = VESTING.map(({ locktime }) => locktime)
 
 const Reinvestment = ({ poolAddress }: { poolAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const [amount, setAmount] = useState('')
   const [locktime, setLocktime] = useState(LOCKTIMES[0])
+  const { retailers } = useSelector((state: AppState) => state)
+  const { pools } = usePool()
+
+  const poolData = pools[poolAddress]
+  const retailerIndex = Object.values(retailers).findIndex(
+    ({ mint_bid }) => mint_bid === poolData?.mint_lpt,
+  )
+  const retailerAddress = Object.keys(retailers)[retailerIndex]
+  const noRetailer = !account.isAddress(retailerAddress)
 
   return (
     <Row gutter={[24, 24]}>
@@ -37,16 +52,16 @@ const Reinvestment = ({ poolAddress }: { poolAddress: string }) => {
         <Discount locktime={locktime} />
       </Col>
       <Col span={24}>
-        <Typography.Text>
-          <span style={{ fontWeight: 700, color: 'inherit' }}>
-            SNTR Buy-Back Offering:
-          </span>{' '}
-          Sell your LPTs with juicy profit. No gas, no slippage. The tokens will
-          be unlocked after the selected period.
-        </Typography.Text>
-      </Col>
-      <Col span={24}>
         <Row gutter={[12, 12]}>
+          <Col span={24}>
+            <Typography.Text>
+              <span style={{ fontWeight: 700, color: 'inherit' }}>
+                SNTR Buy-back Offering:
+              </span>{' '}
+              Selling your LP tokens with juicy profit. No fee, no slippage. The
+              tokens will be unlocked after the selected period.
+            </Typography.Text>
+          </Col>
           <Col span={24}>
             <Form
               poolAddress={poolAddress}
@@ -57,16 +72,29 @@ const Reinvestment = ({ poolAddress }: { poolAddress: string }) => {
           <Col span={24}>
             <Button
               type="primary"
-              icon={<IonIcon name="diamond" />}
+              icon={
+                <IonIcon
+                  name={noRetailer ? 'help-circle-outline' : 'diamond'}
+                />
+              }
               onClick={() => setVisible(true)}
+              disabled={!parseFloat(amount) || noRetailer}
               block
             >
-              Buy SEN
+              {noRetailer ? 'There is no campaign on this pool' : 'Buy SNTR'}
             </Button>
           </Col>
         </Row>
       </Col>
-      <Confirm visible={visible} onClose={() => setVisible(false)} />
+      {!noRetailer && (
+        <Confirm
+          retailerAddress={retailerAddress}
+          amount={amount}
+          locktime={locktime}
+          visible={visible}
+          onClose={() => setVisible(false)}
+        />
+      )}
     </Row>
   )
 }

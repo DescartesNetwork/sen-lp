@@ -1,28 +1,7 @@
 import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd'
 import { MintAvatar } from 'app/components/mint'
 import IonIcon from 'shared/antd/ionicon'
-
-const CardContent = ({
-  label = '',
-  value = '',
-  symbol = undefined,
-  est = false,
-}: {
-  label?: string
-  value?: string | number
-  est?: boolean
-  symbol?: string | undefined
-}) => {
-  return (
-    <Space direction="vertical" size={0}>
-      <Typography.Text type="secondary">{label}</Typography.Text>
-      <Typography.Text type={est ? 'secondary' : undefined}>
-        {value}
-        {symbol && <span>{symbol}</span>}
-      </Typography.Text>
-    </Space>
-  )
-}
+import Order from './order'
 
 const Redeem = () => {
   const data = [
@@ -50,7 +29,7 @@ const Redeem = () => {
           <Row gutter={[16, 16]}>
             {data?.map((item, idx) => (
               <Col xs={12} lg={8} key={idx}>
-                <CardContent
+                <Order
                   label={item.label}
                   value={item.value}
                   est={item.est}
