@@ -24,13 +24,14 @@ const CommunityPools = () => {
     },
     [dispatch, poolAddress],
   )
+
   const setActiveAddress = useCallback(
     (address: string) => {
       dispatch(selectPool(address))
       dispatch(handleOpenDrawer(false))
       history.push('/app/senhub?poolAddress=' + address)
     },
-    [dispatch],
+    [dispatch, history],
   )
 
   const action = useCallback(

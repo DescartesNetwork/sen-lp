@@ -33,7 +33,7 @@ const SideBar = () => {
     ) {
       setDefaultTab('community-pools')
     }
-  }, [])
+  }, [listSentrePools, poolAddress])
 
   return (
     <Tabs

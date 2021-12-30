@@ -36,7 +36,7 @@ const SentrePools = () => {
       dispatch(handleOpenDrawer(false))
       history.push('/app/senhub?poolAddress=' + address)
     },
-    [dispatch],
+    [dispatch, history],
   )
 
   const action = useCallback(
