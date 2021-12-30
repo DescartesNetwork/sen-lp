@@ -15,6 +15,7 @@ import useMintDecimals from 'app/hooks/useMintDecimals'
 import useNextOrderIndex from 'app/hooks/useNextOrderIndex'
 
 import { VESTING } from 'app/constant'
+import { useMintPrice } from 'app/hooks/useMintPrice'
 
 const Content = ({
   label = '',
@@ -99,14 +100,19 @@ const Confirm = ({
   const index = useNextOrderIndex(retailerAddress)
   const bidDecimals = useMintDecimals(retailerData.mint_bid)
   const askDecimals = useMintDecimals(retailerData.mint_ask)
+  const bidPrice = useMintPrice(retailerData.mint_bid)
+  const askPrice = useMintPrice(retailerData.mint_ask)
 
   const lockedTime = global.BigInt(Math.floor(locktime * 24 * 60 * 60))
   const discount =
     VESTING.find(({ locktime: l }) => l === locktime)?.discount || 0
+  // Compute amounts
+  const valuation = parseFloat(amount) * bidPrice
   const bidAmount = utils.decimalize(amount, bidDecimals)
-  const askAmount = utils.decimalize(amount, askDecimals)
-
-  console.log(discount)
+  const askAmount = utils.decimalize(
+    (valuation * (1 + discount)) / askPrice,
+    askDecimals,
+  )
 
   const onPlaceOrder = async () => {
     try {
@@ -116,6 +122,7 @@ const Confirm = ({
       const { wallet } = window.sentre
       if (!wallet) throw new Error('Wallet is not connected')
       await setLoading(true)
+      // Execute
       const { txId } = await purchasing.placeOrder(
         index,
         bidAmount,
@@ -171,8 +178,10 @@ const Confirm = ({
                     </Typography.Title>
                   </Space>
                 }
-                value={1200}
-                subValue={1000}
+                value={numeric((valuation * (1 + discount)) / askPrice).format(
+                  '0,0.[0000]',
+                )}
+                subValue={numeric(valuation / askPrice).format('0,0.[0000]')}
                 color="#3E8C6A"
                 floatRight
               />
