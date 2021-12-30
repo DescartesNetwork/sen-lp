@@ -1,4 +1,4 @@
-import { ReactElement, useMemo, useState, useEffect, Fragment } from 'react'
+import { ReactElement, useMemo, useState, Fragment } from 'react'
 import { PoolData } from '@senswap/sen-js'
 import LazyLoad from '@senswap/react-lazyload'
 
@@ -14,12 +14,10 @@ const {
 } = configs
 
 const ListAllPools = ({
-  onInit = () => {},
   onClick = () => {},
   selectedPoolAddress,
   action = () => <Fragment />,
 }: {
-  onInit?: (poolAddress: string) => void
   onClick?: (poolAddress: string) => void
   selectedPoolAddress?: string
   action?: (poolAddress: string) => ReactElement
@@ -51,11 +49,6 @@ const ListAllPools = ({
         ),
     [pools],
   )
-
-  useEffect(() => {
-    if (!sortedPools.length || selectedPoolAddress) return
-    onInit(sortedPools[0]?.address)
-  }, [onInit, selectedPoolAddress, sortedPools])
 
   return (
     <Row gutter={[12, 12]}>
