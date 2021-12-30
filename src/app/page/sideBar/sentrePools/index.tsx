@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, MouseEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -14,6 +14,7 @@ import { AppState } from 'app/model'
 
 const {
   sol: { senOwner },
+  route: { myRoute },
 } = configs
 
 const SentrePools = () => {
@@ -30,31 +31,13 @@ const SentrePools = () => {
     return senOwner.includes(owner)
   })
 
-  const setActiveAddress = useCallback(
-    (address: string) => {
-      dispatch(selectPool(address))
-      dispatch(handleOpenDrawer(false))
-      history.push('/app/senhub?poolAddress=' + address)
+  const setActivePoolAddress = useCallback(
+    async (address: string) => {
+      await dispatch(selectPool(address))
+      await dispatch(handleOpenDrawer(false))
+      return history.push(`${myRoute}?poolAddress=${address}`)
     },
     [dispatch, history],
-  )
-
-  const action = useCallback(
-    (poolAddress) => {
-      return (
-        <Button
-          type="text"
-          onClick={() => setActiveAddress(poolAddress)}
-          icon={
-            <IonIcon
-              name="arrow-forward-outline"
-              style={{ fontSize: 12, color: '#7A7B85' }}
-            />
-          }
-        />
-      )
-    },
-    [setActiveAddress],
   )
 
   const onInit = useCallback(
@@ -77,8 +60,22 @@ const SentrePools = () => {
           <Col span={24} key={poolAddress + idx}>
             <PoolCard
               poolAddress={poolAddress}
-              action={action(poolAddress)}
-              onClick={() => setActiveAddress(poolAddress)}
+              action={
+                <Button
+                  type="text"
+                  onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                    e.stopPropagation()
+                    setActivePoolAddress(poolAddress)
+                  }}
+                  icon={
+                    <IonIcon
+                      name="arrow-forward-outline"
+                      style={{ fontSize: 12, color: '#7A7B85' }}
+                    />
+                  }
+                />
+              }
+              onClick={() => setActivePoolAddress(poolAddress)}
               selected={selectedPoolAddress === poolAddress}
             />
           </Col>

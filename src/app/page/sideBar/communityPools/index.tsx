@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { MouseEvent, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
@@ -6,19 +6,24 @@ import { Button, Col, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import ListAllPools from './listPools'
 
+import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+
+const {
+  route: { myRoute },
+} = configs
 
 const CommunityPools = () => {
   const history = useHistory()
   const dispatch = useDispatch<AppDispatch>()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
 
-  const setActiveAddress = useCallback(
-    (address: string) => {
-      dispatch(selectPool(address))
-      dispatch(handleOpenDrawer(false))
-      history.push('/app/senhub?poolAddress=' + address)
+  const setActivePoolAddress = useCallback(
+    async (address: string) => {
+      await dispatch(selectPool(address))
+      await dispatch(handleOpenDrawer(false))
+      return history.push(`${myRoute}?poolAddress=${address}`)
     },
     [dispatch, history],
   )
@@ -28,7 +33,10 @@ const CommunityPools = () => {
       return (
         <Button
           type="text"
-          onClick={() => setActiveAddress(poolAddress)}
+          onClick={(e: MouseEvent<HTMLButtonElement>) => {
+            e.stopPropagation()
+            setActivePoolAddress(poolAddress)
+          }}
           icon={
             <IonIcon
               name="arrow-forward-outline"
@@ -38,7 +46,7 @@ const CommunityPools = () => {
         />
       )
     },
-    [setActiveAddress],
+    [setActivePoolAddress],
   )
 
   return (
@@ -47,7 +55,7 @@ const CommunityPools = () => {
         <ListAllPools
           action={action}
           selectedPoolAddress={selectedPoolAddress}
-          onClick={setActiveAddress}
+          onClick={setActivePoolAddress}
         />
       </Col>
     </Row>
