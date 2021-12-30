@@ -38,7 +38,7 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
             placement="left"
             content={
               <Space>
-                <Typography.Text>PoolAddress: {poolAddress}</Typography.Text>
+                <Typography.Text>Pool Address: {poolAddress}</Typography.Text>
                 <Tooltip title="Copied" visible={copied} arrowPointAtCenter>
                   <CopyToClipboard text={poolAddress}>
                     <Button
@@ -52,7 +52,10 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
               </Space>
             }
           >
-            <IonIcon name="alert-circle-outline" />
+            <Button
+              type="text"
+              icon={<IonIcon name="alert-circle-outline" />}
+            />
           </Popover>
           <Button onClick={goFarming}>Go Farming</Button>
         </Space>
