@@ -4,9 +4,14 @@ import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col } from 'antd'
 import Search from './search'
-import ItemPool from '../components/itemPool'
+import PoolCard from '../components/poolCard'
 
 import { usePool } from 'senhub/providers'
+import configs from 'app/configs'
+
+const {
+  sol: { senOwner },
+} = configs
 
 const ListAllPools = ({
   onInit = () => {},
@@ -28,6 +33,10 @@ const ListAllPools = ({
     () =>
       Object.keys(pools)
         .map((address) => ({ address, ...pools[address] }))
+        .filter((pool) => {
+          const { owner } = pool || {}
+          return !senOwner.includes(owner)
+        })
         .sort(
           (
             { reserve_a: firstRa, reserve_b: firstRb },
@@ -56,7 +65,7 @@ const ListAllPools = ({
       {(searchedPools || sortedPools).map((poolData, i) => (
         <Col span={24} key={poolData.address + i}>
           <LazyLoad height={78} overflow>
-            <ItemPool
+            <PoolCard
               poolAddress={poolData.address}
               action={action(poolData.address)}
               onClick={() => onClick(poolData.address)}

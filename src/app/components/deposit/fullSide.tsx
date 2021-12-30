@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
 
-import { Row, Col, Button, Radio, Space, Tag } from 'antd'
+import { Row, Col, Button, Radio, Space, Tag, RadioChangeEvent } from 'antd'
 import Summary from './summary'
 import Amount from 'app/components/amount'
 import { MintSymbol } from 'app/components/mint'
@@ -13,9 +13,11 @@ import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
 const FullSide = ({
   poolAddress,
   onClose = () => {},
+  onChange = () => {},
 }: {
   poolAddress: string
   onClose?: () => void
+  onChange?: (mint: string) => void
 }) => {
   const [loading, setLoading] = useState(false)
   const [lpt, setLPT] = useState('')
@@ -158,9 +160,9 @@ const FullSide = ({
       mint_b,
     )
     const accMintB = accounts[accAddrMintB]
-    if (!accMintA || !accMintB) return setDisabled(true)
-    const disabled =
-      amounts[0] > accMintA.amount || amounts[1] > accMintB.amount
+    const amountMintA = accMintA?.amount || 0
+    const amountMintB = accMintB?.amount || 0
+    const disabled = amounts[0] > amountMintA || amounts[1] > amountMintB
     setDisabled(disabled)
   }, [accounts, amounts, mint_a, mint_b, walletAddress])
 
@@ -168,11 +170,18 @@ const FullSide = ({
     validateInput()
   }, [validateInput])
 
+  const onSelectMint = (event: RadioChangeEvent) => {
+    setSelectMint(event.target.value)
+    onChange(event.target.value)
+  }
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Radio.Group
-          onChange={(e) => setSelectMint(e.target.value)}
+          onChange={(e) => {
+            onSelectMint(e)
+          }}
           value={selectMint}
         >
           <Radio value={'all'}>
