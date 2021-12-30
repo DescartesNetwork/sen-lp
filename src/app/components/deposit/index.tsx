@@ -54,7 +54,7 @@ const Deposit = ({
         <FullSide
           poolAddress={poolAddress}
           onClose={onClose}
-          onSelectMint={setSelectMint}
+          onChange={setSelectMint}
         />
       </Col>
     </Row>
