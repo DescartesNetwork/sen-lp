@@ -8,8 +8,12 @@ import { MintAvatar, MintSymbol } from 'app/components/mint'
 
 import { asyncWait } from 'shared/util'
 import { usePool } from 'senhub/providers'
+import configs from 'app/configs'
 
 const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
+  const {
+    manifest: { appId },
+  } = configs
   const [copied, setCopied] = useState(false)
   const history = useHistory()
   const { pools } = usePool()
@@ -21,8 +25,8 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
     setCopied(false)
   }
   const goFarming = useCallback(() => {
-    return history.push(`/app/sen_farming?mintAddress=${mint_lpt}`)
-  }, [history, mint_lpt])
+    return history.push(`/app/${appId}?poolAddress=${poolAddress}`)
+  }, [history, appId, poolAddress])
 
   return (
     <Row gutter={[16, 16]}>
