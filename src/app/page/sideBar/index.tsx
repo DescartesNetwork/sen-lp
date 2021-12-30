@@ -41,6 +41,7 @@ const SideBar = () => {
   return (
     <Tabs
       activeKey={activeTab}
+      onChange={setActiveTab}
       tabBarExtraContent={<NewPool />}
       style={{
         maxHeight: 'calc(100vh - 112px)',
