@@ -10,7 +10,11 @@ const SideBar = () => {
     <Tabs
       defaultActiveKey="sentre-pools"
       tabBarExtraContent={<NewPool />}
-      style={{ maxHeight: 'calc(100vh - 112px)', padding: '16px 24px' }}
+      style={{
+        maxHeight: 'calc(100vh - 112px)',
+        padding: '16px 24px',
+        marginBottom: 16,
+      }}
       className="scrollbar"
     >
       <Tabs.TabPane key="sentre-pools" tab="Sentre Pools">

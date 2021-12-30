@@ -12,7 +12,7 @@ import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
 import { usePool } from 'senhub/providers'
 
-const ItemPool = ({
+const PoolCard = ({
   poolAddress,
   onClick = () => {},
   action = <Fragment />,
@@ -95,4 +95,4 @@ const ItemPool = ({
   )
 }
 
-export default ItemPool
+export default PoolCard

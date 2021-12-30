@@ -13,9 +13,11 @@ import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
 const FullSide = ({
   poolAddress,
   onClose = () => {},
+  onSelectMint = () => {},
 }: {
   poolAddress: string
   onClose?: () => void
+  onSelectMint?: (mint: string) => void
 }) => {
   const [loading, setLoading] = useState(false)
   const [lpt, setLPT] = useState('')
@@ -172,7 +174,10 @@ const FullSide = ({
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Radio.Group
-          onChange={(e) => setSelectMint(e.target.value)}
+          onChange={(e) => {
+            setSelectMint(e.target.value)
+            onSelectMint(e.target.value)
+          }}
           value={selectMint}
         >
           <Radio value={'all'}>
