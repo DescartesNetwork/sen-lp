@@ -4,23 +4,43 @@ import { utils } from '@senswap/sen-js'
 import { useMint, usePool } from 'senhub/providers'
 import { fetchCGK } from 'shared/util'
 
-export const useMintPrice = (mintAddress: string) => {
-  const { tokenProvider, getMint } = useMint()
+/**
+ * @param mintAddress
+ * @param strict true: if has token unknown => returns 0
+ * @returns
+ */
+export const useMintPrice = (mintAddress: string, strict?: boolean) => {
+  const { tokenProvider, getMint, getDecimals } = useMint()
   const { pools } = usePool()
   const [mintPrice, setMintPrice] = useState(0)
 
-  const getMintUSD = useCallback(
-    async (mintAddress: string, amount: bigint) => {
-      const tokenInfo = await tokenProvider.findByAddress(mintAddress)
-      if (!tokenInfo) return 0
-      const ticket = tokenInfo.extensions?.coingeckoId
-      if (!ticket) return 0
+  const getTokenPrice = useCallback(
+    async (tokenAddress: string) => {
+      const tokenInfo = await tokenProvider.findByAddress(tokenAddress)
+      const ticket = tokenInfo?.extensions?.coingeckoId
+      if (!ticket) {
+        if (strict) throw new Error('Unknown Token')
+        return 0
+      }
       const cgkData = await fetchCGK(ticket)
-      return (
-        Number(utils.undecimalize(amount, tokenInfo.decimals)) * cgkData.price
-      )
+      const price = cgkData.price
+      if (!price) {
+        if (strict) throw new Error('Not find on Cgk')
+        return 0
+      }
+      return price
     },
-    [tokenProvider],
+    [strict, tokenProvider],
+  )
+
+  const getTokenUsd = useCallback(
+    async (mintAddress: string, amountBigint: bigint) => {
+      const mintPrice = await getTokenPrice(mintAddress)
+      const mintDecimals = await getDecimals(mintAddress)
+      const amount = Number(utils.undecimalize(amountBigint, mintDecimals))
+      return amount * mintPrice
+    },
+    [getDecimals, getTokenPrice],
   )
 
   const getMintLptPrice = useCallback(
@@ -34,11 +54,11 @@ export const useMintPrice = (mintAddress: string) => {
       const {
         [lptAddress]: { supply },
       } = await getMint({ address: lptAddress })
-      const balanceA: number = await getMintUSD(mint_a, reserve_a)
-      const balanceB: number = await getMintUSD(mint_b, reserve_b)
+      const balanceA: number = await getTokenUsd(mint_a, reserve_a)
+      const balanceB: number = await getTokenUsd(mint_b, reserve_b)
       return (balanceA + balanceB) / Number(utils.undecimalize(supply, 9))
     },
-    [getMint, getMintUSD, pools],
+    [getMint, getTokenUsd, pools],
   )
 
   const getMintPrice = useCallback(
