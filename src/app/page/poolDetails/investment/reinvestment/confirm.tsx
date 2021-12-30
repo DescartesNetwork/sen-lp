@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { utils } from '@senswap/sen-js'
 
-import { Button, Col, Divider, Modal, Row, Space, Typography } from 'antd'
+import { Button, Col, Card, Modal, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'app/components/mint'
 import IonIcon from 'shared/antd/ionicon'
 
@@ -13,9 +13,9 @@ import { notifyError, notifySuccess } from 'app/helper'
 import configs from 'app/configs'
 import useMintDecimals from 'app/hooks/useMintDecimals'
 import useNextOrderIndex from 'app/hooks/useNextOrderIndex'
-
-import { VESTING } from 'app/constant'
 import { useMintPrice } from 'app/hooks/useMintPrice'
+import { VESTING } from 'app/constant'
+import './index.less'
 
 const Content = ({
   label = '',
@@ -63,15 +63,7 @@ const TimeInfo = ({
   return (
     <Row gutter={[16, 16]}>
       <Col flex="auto">
-        <Typography.Text
-          style={{
-            display: 'list-item',
-            listStyleType: 'square',
-            marginLeft: 16,
-          }}
-        >
-          {label}
-        </Typography.Text>
+        <Typography.Text>{label}</Typography.Text>
       </Col>
       <Col>
         <Typography.Title level={5}>{value}</Typography.Title>
@@ -189,20 +181,23 @@ const Confirm = ({
           </Row>
         </Col>
         <Col span={24}>
-          <Divider style={{ margin: 0 }} />
-        </Col>
-        <Col span={24}>
-          <Row gutter={[12, 12]}>
-            <Col span={24}>
-              <TimeInfo
-                label="Created At"
-                value={moment().format('HH:mm DD/MM/YYYY')}
-              />
-            </Col>
-            <Col span={24}>
-              <TimeInfo label="Locked Time" value={`${locktime} Days`} />
-            </Col>
-          </Row>
+          <Card
+            className="confirm-sub-card"
+            bodyStyle={{ padding: 16 }}
+            bordered={false}
+          >
+            <Row gutter={[12, 12]}>
+              <Col span={24}>
+                <TimeInfo
+                  label="Created At"
+                  value={moment().format('HH:mm DD/MM/YYYY')}
+                />
+              </Col>
+              <Col span={24}>
+                <TimeInfo label="Locked Time" value={`${locktime} Days`} />
+              </Col>
+            </Row>
+          </Card>
         </Col>
         <Col span={24}>
           <Button type="primary" onClick={onPlaceOrder} loading={loading} block>

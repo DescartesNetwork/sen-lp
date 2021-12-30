@@ -13,7 +13,6 @@ export enum OrderState {
 }
 
 export const VESTING = [
-  { locktime: 0.00002, discount: 0.01 },
   { locktime: 7, discount: 0.05 },
   { locktime: 30, discount: 0.25 },
   { locktime: 60, discount: 0.35 },
