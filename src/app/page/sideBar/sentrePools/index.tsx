@@ -4,7 +4,7 @@ import { account } from '@senswap/sen-js'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import { Button, Col, Row } from 'antd'
-import ItemPool from '../components/itemPool'
+import PoolCard from '../components/poolCard'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
@@ -75,7 +75,7 @@ const SentrePools = () => {
       {listSentrePools.map((poolAddress, idx) => {
         return (
           <Col span={24} key={poolAddress + idx}>
-            <ItemPool
+            <PoolCard
               poolAddress={poolAddress}
               action={action(poolAddress)}
               onClick={() => setActiveAddress(poolAddress)}

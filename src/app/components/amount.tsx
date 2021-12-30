@@ -80,11 +80,7 @@ const Amount = ({
   return (
     <Row gutter={[4, 4]}>
       <Col span={24}>
-        <Card
-          style={{ borderRadius: 8 }}
-          bodyStyle={{ padding: 8 }}
-          bordered={false}
-        >
+        <Card bodyStyle={{ padding: 8 }} bordered={false} className="lp-card">
           <NumericInput
             placeholder="0"
             value={amount}

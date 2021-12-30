@@ -26,7 +26,7 @@ const LPTCard = ({
 }) => {
   const { pool: poolAddress, amount } = data
   const lp = utils.undecimalize(amount, DECIMAL)
-  const cardStyle = selected ? 'card-active' : ''
+  const cardStyle = selected ? 'card-active lp-card' : 'lp-card'
   const isFrozen = data.state === PoolStatus.Frozen
   const { pools } = usePool()
 
