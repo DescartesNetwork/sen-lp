@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import LazyLoad from '@senswap/react-lazyload'
 
 import { Col, Row, Typography } from 'antd'
 import Order from './order'
@@ -22,11 +23,13 @@ const Redeem = ({ poolAddress }: { poolAddress: string }) => {
       {!orderAddresses.length && (
         <Typography.Text type="secondary">No available order</Typography.Text>
       )}
-      {orderAddresses.map((orderAddress) => (
-        <Col span={24} key={orderAddress}>
-          <Order orderAddress={orderAddress} />
-        </Col>
-      ))}
+      <LazyLoad height={112} overflow>
+        {orderAddresses.map((orderAddress) => (
+          <Col span={24} key={orderAddress}>
+            <Order orderAddress={orderAddress} />
+          </Col>
+        ))}
+      </LazyLoad>
     </Row>
   )
 }

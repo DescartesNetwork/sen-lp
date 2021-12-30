@@ -14,6 +14,8 @@ import configs from 'app/configs'
 import useMintDecimals from 'app/hooks/useMintDecimals'
 import useNextOrderIndex from 'app/hooks/useNextOrderIndex'
 
+import { VESTING } from 'app/constant'
+
 const Content = ({
   label = '',
   avatar = undefined,
@@ -98,9 +100,13 @@ const Confirm = ({
   const bidDecimals = useMintDecimals(retailerData.mint_bid)
   const askDecimals = useMintDecimals(retailerData.mint_ask)
 
+  const lockedTime = global.BigInt(Math.floor(locktime * 24 * 60 * 60))
+  const discount =
+    VESTING.find(({ locktime: l }) => l === locktime)?.discount || 0
   const bidAmount = utils.decimalize(amount, bidDecimals)
   const askAmount = utils.decimalize(amount, askDecimals)
-  const lockedTime = global.BigInt(locktime * 24 * 60 * 60)
+
+  console.log(discount)
 
   const onPlaceOrder = async () => {
     try {
@@ -180,7 +186,7 @@ const Confirm = ({
           <Row gutter={[12, 12]}>
             <Col span={24}>
               <TimeInfo
-                label="Start Date"
+                label="Created At"
                 value={moment().format('HH:mm DD/MM/YYYY')}
               />
             </Col>

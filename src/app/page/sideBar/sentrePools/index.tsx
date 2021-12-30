@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import { Button, Col, Row } from 'antd'
 import PoolCard from '../components/poolCard'
@@ -17,6 +17,7 @@ const {
 } = configs
 
 const SentrePools = () => {
+  const history = useHistory()
   const dispatch = useDispatch()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const { pools } = usePool()
@@ -33,8 +34,9 @@ const SentrePools = () => {
     (address: string) => {
       dispatch(selectPool(address))
       dispatch(handleOpenDrawer(false))
+      history.push('/app/senhub?poolAddress=' + address)
     },
-    [dispatch],
+    [dispatch, history],
   )
 
   const action = useCallback(

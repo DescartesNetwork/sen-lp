@@ -9,7 +9,7 @@ import configs from 'app/configs'
 import { account } from '@senswap/sen-js'
 import IonIcon from 'shared/antd/ionicon'
 
-const State = ({ retailerAddress }: { retailerAddress: string }) => {
+const RetailerState = ({ retailerAddress }: { retailerAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const {
     retailers: { [retailerAddress]: retailerData },
@@ -73,4 +73,4 @@ const State = ({ retailerAddress }: { retailerAddress: string }) => {
   )
 }
 
-export default State
+export default RetailerState

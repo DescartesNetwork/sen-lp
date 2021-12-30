@@ -48,7 +48,10 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
               </Space>
             }
           >
-            <IonIcon name="alert-circle-outline" />
+            <Button
+              type="text"
+              icon={<IonIcon name="alert-circle-outline" />}
+            />
           </Popover>
         </Space>
       </Col>
