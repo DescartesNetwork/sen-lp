@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
+import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col, Space, Typography, Switch } from 'antd'
 import NewRetailer from './newRetailer'
@@ -68,11 +69,13 @@ const Admin = ({ poolAddress }: { poolAddress: string }) => {
       </Col>
       <Col span={24}>
         <Row gutter={[16, 16]} style={{ maxHeight: 234 }} className="scrollbar">
-          {orderAddresses.map((orderAddress) => (
-            <Col span={24} key={orderAddress}>
-              <Order orderAddress={orderAddress} />
-            </Col>
-          ))}
+          <LazyLoad height={112} overflow>
+            {orderAddresses.map((orderAddress) => (
+              <Col span={24} key={orderAddress}>
+                <Order orderAddress={orderAddress} />
+              </Col>
+            ))}
+          </LazyLoad>
         </Row>
       </Col>
     </Row>
