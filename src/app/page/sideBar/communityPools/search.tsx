@@ -42,7 +42,7 @@ const Search = ({
   }, [search])
 
   return (
-    <Card bodyStyle={{ padding: 8 }} bordered={false}>
+    <Card bodyStyle={{ padding: 8 }} bordered={false} className="lp-card">
       <Input
         placeholder="Search"
         value={keyword}

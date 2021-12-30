@@ -46,7 +46,7 @@ const ItemPool = ({
   }, [dispatch, poolAddress])
 
   const isFrozen = poolState === PoolStatus.Frozen
-  const cardStyle = selected ? 'card-active' : ''
+  const cardStyle = selected ? 'card-active lp-card' : 'lp-card'
 
   return (
     <Card
