@@ -14,7 +14,8 @@ import configs from 'app/configs'
 
 const SideBar = () => {
   const { pools } = usePool()
-  const [defaultTab, setDefaultTab] = useState('sentre-pools')
+  const [activeTab, setActiveTab] = useState('sentre-pools')
+  const [checkTab, setCheckTab] = useState(false)
 
   const query = new URLSearchParams(useLocation().search)
   const poolAddress = query.get('poolAddress') || ''
@@ -27,19 +28,21 @@ const SideBar = () => {
   })
 
   useEffect(() => {
+    if (checkTab || !Object.keys(pools).length) return
     if (
       account.isAddress(poolAddress) &&
       !listSentrePools?.includes(poolAddress)
     ) {
-      setDefaultTab('community-pools')
+      setCheckTab(true)
+      setActiveTab('community-pools')
     }
-  }, [listSentrePools, poolAddress])
+  }, [checkTab, listSentrePools, poolAddress, pools])
 
   return (
     <Tabs
-      activeKey={defaultTab}
+      activeKey={activeTab}
       tabBarExtraContent={<NewPool />}
-      onChange={setDefaultTab}
+      onChange={setActiveTab}
       style={{ maxHeight: 'calc(100vh - 112px)', padding: '16px 24px' }}
       className="scrollbar"
     >
