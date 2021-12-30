@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
+import { useHistory } from 'react-router-dom'
 
 import { Button, Col, Row } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -14,16 +13,6 @@ const CommunityPools = () => {
   const history = useHistory()
   const dispatch = useDispatch<AppDispatch>()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
-  const query = new URLSearchParams(useLocation().search)
-  const poolAddress = query.get('poolAddress') || ''
-
-  const onInit = useCallback(
-    (address) => {
-      const addr = account.isAddress(poolAddress) ? poolAddress : address
-      return dispatch(selectPool(addr))
-    },
-    [dispatch, poolAddress],
-  )
 
   const setActiveAddress = useCallback(
     (address: string) => {
@@ -58,7 +47,6 @@ const CommunityPools = () => {
         <ListAllPools
           action={action}
           selectedPoolAddress={selectedPoolAddress}
-          onInit={onInit}
           onClick={setActiveAddress}
         />
       </Col>
