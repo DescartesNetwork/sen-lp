@@ -3,7 +3,7 @@ export enum PoolStatus {
   Active = 1,
 }
 
-export enum OrderStatus {
+export enum OrderState {
   Uninitialized = 0,
   Open = 1,
   Approved = 2,

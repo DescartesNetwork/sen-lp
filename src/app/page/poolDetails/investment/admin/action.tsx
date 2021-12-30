@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Button } from 'antd'
+import { Button, Space } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { AppState } from 'app/model'
@@ -13,9 +13,9 @@ import { explorer } from 'shared/util'
 const Action = ({ orderAddress }: { orderAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const { orders } = useSelector((state: AppState) => state)
-  const { state, locked_time } = orders[orderAddress] || {}
+  const { state } = orders[orderAddress] || {}
 
-  const onCancel = async () => {
+  const onReject = async () => {
     try {
       const { wallet } = window.sentre
       const {
@@ -23,8 +23,8 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
       } = configs
       if (!wallet) throw new Error('Wallet is not connected')
       await setLoading(true)
-      const { txId } = await purchasing.cancelOrder(orderAddress, wallet)
-      return notifySuccess('Cancel the order', txId)
+      const { txId } = await purchasing.rejectOrder(orderAddress, wallet)
+      return notifySuccess('Reject the order', txId)
     } catch (er: any) {
       return notifyError(er)
     } finally {
@@ -32,7 +32,7 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
     }
   }
 
-  const onRedeem = async () => {
+  const onApprove = async () => {
     try {
       const { wallet } = window.sentre
       const {
@@ -40,8 +40,8 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
       } = configs
       if (!wallet) throw new Error('Wallet is not connected')
       await setLoading(true)
-      const { txId } = await purchasing.redeemOrder(orderAddress, wallet)
-      return notifySuccess('Redeem the order', txId)
+      const { txId } = await purchasing.approveOrder(orderAddress, wallet)
+      return notifySuccess('Approve the order', txId)
     } catch (er: any) {
       return notifyError(er)
     } finally {
@@ -55,21 +55,19 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
 
   if (state === OrderState.Open)
     return (
-      <Button type="text" size="small" loading={loading} onClick={onCancel}>
-        Cancel
-      </Button>
-    )
-  if (state === OrderState.Approved)
-    return (
-      <Button
-        type="primary"
-        size="small"
-        disabled={Number(locked_time) > Date.now() / 1000}
-        loading={loading}
-        onClick={onRedeem}
-      >
-        Redeem
-      </Button>
+      <Space direction="vertical" align="center">
+        <Button
+          type="primary"
+          size="small"
+          loading={loading}
+          onClick={onApprove}
+        >
+          Approve
+        </Button>
+        <Button type="text" size="small" loading={loading} onClick={onReject}>
+          Reject
+        </Button>
+      </Space>
     )
   return (
     <Button
