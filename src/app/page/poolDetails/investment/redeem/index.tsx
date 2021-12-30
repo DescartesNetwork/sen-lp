@@ -19,17 +19,17 @@ const Redeem = ({ poolAddress }: { poolAddress: string }) => {
   })
 
   return (
-    <Row gutter={[16, 16]} style={{ maxHeight: 282 }} className="scrollbar">
+    <Row gutter={[16, 16]} style={{ height: 282 }} className="scrollbar">
       {!orderAddresses.length && (
         <Typography.Text type="secondary">No available order</Typography.Text>
       )}
-      <LazyLoad height={112} overflow>
-        {orderAddresses.map((orderAddress) => (
-          <Col span={24} key={orderAddress}>
+      {orderAddresses.map((orderAddress) => (
+        <Col span={24} key={orderAddress}>
+          <LazyLoad height={125} overflow>
             <Order orderAddress={orderAddress} />
-          </Col>
-        ))}
-      </LazyLoad>
+          </LazyLoad>
+        </Col>
+      ))}
     </Row>
   )
 }
