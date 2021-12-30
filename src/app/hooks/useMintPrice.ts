@@ -1,12 +1,13 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 
 import { useMint, usePool } from 'senhub/providers'
 import { fetchCGK } from 'shared/util'
 
-export const useMintPrice = () => {
+export const useMintPrice = (mintAddress: string) => {
   const { tokenProvider, getMint } = useMint()
   const { pools } = usePool()
+  const [mintPrice, setMintPrice] = useState(0)
 
   const getMintUSD = useCallback(
     async (mintAddress: string, amount: bigint) => {
@@ -45,17 +46,25 @@ export const useMintPrice = () => {
       try {
         const tokenInfo = await tokenProvider.findByAddress(mintAddress)
         // mint lpt
-        if (!tokenInfo) return getMintLptPrice(mintAddress)
+        if (!tokenInfo) {
+          const mintLptPrice = await getMintLptPrice(mintAddress)
+          return setMintPrice(mintLptPrice)
+        }
         // token
         const ticket = tokenInfo.extensions?.coingeckoId
-        if (!ticket) return 0
+        if (!ticket) return setMintPrice(0)
         const cgkData = await fetchCGK(ticket)
-        return cgkData.price
+        return setMintPrice(cgkData.price)
       } catch (error) {
         return 0
       }
     },
     [getMintLptPrice, tokenProvider],
   )
-  return { getMintPrice }
+
+  useEffect(() => {
+    getMintPrice(mintAddress)
+  }, [getMintPrice, mintAddress])
+
+  return mintPrice
 }
