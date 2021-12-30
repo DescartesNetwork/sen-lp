@@ -13,7 +13,7 @@ import { explorer } from 'shared/util'
 const Action = ({ orderAddress }: { orderAddress: string }) => {
   const [loading, setLoading] = useState(false)
   const { orders } = useSelector((state: AppState) => state)
-  const { state, locked_time } = orders[orderAddress] || {}
+  const { state, locked_time, updated_at } = orders[orderAddress] || {}
 
   const onCancel = async () => {
     try {
@@ -59,18 +59,20 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
         Cancel
       </Button>
     )
-  if (state === OrderState.Approved)
+  if (state === OrderState.Approved) {
+    const locked = Number(locked_time) > Date.now() / 1000 - Number(updated_at)
     return (
       <Button
         type="primary"
         size="small"
-        disabled={Number(locked_time) > Date.now() / 1000}
+        disabled={locked}
         loading={loading}
         onClick={onRedeem}
       >
         Redeem
       </Button>
     )
+  }
   return (
     <Button
       type="text"
