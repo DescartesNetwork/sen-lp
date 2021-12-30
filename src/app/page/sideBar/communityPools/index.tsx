@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 
 import { Button, Col, Row } from 'antd'
@@ -11,6 +11,7 @@ import { AppDispatch, AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 
 const CommunityPools = () => {
+  const history = useHistory()
   const dispatch = useDispatch<AppDispatch>()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const query = new URLSearchParams(useLocation().search)
@@ -27,6 +28,7 @@ const CommunityPools = () => {
     (address: string) => {
       dispatch(selectPool(address))
       dispatch(handleOpenDrawer(false))
+      history.push('/app/senhub?poolAddress=' + address)
     },
     [dispatch],
   )
