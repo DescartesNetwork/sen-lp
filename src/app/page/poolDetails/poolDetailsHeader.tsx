@@ -30,15 +30,10 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
         <Space>
           <MintAvatar mintAddress={mint_lpt} size={32} />
           <MintSymbol mintAddress={mint_lpt} />
-        </Space>
-      </Col>
-      <Col>
-        <Space>
           <Popover
-            placement="left"
+            placement="right"
             content={
               <Space>
-                <Typography.Text>PoolAddress: {poolAddress}</Typography.Text>
                 <Tooltip title="Copied" visible={copied} arrowPointAtCenter>
                   <CopyToClipboard text={poolAddress}>
                     <Button
@@ -49,13 +44,16 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
                     />
                   </CopyToClipboard>
                 </Tooltip>
+                <Typography.Text>PoolAddress: {poolAddress}</Typography.Text>
               </Space>
             }
           >
             <IonIcon name="alert-circle-outline" />
           </Popover>
-          <Button onClick={goFarming}>Go Farming</Button>
         </Space>
+      </Col>
+      <Col>
+        <Button onClick={goFarming}>Go Farming</Button>
       </Col>
     </Row>
   )

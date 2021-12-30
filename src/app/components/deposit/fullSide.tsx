@@ -158,9 +158,9 @@ const FullSide = ({
       mint_b,
     )
     const accMintB = accounts[accAddrMintB]
-    if (!accMintA || !accMintB) return setDisabled(true)
-    const disabled =
-      amounts[0] > accMintA.amount || amounts[1] > accMintB.amount
+    const amountMintA = accMintA?.amount || 0
+    const amountMintB = accMintB?.amount || 0
+    const disabled = amounts[0] > amountMintA || amounts[1] > amountMintB
     setDisabled(disabled)
   }, [accounts, amounts, mint_a, mint_b, walletAddress])
 
