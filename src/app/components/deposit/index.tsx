@@ -4,6 +4,7 @@ import { Row, Col, Typography } from 'antd'
 import FullSide from './fullSide'
 
 import { usePool } from 'senhub/providers'
+import { useState } from 'react'
 
 const FEE_DECIMALS_PERCENT = 7
 
@@ -15,6 +16,7 @@ const Deposit = ({
   onClose?: () => void
 }) => {
   const { pools } = usePool()
+  const [selectMint, setSelectMint] = useState('all')
   const { fee_ratio, tax_ratio } = pools[poolAddress] || {}
   const feeRatio = fee_ratio || BigInt(0)
   const taxRatio = tax_ratio || BigInt(0)
@@ -23,6 +25,9 @@ const Deposit = ({
     feeRatio + taxRatio,
     FEE_DECIMALS_PERCENT,
   )
+  const asymmetric = selectMint !== 'all'
+  const asymmetricColor = asymmetric ? '#F9575E' : 'inherit'
+  const asymmetricType = asymmetric ? undefined : 'secondary'
 
   return (
     <Row gutter={[16, 16]}>
@@ -36,14 +41,21 @@ const Deposit = ({
           the pool. Fees are accrued into the pool and can be claimed by
           withdrawing your liquidity.
         </Typography.Paragraph>
-        <Typography.Paragraph type="secondary">
-          <strong>Asymmetric Deposit.</strong> Instead of depositing amounts of
-          tokens proportionally, Asymmetric Deposit allows you to deposit even
-          one side of token. The pool will automatically re-balance itself.
+        <Typography.Paragraph type={asymmetricType}>
+          <strong style={{ color: asymmetricColor }}>
+            Asymmetric Deposit.
+          </strong>{' '}
+          Instead of depositing amounts of tokens proportionally, Asymmetric
+          Deposit allows you to deposit even one side of token. The pool will
+          automatically re-balance itself.
         </Typography.Paragraph>
       </Col>
       <Col span={24}>
-        <FullSide poolAddress={poolAddress} onClose={onClose} />
+        <FullSide
+          poolAddress={poolAddress}
+          onClose={onClose}
+          onChange={setSelectMint}
+        />
       </Col>
     </Row>
   )
