@@ -13,7 +13,7 @@ import configs from 'app/configs'
 
 const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
   const {
-    manifest: { appId },
+    route: { farmRoute },
   } = configs
   const [copied, setCopied] = useState(false)
   const history = useHistory()
@@ -26,8 +26,8 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
     setCopied(false)
   }
   const goFarming = useCallback(() => {
-    return history.push(`/app/${appId}?poolAddress=${poolAddress}`)
-  }, [history, appId, poolAddress])
+    return history.push(`${farmRoute}?search=${poolAddress}`)
+  }, [history, farmRoute, poolAddress])
 
   return (
     <Row gutter={[16, 16]}>

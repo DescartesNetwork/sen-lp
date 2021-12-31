@@ -6,6 +6,7 @@ import { Env } from 'shared/runtime'
 type Config = {
   myRoute: string
   swapRoute: string
+  farmRoute: string
 }
 
 const config: Record<Env, Config> = {
@@ -15,6 +16,7 @@ const config: Record<Env, Config> = {
   development: {
     myRoute: '/app/senhub',
     swapRoute: '/app/sen_swap',
+    farmRoute: '/app/senhub',
   },
 
   /**
@@ -23,6 +25,7 @@ const config: Record<Env, Config> = {
   staging: {
     myRoute: '/app/sen_lp',
     swapRoute: '/app/sen_swap',
+    farmRoute: '/app/sen_farming',
   },
 
   /**
@@ -31,6 +34,7 @@ const config: Record<Env, Config> = {
   production: {
     myRoute: '/app/sen_lp',
     swapRoute: '/app/sen_swap',
+    farmRoute: '/app/sen_farming',
   },
 }
 
