@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Col, Row } from 'antd'
 import Header from './header'
-import LptWatcher from 'app/components/lptWatcher'
-import RetailerWatcher from 'app/components/retailerWatcher'
-import OrderWatcher from 'app/components/orderWatcher'
+import LptWatcher from 'app/components/watcher/lptWatcher'
+import RetailerWatcher from 'app/components/watcher/retailerWatcher'
+import OrderWatcher from 'app/components/watcher/orderWatcher'
 import LptsPools from './components/lptsPools'
 import HotPools from './components/pools'
 

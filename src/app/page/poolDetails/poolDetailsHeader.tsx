@@ -57,10 +57,10 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
         </Space>
       </Col>
       <Col>
-        <SwapButton poolAddress={poolAddress} />
-      </Col>
-      <Col>
-        <Button onClick={goFarming}>Go Farming</Button>
+        <Space>
+          <SwapButton poolAddress={poolAddress} />
+          <Button onClick={goFarming}>Go Farming</Button>
+        </Space>
       </Col>
     </Row>
   )
