@@ -2,7 +2,7 @@ import { ReactElement, Fragment, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col } from 'antd'
+import { Row, Col, Empty } from 'antd'
 import ItemLPT from './itemLPT'
 
 import { AppState } from 'app/model'
@@ -46,6 +46,8 @@ const LptsPools = ({
     if (!lptAddresses.length) return
     onInit(lptAddresses[0])
   }, [onInit, lptAddresses, lpts])
+
+  if (!lptAddresses.length) return <Empty />
 
   return (
     <Row gutter={[12, 12]}>

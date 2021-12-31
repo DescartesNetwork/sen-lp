@@ -221,10 +221,11 @@ const NewPool = () => {
     <Fragment>
       <Button
         type="primary"
-        size="small"
         icon={<IonIcon name="add-outline" />}
         onClick={() => setVisible(!visible)}
-      ></Button>
+      >
+        New
+      </Button>
       <Modal
         visible={visible}
         onCancel={onClose}
