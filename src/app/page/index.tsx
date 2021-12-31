@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 import { useDispatch, useSelector } from 'react-redux'
@@ -30,8 +30,6 @@ const Page = () => {
   const query = new URLSearchParams(useLocation().search)
   const poolAddress = query.get('poolAddress') || ''
   const senOwner = configs.sol.senOwner
-  const [checkTab, setCheckTab] = useState(false)
-  const [activeTab, setActiveTab] = useState('sentre-pools')
 
   const listSentrePools = Object.keys(pools).filter((poolAddr) => {
     const poolData = pools?.[poolAddr]
@@ -39,19 +37,8 @@ const Page = () => {
     return senOwner.includes(owner)
   })
 
-  useEffect(() => {
-    if (checkTab || !Object.keys(pools).length) return
-    if (
-      account.isAddress(poolAddress) &&
-      !listSentrePools?.includes(poolAddress)
-    ) {
-      setCheckTab(true)
-      setActiveTab('community-pools')
-    }
-  }, [checkTab, listSentrePools, poolAddress, pools])
-
   const sortedPools = useMemo(() => {
-    if (checkTab || !Object.keys(pools).length) return
+    if (!Object.keys(pools).length) return
     return Object.keys(pools)
       .map((address) => ({ address, ...pools[address] }))
       .sort(
@@ -66,7 +53,7 @@ const Page = () => {
           return 0
         },
       )
-  }, [checkTab, pools])
+  }, [pools])
 
   const onInit = useCallback(() => {
     if (account.isAddress(selectedPoolAddress)) return
@@ -88,7 +75,7 @@ const Page = () => {
       {width >= 1200 ? (
         <Col lg={8} xl={6}>
           <Card bodyStyle={{ padding: 0 }} bordered={false}>
-            <SideBar activeTab={activeTab} setActiveTab={setActiveTab} />
+            <SideBar />
           </Card>
         </Col>
       ) : (
@@ -101,7 +88,7 @@ const Page = () => {
           bodyStyle={{ padding: 0 }}
           centered
         >
-          <SideBar activeTab={activeTab} setActiveTab={setActiveTab} />
+          <SideBar />
         </Modal>
       )}
       <Col xs={24} lg={24} xl={18}>

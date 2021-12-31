@@ -1,48 +1,45 @@
-import { Space, Tabs } from 'antd'
+import { useState } from 'react'
+
+import { Col, Row, Select } from 'antd'
 import CommunityPools from './communityPools'
 import YourPools from './yourPools'
 import NewPool from './newPool'
 import SentrePools from './sentrePools'
 import DepositedPools from './depositedPools'
-import SettingsButton from 'app/components/settingsButton'
 
-const SideBar = ({
-  setActiveTab = () => {},
-  activeTab = 'sentre-pools',
-}: {
-  setActiveTab?: (activeTab: string) => void
-  activeTab?: string
-}) => {
+const SideBar = () => {
+  const [selectPools, setSelectPools] = useState('sentre-pools')
+  const handleChange = (value: string) => {
+    setSelectPools(value)
+  }
+
+  const PoolsSelected = () => {
+    if (selectPools === 'sentre-pools') return <SentrePools />
+    else if (selectPools === 'community-pools') return <CommunityPools />
+    else if (selectPools === 'deposited-pools') return <DepositedPools />
+    else return <YourPools />
+  }
   return (
-    <Tabs
-      activeKey={activeTab}
-      onChange={setActiveTab}
-      tabBarExtraContent={
-        <Space>
-          <SettingsButton />
-          <NewPool />
-        </Space>
-      }
-      style={{
-        maxHeight: 'calc(100vh - 112px)',
-        padding: '16px 24px',
-        marginBottom: 16,
-      }}
-      className="scrollbar"
-    >
-      <Tabs.TabPane key="sentre-pools" tab="Sentre Pools">
-        <SentrePools />
-      </Tabs.TabPane>
-      <Tabs.TabPane key="community-pools" tab="Community Pools">
-        <CommunityPools />
-      </Tabs.TabPane>
-      <Tabs.TabPane key="deposited-pools" tab="Deposited Pools">
-        <DepositedPools />
-      </Tabs.TabPane>
-      <Tabs.TabPane key="your-pools" tab="Your Pools">
-        <YourPools />
-      </Tabs.TabPane>
-    </Tabs>
+    <Row gutter={[12, 24]} className="side-bar scrollbar">
+      <Col flex="auto">
+        <Select
+          defaultValue="sentre-pools"
+          onChange={handleChange}
+          className="header-sidebar"
+        >
+          <Select.Option value="sentre-pools">Sentre pools</Select.Option>
+          <Select.Option value="deposited-pools">Deposited pools</Select.Option>
+          <Select.Option value="your-pools">Your pools</Select.Option>
+          <Select.Option value="community-pools">Community pools</Select.Option>
+        </Select>
+      </Col>
+      <Col>
+        <NewPool />
+      </Col>
+      <Col span={24}>
+        <PoolsSelected />
+      </Col>
+    </Row>
   )
 }
 

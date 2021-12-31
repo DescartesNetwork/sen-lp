@@ -2,7 +2,7 @@ import { ReactElement, useMemo, useEffect, Fragment } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col } from 'antd'
+import { Row, Col, Empty } from 'antd'
 import ItemPool from './itemPool'
 
 import { usePool } from 'senhub/providers'
@@ -73,6 +73,8 @@ const ListPools = ({
       ))}
     </Fragment>
   )
+
+  if (!listSentrePools.length) return <Empty />
 
   const SentrePools = () => (
     <Fragment>

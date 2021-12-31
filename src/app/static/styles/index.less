@@ -6,47 +6,72 @@
 .caption {
   font-size: 12px;
 }
+.side-bar {
+  min-height: 80px;
+  padding: 24px;
+  max-height: calc(100vh - 112px);
+  .header-sidebar {
+    padding: 0 4px;
+    width: 100%;
+    border-radius: 8px;
+    & .sentre-select-selector {
+      width: 100% !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
 
-.header-widget {
-  padding: 0 4px;
-  position: relative;
-  top: -16px;
-  left: -4px;
-  width: calc(100% + 32px);
-  background-color: #40a9ff;
-  border-radius: 16px;
-  height: 64px;
-  & .sentre-select-selector {
-    color: #e9e9eb !important;
-    width: 151px !important;
-    background-color: transparent !important;
-    border: solid 1px #66baff !important;
-    box-shadow: none !important;
-
-    &:hover &:focus {
-      border: solid 1px #e9e9eb !important;
+      &:hover &:focus {
+        border: solid 1px #e9e9eb !important;
+      }
     }
-  }
-  & .sentre-select-arrow {
-    color: #b3ddff !important;
-  }
-}
-.body-widget {
-  & .sentre-select-selection-item {
-    color: #e9e9eb !important;
-  }
-  & .expandHidden {
-    display: none;
-  }
-  & .sentre-collapse {
-    &-header {
-      display: none !important;
-    }
-    &-content-box {
-      padding: 0 !important;
+    & .sentre-select-arrow {
+      color: #7a7b85 !important;
     }
   }
 }
+
+.widget {
+  .header-widget {
+    padding: 0 4px;
+    position: relative;
+    top: -16px;
+    left: -4px;
+    width: calc(100% + 32px);
+    background-color: #40a9ff;
+    border-radius: 16px;
+    height: 64px;
+    & .sentre-select-selector {
+      color: #e9e9eb !important;
+      width: 151px !important;
+      background-color: transparent !important;
+      border: solid 1px #66baff !important;
+      box-shadow: none !important;
+
+      &:hover &:focus {
+        border: solid 1px #e9e9eb !important;
+      }
+    }
+    & .sentre-select-arrow {
+      color: #b3ddff !important;
+    }
+  }
+  .body-widget {
+    & .sentre-select-selection-item {
+      color: #e9e9eb !important;
+    }
+    & .expandHidden {
+      display: none;
+    }
+    & .sentre-collapse {
+      &-header {
+        display: none !important;
+      }
+      &-content-box {
+        padding: 0 !important;
+      }
+    }
+  }
+}
+
 .deposit-tag {
   position: relative;
   background: #f9575e1a !important;

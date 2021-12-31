@@ -33,7 +33,7 @@ const Widget = () => {
     [dispatch, history, appId],
   )
   return (
-    <Row>
+    <Row className="widget">
       <Col span={24}>
         <Header />
       </Col>
