@@ -1,34 +1,36 @@
 import { useHistory } from 'react-router-dom'
 
-import { Button, Col, Row, Space, Typography } from 'antd'
+import { Button, Col, Row, Space, Typography, Popover } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+
 import configs from 'app/configs'
+import { PoolStatus } from 'app/constant'
+import { usePool } from 'senhub/providers'
 
 const {
   route: { swapRoute },
 } = configs
 
-const SwapAction = ({
-  poolAddress,
-  isDisabled,
-}: {
-  poolAddress: string
-  isDisabled: boolean
-}) => {
+export const SwapAction = ({ poolAddress }: { poolAddress: string }) => {
   const history = useHistory()
+  const { pools } = usePool()
+  const frozen = pools?.[poolAddress].state === PoolStatus.Frozen
+
   const onSwap = (originalRoute: boolean) => {
+    console.log(swapRoute, poolAddress, originalRoute)
     return history.push({
       pathname: swapRoute,
       state: { poolAddress, originalRoute },
     })
   }
+
   return (
-    <Row gutter={[24, 12]} style={{ width: 260 }}>
+    <Row gutter={[24, 12]} style={{ width: 256 }}>
       <Col span={24}>
         <Space direction="vertical" size={0}>
           <Space>
             <IonIcon style={{ color: '#FA8C16' }} name="alert-circle-outline" />
-            <Typography.Title level={5}>Choose the route?</Typography.Title>
+            <Typography.Title level={5}>Choose the route</Typography.Title>
           </Space>
           <Typography.Text type="secondary">
             We recommend choosing the best route to optimize the price.
@@ -37,11 +39,7 @@ const SwapAction = ({
       </Col>
       <Col style={{ textAlign: 'right' }} span={24}>
         <Space>
-          <Button
-            size="small"
-            disabled={isDisabled}
-            onClick={() => onSwap(true)}
-          >
+          <Button size="small" disabled={frozen} onClick={() => onSwap(true)}>
             Original route
           </Button>
           <Button size="small" onClick={() => onSwap(false)} type="primary">
@@ -52,4 +50,17 @@ const SwapAction = ({
     </Row>
   )
 }
-export default SwapAction
+
+const SwapButton = ({ poolAddress }: { poolAddress: string }) => {
+  return (
+    <Popover
+      trigger="click"
+      placement="bottomLeft"
+      content={<SwapAction poolAddress={poolAddress} />}
+    >
+      <Button block>Swap</Button>
+    </Popover>
+  )
+}
+
+export default SwapButton

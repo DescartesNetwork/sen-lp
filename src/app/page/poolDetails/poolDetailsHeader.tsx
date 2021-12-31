@@ -5,6 +5,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import { Button, Col, Popover, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import { MintAvatar, MintSymbol } from 'app/components/mint'
+import SwapButton from 'app/components/swapButton'
 
 import { asyncWait } from 'shared/util'
 import { usePool } from 'senhub/providers'
@@ -54,6 +55,9 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
             />
           </Popover>
         </Space>
+      </Col>
+      <Col>
+        <SwapButton poolAddress={poolAddress} />
       </Col>
       <Col>
         <Button onClick={goFarming}>Go Farming</Button>

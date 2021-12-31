@@ -1,7 +1,7 @@
+import { MouseEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
 import { account } from '@senswap/sen-js'
-import { MouseEvent } from 'react'
 
 import { Button, Card, Col, Row, Space, Typography } from 'antd'
 import AppIcon from 'os/components/appIcon'
