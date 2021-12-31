@@ -62,7 +62,7 @@ const SentrePools = () => {
   }, [listSentrePools, onInit, selectedPoolAddress])
 
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[12, 12]}>
       {listSentrePools.map((poolAddress, idx) => {
         return (
           <Col span={24} key={poolAddress + idx}>
