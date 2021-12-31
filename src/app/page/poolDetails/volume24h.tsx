@@ -64,8 +64,8 @@ const Volume24h = () => {
   }, [fetchChart])
 
   const vol24h = useMemo(() => {
-    const today = chartData.at(-1)?.data || 0
-    const yesterday = chartData.at(-2)?.data || 0
+    const today = chartData[chartData.length - 1]?.data || 0
+    const yesterday = chartData[chartData.length - 2]?.data || 0
     const house = new Date().getHours()
     return today + (house * yesterday) / 24
   }, [chartData])

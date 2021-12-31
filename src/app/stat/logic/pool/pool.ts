@@ -51,7 +51,7 @@ export default class PoolService {
     let cacheTransLog: TransLog[] = (await db.getItem('translogs')) || []
     cacheTransLog = cacheTransLog.sort((a, b) => b.blockTime - a.blockTime)
     const fistTransLog = cacheTransLog[0]
-    const lastTransLog = cacheTransLog.at(-1)
+    const lastTransLog = cacheTransLog[cacheTransLog.length - 1]
 
     if (fistTransLog && lastTransLog) {
       const [beginTransLogs, afterTransLog] = await Promise.all([
