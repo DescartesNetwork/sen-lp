@@ -68,14 +68,14 @@ const Admin = ({ poolAddress }: { poolAddress: string }) => {
         )}
       </Col>
       <Col span={24}>
-        <Row gutter={[16, 16]} style={{ maxHeight: 234 }} className="scrollbar">
-          <LazyLoad height={112} overflow>
-            {orderAddresses.map((orderAddress) => (
-              <Col span={24} key={orderAddress}>
+        <Row gutter={[16, 16]} style={{ height: 234 }} className="scrollbar">
+          {orderAddresses.map((orderAddress) => (
+            <Col span={24} key={orderAddress}>
+              <LazyLoad height={125} overflow>
                 <Order orderAddress={orderAddress} />
-              </Col>
-            ))}
-          </LazyLoad>
+              </LazyLoad>
+            </Col>
+          ))}
         </Row>
       </Col>
     </Row>

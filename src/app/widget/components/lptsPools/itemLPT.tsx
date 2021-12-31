@@ -11,12 +11,11 @@ import {
   Tooltip,
   Collapse,
   Button,
-  Popover,
 } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
-import SwapAction from 'app/widget/components/swapAction'
+import SwapButton from 'app/components/swapButton'
 import { MintAvatar, MintSymbol } from 'app/components/mint'
 
 import { LPTData } from 'app/model/lpts.controller'
@@ -107,15 +106,7 @@ const ItemLPT = ({
         <Collapse.Panel header="" key={defaultKey}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <Popover
-                trigger="click"
-                placement="bottomLeft"
-                content={
-                  <SwapAction isDisabled={isFrozen} poolAddress={poolAddress} />
-                }
-              >
-                <Button block>Swap</Button>
-              </Popover>
+              <SwapButton poolAddress={poolAddress} />
             </Col>
             <Col span={12}>
               <Button onClick={onClick} block type="primary">

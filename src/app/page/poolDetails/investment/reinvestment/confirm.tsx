@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { Fragment, ReactNode, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 import { utils } from '@senswap/sen-js'
@@ -19,27 +19,23 @@ import './index.less'
 
 const Content = ({
   label = '',
-  avatar = undefined,
+  avatar = <Fragment />,
   value = '',
-  color = undefined,
-  subValue = undefined,
+  subValue = '',
   floatRight = false,
 }: {
   label?: string
   avatar?: ReactNode
   value?: string | number
-  color?: string | undefined
   subValue?: string | number | undefined
   floatRight?: boolean
 }) => {
   const textAlign = floatRight ? 'right' : 'left'
   return (
-    <Space size={12} direction="vertical" style={{ textAlign: textAlign }}>
+    <Space size={12} direction="vertical" style={{ textAlign }}>
       <Typography.Text>{label}</Typography.Text>
       {avatar}
-      <Typography.Title level={3} style={{ color: color ? color : 'inherit' }}>
-        {value}
-      </Typography.Title>
+      <Typography.Title level={3}>{value}</Typography.Title>
       {subValue && (
         <Typography.Title
           level={5}
@@ -92,8 +88,8 @@ const Confirm = ({
   const index = useNextOrderIndex(retailerAddress)
   const bidDecimals = useMintDecimals(retailerData.mint_bid)
   const askDecimals = useMintDecimals(retailerData.mint_ask)
-  const bidPrice = useMintPrice(retailerData.mint_bid)
-  const askPrice = useMintPrice(retailerData.mint_ask)
+  const bidPrice = useMintPrice(retailerData.mint_bid, true)
+  const askPrice = useMintPrice(retailerData.mint_ask, true)
 
   const lockedTime = global.BigInt(Math.floor(locktime * 24 * 60 * 60))
   const discount =
@@ -101,10 +97,9 @@ const Confirm = ({
   // Compute amounts
   const valuation = parseFloat(amount) * bidPrice
   const bidAmount = utils.decimalize(amount, bidDecimals)
-  const askAmount = utils.decimalize(
-    (valuation * (1 + discount)) / askPrice,
-    askDecimals,
-  )
+  const askAmount = !askPrice
+    ? global.BigInt(0)
+    : utils.decimalize((valuation * (1 + discount)) / askPrice, askDecimals)
 
   const onPlaceOrder = async () => {
     try {
@@ -147,7 +142,7 @@ const Confirm = ({
           <Row gutter={[16, 16]}>
             <Col flex="auto">
               <Content
-                label="Est. Payment"
+                label="Payment"
                 avatar={
                   <Space>
                     <MintAvatar mintAddress={retailerData.mint_bid} />
@@ -161,7 +156,7 @@ const Confirm = ({
             </Col>
             <Col>
               <Content
-                label="Est. Receiving"
+                label="Receiving"
                 avatar={
                   <Space>
                     <MintAvatar mintAddress={retailerData.mint_ask} />
@@ -170,11 +165,10 @@ const Confirm = ({
                     </Typography.Title>
                   </Space>
                 }
-                value={numeric((valuation * (1 + discount)) / askPrice).format(
-                  '0,0.[0000]',
-                )}
+                value={numeric(
+                  utils.undecimalize(askAmount, askDecimals),
+                ).format('0,0.[0000]')}
                 subValue={numeric(valuation / askPrice).format('0,0.[0000]')}
-                color="#3E8C6A"
                 floatRight
               />
             </Col>
@@ -195,6 +189,12 @@ const Confirm = ({
               </Col>
               <Col span={24}>
                 <TimeInfo label="Locked Time" value={`${locktime} Days`} />
+              </Col>
+              <Col span={24}>
+                <TimeInfo
+                  label="Multiplier"
+                  value={`${(1 + discount) * 100}%`}
+                />
               </Col>
             </Row>
           </Card>

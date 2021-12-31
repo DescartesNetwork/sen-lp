@@ -11,12 +11,10 @@ import {
   Tooltip,
   Collapse,
   Button,
-  Popover,
 } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/PoolCardStatus'
-import SwapAction from '../swapAction'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
@@ -24,6 +22,7 @@ import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
 import { MintAvatar, MintSymbol } from 'app/components/mint'
 import { usePool } from 'senhub/providers'
+import SwapButton from 'app/components/swapButton'
 
 const ItemPool = ({
   poolAddress,
@@ -121,15 +120,7 @@ const ItemPool = ({
         <Collapse.Panel header="" key={defaultKey}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <Popover
-                trigger="click"
-                placement="bottomLeft"
-                content={
-                  <SwapAction isDisabled={isFrozen} poolAddress={poolAddress} />
-                }
-              >
-                <Button block>Swap</Button>
-              </Popover>
+              <SwapButton poolAddress={poolAddress} />
             </Col>
             <Col span={12}>
               <Button onClick={onClick} block type="primary">
