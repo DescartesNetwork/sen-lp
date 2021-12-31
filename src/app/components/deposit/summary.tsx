@@ -21,7 +21,7 @@ const Summary = ({
 }) => {
   const [isReverse, setIsReverse] = useState(false)
   const [totalLPT, setTotalLPT] = useState('0')
-  const lpts = useSelector((state: AppState) => state.lpts)
+  const { lpts } = useSelector((state: AppState) => state)
   const { getMint } = useMint()
   const { pools } = usePool()
 
