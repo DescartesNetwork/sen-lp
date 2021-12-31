@@ -16,7 +16,7 @@ const config: Record<Env, Config> = {
   development: {
     myRoute: '/app/senhub',
     swapRoute: '/app/sen_swap',
-    farmRoute: '/app/senhub',
+    farmRoute: '/app/sen_farming',
   },
 
   /**

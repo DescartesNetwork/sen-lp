@@ -11,10 +11,11 @@ import { asyncWait } from 'shared/util'
 import { usePool } from 'senhub/providers'
 import configs from 'app/configs'
 
+const {
+  route: { farmRoute },
+} = configs
+
 const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
-  const {
-    route: { farmRoute },
-  } = configs
   const [copied, setCopied] = useState(false)
   const history = useHistory()
   const { pools } = usePool()
@@ -27,7 +28,7 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
   }
   const goFarming = useCallback(() => {
     return history.push(`${farmRoute}?search=${poolAddress}`)
-  }, [history, farmRoute, poolAddress])
+  }, [history, poolAddress])
 
   return (
     <Row gutter={[16, 16]}>
