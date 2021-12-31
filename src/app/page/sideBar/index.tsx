@@ -36,7 +36,7 @@ const SideBar = ({
       <Tabs.TabPane key="community-pools" tab="Community Pools">
         <CommunityPools />
       </Tabs.TabPane>
-      <Tabs.TabPane key="deposited" tab="Deposited Pools">
+      <Tabs.TabPane key="deposited-pools" tab="Deposited Pools">
         <DepositedPools />
       </Tabs.TabPane>
       <Tabs.TabPane key="your-pools" tab="Your Pools">
