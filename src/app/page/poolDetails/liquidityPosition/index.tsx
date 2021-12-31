@@ -1,17 +1,16 @@
-import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { TokenInfo } from '@solana/spl-token-registry'
 
 import { Card, Col, Row, Space, Typography } from 'antd'
-import InservePrice from './inversePrice'
+import Price from './price'
 import LiquidityAction from './liquidityAction'
 
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import { useMint, usePool } from 'senhub/providers'
-import useTokenProvider from 'app/hooks/useTokenProvider'
-import { extractReserve } from 'app/helper'
+import { MintSymbol } from 'app/components/mint'
+import useMintDecimals from 'app/hooks/useMintDecimals'
 
 const APY_DATE = 365
 
@@ -43,7 +42,7 @@ const Title = ({
   format = '',
 }: {
   value?: string | number
-  sub?: string
+  sub?: string | ReactNode
   format?: string
 }) => {
   return (
@@ -68,9 +67,13 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
   )
   const { getMint } = useMint()
   const { pools } = usePool()
-  const poolData = pools?.[poolAddress] || {}
-  const { mint_lpt } = poolData
-  const tokenInfos = useTokenProvider(mint_lpt)
+
+  const { mint_a, mint_b, reserve_a, reserve_b, mint_lpt } =
+    pools[poolAddress] || {}
+  const decimalsA = useMintDecimals(mint_a)
+  const decimalsB = useMintDecimals(mint_b)
+  const reserveA = utils.undecimalize(reserve_a, decimalsA)
+  const reserveB = utils.undecimalize(reserve_b, decimalsB)
 
   const lptAddress =
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
@@ -94,14 +97,6 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
       setSupply(Number(utils.undecimalize(supply, decimals)))
     })()
   }, [getMint, mint_lpt])
-
-  const getReserve = (tokenInfo: TokenInfo | undefined) => {
-    if (!tokenInfo || !poolData) return 0
-    const { address, decimals } = tokenInfo
-    if (!account.isAddress(address) || !decimals) return 0
-    const reserve = extractReserve(address, poolData)
-    return Number(utils.undecimalize(reserve, decimals))
-  }
 
   return (
     <Card bordered={false}>
@@ -130,18 +125,17 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
                 label="Pool Composition"
                 title={
                   <Space size={4} align="baseline">
-                    {tokenInfos.map((tokenInfo, i) => (
-                      <Fragment key={i}>
-                        <Title
-                          value={getReserve(tokenInfo)}
-                          sub={tokenInfo?.symbol || 'TOKN'}
-                          format="0,0.[00]a"
-                        />
-                        {tokenInfos.length > i + 1 && (
-                          <Typography.Title level={5}>+</Typography.Title>
-                        )}
-                      </Fragment>
-                    ))}
+                    <Title
+                      value={reserveA}
+                      sub={<MintSymbol mintAddress={mint_a} />}
+                      format="0,0.[00]a"
+                    />
+                    <Typography.Title level={5}>+</Typography.Title>
+                    <Title
+                      value={reserveB}
+                      sub={<MintSymbol mintAddress={mint_b} />}
+                      format="0,0.[00]a"
+                    />
                   </Space>
                 }
               />
@@ -156,7 +150,7 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
             <Col xs={16}>
               <Content
                 label="In-Pool Price"
-                title={<InservePrice poolAddress={poolAddress} />}
+                title={<Price poolAddress={poolAddress} />}
               />
             </Col>
           </Row>

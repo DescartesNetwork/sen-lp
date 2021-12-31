@@ -1,16 +1,16 @@
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { account, utils } from '@senswap/sen-js'
-import { TokenInfo } from '@solana/spl-token-registry'
+import { utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
+import PoolPrice from 'app/components/poolPrice'
+import { MintSymbol } from 'app/components/mint'
 
 import { AppState } from 'app/model'
 import { useMint, usePool } from 'senhub/providers'
 import { numeric } from 'shared/util'
-import useTokenProvider from 'app/hooks/useTokenProvider'
-import { extractReserve } from 'app/helper'
+import useMintDecimals from 'app/hooks/useMintDecimals'
 
 const Summary = ({
   value = '0',
@@ -21,50 +21,21 @@ const Summary = ({
 }) => {
   const [isReverse, setIsReverse] = useState(false)
   const [totalLPT, setTotalLPT] = useState('0')
-  const [ratio, setRatio] = useState(0)
   const lpts = useSelector((state: AppState) => state.lpts)
-  const { getMint, getDecimals } = useMint()
+  const { getMint } = useMint()
   const { pools } = usePool()
 
-  const poolData = pools?.[poolAddress]
-  const { reserve_a, mint_a, reserve_b, mint_b, mint_lpt } = poolData
-  const tokenInfos = useTokenProvider(mint_lpt)
+  const { mint_a, mint_b, reserve_a, reserve_b, mint_lpt } =
+    pools[poolAddress] || {}
+  const decimalsA = useMintDecimals(mint_a)
+  const decimalsB = useMintDecimals(mint_b)
+  const reserveA = utils.undecimalize(reserve_a, decimalsA)
+  const reserveB = utils.undecimalize(reserve_b, decimalsB)
 
   const lptAddress =
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
   const { amount } = lpts[lptAddress] || {}
   const lpt = Number(utils.undecimalize(amount || BigInt(0), 9))
-  // Symbols
-  let symbols = tokenInfos.map((token) => (!token ? 'TOKN' : token.symbol))
-  if (isReverse) symbols.reverse()
-  symbols.join(' / ')
-
-  const getReserve = (tokenInfo: TokenInfo | undefined) => {
-    if (!tokenInfo || !poolData) return 0
-    const { address: mintAddress, decimals } = tokenInfo
-    if (!account.isAddress(mintAddress) || !decimals) return 0
-    const reserve = extractReserve(mintAddress, poolData)
-    return Number(utils.undecimalize(reserve, decimals))
-  }
-
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const reserveA = Number(
-          utils.undecimalize(reserve_a, await getDecimals(mint_a)),
-        )
-        const reserveB = Number(
-          utils.undecimalize(reserve_b, await getDecimals(mint_b)),
-        )
-        const ratio = isReverse
-          ? (await reserveB) / (await reserveA)
-          : (await reserveA) / (await reserveB)
-        return setRatio(ratio)
-      } catch (er: any) {
-        return setRatio(0)
-      }
-    })()
-  }, [isReverse, mint_a, reserve_a, mint_b, reserve_b, getDecimals])
 
   useEffect(() => {
     ;(async () => {
@@ -91,10 +62,7 @@ const Summary = ({
                   icon={<IonIcon name="swap-horizontal-outline" />}
                   onClick={() => setIsReverse(!isReverse)}
                 />
-                <Typography.Text>
-                  {numeric(ratio).format('0,0.[0000]')}
-                </Typography.Text>
-                <Typography.Text>{symbols}</Typography.Text>
+                <PoolPrice poolAddress={poolAddress} reversed={isReverse} />
               </Space>
             </Col>
           </Row>
@@ -108,17 +76,15 @@ const Summary = ({
             </Col>
             <Col>
               <Space size={4}>
-                {tokenInfos.map((tokenInfo, i) => (
-                  <Fragment key={i}>
-                    <Typography.Text>
-                      {numeric(getReserve(tokenInfo)).format('0,0.[00]a')}{' '}
-                      {tokenInfo?.symbol || 'TOKN'}
-                    </Typography.Text>
-                    {tokenInfos.length > i + 1 && (
-                      <Typography.Title level={5}>+</Typography.Title>
-                    )}
-                  </Fragment>
-                ))}
+                <Typography.Text>
+                  {numeric(reserveA).format('0,0.[00]a')}{' '}
+                  <MintSymbol mintAddress={mint_a} />
+                </Typography.Text>
+                <Typography.Title level={5}> + </Typography.Title>
+                <Typography.Text>
+                  {numeric(reserveB).format('0,0.[00]a')}{' '}
+                  <MintSymbol mintAddress={mint_b} />
+                </Typography.Text>
               </Space>
             </Col>
           </Row>
