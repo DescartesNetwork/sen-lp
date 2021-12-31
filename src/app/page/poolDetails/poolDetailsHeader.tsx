@@ -9,6 +9,11 @@ import SwapButton from 'app/components/swapButton'
 
 import { asyncWait } from 'shared/util'
 import { usePool } from 'senhub/providers'
+import configs from 'app/configs'
+
+const {
+  route: { farmRoute },
+} = configs
 
 const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
   const [copied, setCopied] = useState(false)
@@ -22,8 +27,8 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
     setCopied(false)
   }
   const goFarming = useCallback(() => {
-    return history.push(`/app/sen_farming?mintAddress=${mint_lpt}`)
-  }, [history, mint_lpt])
+    return history.push(`${farmRoute}?search=${poolAddress}`)
+  }, [history, poolAddress])
 
   return (
     <Row gutter={[16, 16]}>
