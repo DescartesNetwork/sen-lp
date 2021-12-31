@@ -3,14 +3,16 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import ListMyPools from './listDepositedPools'
+import ListMyPools from './listMyPools'
 
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppDispatch, AppState } from 'app/model'
 
 const YourPools = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const {
+    main: { selectedPoolAddress },
+  } = useSelector((state: AppState) => state)
 
   const setActiveAddress = useCallback(
     (lptAddress: string, poolAddress: string) => {

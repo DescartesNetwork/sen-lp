@@ -14,15 +14,15 @@ import {
 } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
-import PoolCardStatus from 'app/components/PoolCardStatus'
+import PoolCardStatus from 'app/components/poolCardStatus'
+import SwapButton from 'app/components/swapButton'
+import { MintAvatar, MintSymbol } from 'app/components/mint'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
 import { usePool } from 'senhub/providers'
-import SwapButton from 'app/components/swapButton'
 
 const ItemPool = ({
   poolAddress,

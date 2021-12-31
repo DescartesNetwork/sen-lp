@@ -20,16 +20,24 @@ const {
 const SentrePools = () => {
   const history = useHistory()
   const dispatch = useDispatch()
-  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const {
+    main: { selectedPoolAddress },
+    settings: { showArchived },
+  } = useSelector((state: AppState) => state)
   const { pools } = usePool()
   const query = new URLSearchParams(useLocation().search)
   const poolAddress = query.get('poolAddress') || ''
 
-  const listSentrePools = Object.keys(pools).filter((poolAddr) => {
-    const poolData = pools?.[poolAddr]
-    const { owner } = poolData
-    return senOwner.includes(owner)
-  })
+  const listSentrePools = Object.keys(pools)
+    .filter((poolAddr) => {
+      const { owner } = pools[poolAddr] || {}
+      return senOwner.includes(owner)
+    })
+    .filter((poolAddr) => {
+      const { reserve_a, reserve_b } = pools[poolAddr] || {}
+      const empty = !reserve_a || !reserve_b
+      return showArchived || !empty
+    })
 
   const setActivePoolAddress = useCallback(
     async (address: string) => {

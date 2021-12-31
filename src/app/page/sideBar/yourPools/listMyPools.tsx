@@ -1,4 +1,4 @@
-import { ReactElement, Fragment, useEffect, useMemo } from 'react'
+import { ReactElement, Fragment, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
@@ -9,12 +9,10 @@ import { AppState } from 'app/model'
 import { usePool, useWallet } from 'senhub/providers'
 
 const ListMyPools = ({
-  onInit = () => {},
   onClick = () => {},
   selectedPoolAddress,
   action = () => <Fragment />,
 }: {
-  onInit?: (poolAddress: string) => void
   onClick?: (lptAddress: string, poolAddress: string) => void
   selectedPoolAddress?: string
   action?: (lptAddress: string, poolAddress: string) => ReactElement
@@ -29,17 +27,10 @@ const ListMyPools = ({
     () =>
       Object.keys(lpts).filter((lptAddress) => {
         const { pool: poolAddress } = lpts[lptAddress]
-        if (pools?.[poolAddress]?.owner === walletAddress)
-          return pools?.[poolAddress]
-        return null
+        return pools[poolAddress]?.owner === walletAddress
       }),
     [lpts, pools, walletAddress],
   )
-
-  useEffect(() => {
-    if (!lptAddresses.length) return
-    onInit(lptAddresses[0])
-  }, [onInit, lptAddresses, lpts])
 
   return (
     <Row gutter={[12, 12]}>

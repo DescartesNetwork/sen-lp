@@ -6,6 +6,7 @@ import stat from 'app/model/stat.controller'
 import lpts from 'app/model/lpts.controller'
 import retailers from 'app/model/retailers.controller'
 import orders from 'app/model/orders.controller'
+import settings from 'app/model/settings.controller'
 
 /**
  * Isolated store
@@ -20,6 +21,7 @@ const model = configureStore({
     lpts,
     retailers,
     orders,
+    settings,
   },
 })
 

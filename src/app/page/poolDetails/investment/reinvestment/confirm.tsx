@@ -91,14 +91,14 @@ const Confirm = ({
   const bidPrice = useMintPrice(retailerData.mint_bid, true)
   const askPrice = useMintPrice(retailerData.mint_ask, true)
 
-  const lockedTime = global.BigInt(Math.floor(locktime * 24 * 60 * 60))
+  const lockedTime = BigInt(Math.floor(locktime * 24 * 60 * 60))
   const discount =
     VESTING.find(({ locktime: l }) => l === locktime)?.discount || 0
   // Compute amounts
   const valuation = parseFloat(amount) * bidPrice
   const bidAmount = utils.decimalize(amount, bidDecimals)
   const askAmount = !askPrice
-    ? global.BigInt(0)
+    ? BigInt(0)
     : utils.decimalize((valuation * (1 + discount)) / askPrice, askDecimals)
 
   const onPlaceOrder = async () => {

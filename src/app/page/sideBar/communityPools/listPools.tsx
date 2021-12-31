@@ -1,4 +1,5 @@
 import { ReactElement, useMemo, useState, Fragment } from 'react'
+import { useSelector } from 'react-redux'
 import { PoolData } from '@senswap/sen-js'
 import LazyLoad from '@senswap/react-lazyload'
 
@@ -8,6 +9,7 @@ import PoolCard from '../components/poolCard'
 
 import { usePool } from 'senhub/providers'
 import configs from 'app/configs'
+import { AppState } from 'app/model'
 
 const {
   sol: { senOwner },
@@ -25,6 +27,9 @@ const ListAllPools = ({
   const [searchedPools, setSearchedPools] = useState<
     Array<PoolData & { address: string }> | undefined
   >()
+  const {
+    settings: { showArchived },
+  } = useSelector((state: AppState) => state)
   const { pools } = usePool()
 
   const sortedPools = useMemo(
@@ -34,6 +39,11 @@ const ListAllPools = ({
         .filter((pool) => {
           const { owner } = pool || {}
           return !senOwner.includes(owner)
+        })
+        .filter((pool) => {
+          const { reserve_a, reserve_b } = pool || {}
+          const empty = !reserve_a || !reserve_b
+          return showArchived || !empty
         })
         .sort(
           (
@@ -47,7 +57,7 @@ const ListAllPools = ({
             return 0
           },
         ),
-    [pools],
+    [pools, showArchived],
   )
 
   return (

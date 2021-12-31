@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
-import PoolCardStatus from 'app/components/PoolCardStatus'
+import PoolCardStatus from 'app/components/poolCardStatus'
 import { MintAvatar, MintSymbol } from 'app/components/mint'
 
 import { numeric } from 'shared/util'
