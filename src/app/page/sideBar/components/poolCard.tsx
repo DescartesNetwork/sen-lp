@@ -1,5 +1,6 @@
 import { Fragment, ReactElement, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { account } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
@@ -28,24 +29,21 @@ const PoolCard = ({
   const details = useSelector(
     (state: AppState) => state.stat[poolAddress]?.details,
   )
-  const poolData = pools?.[poolAddress] || {}
-  const { state: poolState } = poolData
-
-  const mintLptAddress = pools?.[poolAddress]?.mint_lpt
+  const { state: poolState, mint_lpt: mintLptAddress } =
+    pools[poolAddress] || {}
 
   const apy = useMemo(() => {
     if (!details) return 0
-
-    const roi = details.roi
-    return Math.pow(1 + Number(roi || 0) / 100, 365) - 1
+    const roi = details.roi || 0
+    return Math.pow(1 + roi / 100, 365) - 1
   }, [details])
 
   useEffect(() => {
-    if (!poolAddress) return
+    if (!account.isAddress(poolAddress)) return
     dispatch(fetchStatPoolData({ address: poolAddress }))
   }, [dispatch, poolAddress])
 
-  const isFrozen = poolState === PoolStatus.Frozen
+  const frozen = poolState === PoolStatus.Frozen
   const cardStyle = selected ? 'card-active lp-card' : 'lp-card'
 
   return (
@@ -61,7 +59,7 @@ const PoolCard = ({
           <Space direction="vertical">
             <Space>
               <MintAvatar mintAddress={mintLptAddress} size={24} />
-              <Typography.Text type={isFrozen ? 'secondary' : undefined}>
+              <Typography.Text type={frozen ? 'secondary' : undefined}>
                 <MintSymbol mintAddress={mintLptAddress} />
               </Typography.Text>
             </Space>
