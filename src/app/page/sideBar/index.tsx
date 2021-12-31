@@ -1,9 +1,10 @@
-import { Tabs } from 'antd'
+import { Space, Tabs } from 'antd'
 import CommunityPools from './communityPools'
 import YourPools from './yourPools'
 import NewPool from './newPool'
 import SentrePools from './sentrePools'
 import DepositedPools from './depositedPools'
+import SettingsButton from 'app/components/settingsButton'
 
 const SideBar = ({
   setActiveTab = () => {},
@@ -16,7 +17,12 @@ const SideBar = ({
     <Tabs
       activeKey={activeTab}
       onChange={setActiveTab}
-      tabBarExtraContent={<NewPool />}
+      tabBarExtraContent={
+        <Space>
+          <SettingsButton />
+          <NewPool />
+        </Space>
+      }
       style={{
         maxHeight: 'calc(100vh - 112px)',
         padding: '16px 24px',
