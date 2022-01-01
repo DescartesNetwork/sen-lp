@@ -7,7 +7,7 @@ import { Row, Col, Button, Typography, Space } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { numeric } from 'shared/util'
 import useTokenProvider from 'app/hooks/useTokenProvider'
-import useMintDecimals from 'app/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 import SelectPools from './selectPools'
 
 interface SuggestMintAmount {
@@ -36,7 +36,7 @@ const AmountSelect = ({
   const [associatedAddress, setAssociatedAddress] = useState('')
   const { accounts } = useAccount()
   const tokenInfo = useTokenProvider(activeMintAddress)
-  const decimals = useMintDecimals(activeMintAddress)
+  const decimals = useMintDecimals(activeMintAddress) || 0
   const {
     wallet: { address: walletAddress },
   } = useWallet()

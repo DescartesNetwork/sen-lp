@@ -5,7 +5,7 @@ import { MintSymbol } from 'shared/antd/mint'
 
 import { usePool } from 'senhub/providers'
 import { numeric } from 'shared/util'
-import useMintDecimals from 'app/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const PoolPrice = ({
   poolAddress,
@@ -18,8 +18,8 @@ const PoolPrice = ({
 
   const { mint_a, mint_b, reserve_a, reserve_b, mint_lpt } =
     pools[poolAddress] || {}
-  const decimalsA = useMintDecimals(mint_a)
-  const decimalsB = useMintDecimals(mint_b)
+  const decimalsA = useMintDecimals(mint_a) || 0
+  const decimalsB = useMintDecimals(mint_b) || 0
   const amountA = Number(utils.undecimalize(reserve_a, decimalsA))
   const amountB = Number(utils.undecimalize(reserve_b, decimalsB))
 

@@ -7,7 +7,7 @@ import Amount from 'app/components/amount'
 import { MintSymbol } from 'shared/antd/mint'
 
 import { explorer } from 'shared/util'
-import useMintDecimals from 'app/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
 
 const FullSide = ({
@@ -41,8 +41,8 @@ const FullSide = ({
     tax_ratio,
   } = pools[poolAddress]
   const mintAddresses = [mint_a, mint_b]
-  const decimalA = useMintDecimals(mint_a)
-  const decimalB = useMintDecimals(mint_b)
+  const decimalA = useMintDecimals(mint_a) || 0
+  const decimalB = useMintDecimals(mint_b) || 0
   const decimals = useMemo(() => {
     return [decimalA, decimalB]
   }, [decimalA, decimalB])

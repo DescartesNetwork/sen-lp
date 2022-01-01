@@ -12,7 +12,7 @@ import OrderStatus from 'app/components/orderStatus'
 
 import { AppState } from 'app/model'
 import { numeric, shortenAddress } from 'shared/util'
-import useMintDecimals from 'app/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const Order = ({ orderAddress }: { orderAddress: string }) => {
   const [visible, setVisible] = useState(false)
@@ -28,8 +28,8 @@ const Order = ({ orderAddress }: { orderAddress: string }) => {
     updated_at,
   } = orders[orderAddress] || {}
   const { mint_bid, mint_ask } = retailers[retailer] || {}
-  const bidDecimals = useMintDecimals(mint_bid)
-  const askDecimals = useMintDecimals(mint_ask)
+  const bidDecimals = useMintDecimals(mint_bid) || 0
+  const askDecimals = useMintDecimals(mint_ask) || 0
   const bidAmount = utils.undecimalize(bid_amount, bidDecimals)
   const askAmount = utils.undecimalize(ask_amount, askDecimals)
 

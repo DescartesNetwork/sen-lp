@@ -11,7 +11,7 @@ import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import { notifyError, notifySuccess } from 'app/helper'
 import configs from 'app/configs'
-import useMintDecimals from 'app/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 import useNextOrderIndex from 'app/hooks/useNextOrderIndex'
 import { useMintPrice } from 'app/hooks/useMintPrice'
 import { VESTING } from 'app/constant'
@@ -86,8 +86,8 @@ const Confirm = ({
     retailers: { [retailerAddress]: retailerData },
   } = useSelector((state: AppState) => state)
   const index = useNextOrderIndex(retailerAddress)
-  const bidDecimals = useMintDecimals(retailerData.mint_bid)
-  const askDecimals = useMintDecimals(retailerData.mint_ask)
+  const bidDecimals = useMintDecimals(retailerData.mint_bid) || 0
+  const askDecimals = useMintDecimals(retailerData.mint_ask) || 0
   const bidPrice = useMintPrice(retailerData.mint_bid, true)
   const askPrice = useMintPrice(retailerData.mint_ask, true)
 

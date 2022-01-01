@@ -10,7 +10,7 @@ import { MintSymbol } from 'shared/antd/mint'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import { useMint, usePool } from 'senhub/providers'
-import useMintDecimals from 'app/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const APY_DATE = 365
 
@@ -70,8 +70,8 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
 
   const { mint_a, mint_b, reserve_a, reserve_b, mint_lpt } =
     pools[poolAddress] || {}
-  const decimalsA = useMintDecimals(mint_a)
-  const decimalsB = useMintDecimals(mint_b)
+  const decimalsA = useMintDecimals(mint_a) || 0
+  const decimalsB = useMintDecimals(mint_b) || 0
   const reserveA = utils.undecimalize(reserve_a, decimalsA)
   const reserveB = utils.undecimalize(reserve_b, decimalsB)
 

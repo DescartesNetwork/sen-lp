@@ -7,7 +7,7 @@ import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
 import { useAccount, useWallet } from 'senhub/providers'
 import { numeric } from 'shared/util'
-import useMintDecimals from 'app/hooks/useMintDecimals'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 /**
  * Single amount input
@@ -27,7 +27,7 @@ const Amount = ({
     wallet: { address: walletAddress },
   } = useWallet()
   const { accounts } = useAccount()
-  const decimals = useMintDecimals(mintAddress)
+  const decimals = useMintDecimals(mintAddress) || 0
 
   const accountData = accounts?.[associatedAddress]
 
