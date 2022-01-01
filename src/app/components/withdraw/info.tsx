@@ -1,5 +1,5 @@
 import { Row, Col, Card, Typography } from 'antd'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
 import { numeric } from 'shared/util'
 

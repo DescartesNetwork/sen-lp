@@ -4,7 +4,7 @@ import { utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Typography, Space, Button, Divider } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { MintAvatar, MintName } from 'app/components/mint'
+import { MintAvatar, MintName } from 'shared/antd/mint'
 
 import { numeric } from 'shared/util'
 import { usePool } from 'senhub/providers'

@@ -5,11 +5,11 @@ import { account, utils } from '@senswap/sen-js'
 import { Card, Col, Row, Space, Typography } from 'antd'
 import Price from './price'
 import LiquidityAction from './liquidityAction'
+import { MintSymbol } from 'shared/antd/mint'
 
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import { useMint, usePool } from 'senhub/providers'
-import { MintSymbol } from 'app/components/mint'
 import useMintDecimals from 'app/hooks/useMintDecimals'
 
 const APY_DATE = 365

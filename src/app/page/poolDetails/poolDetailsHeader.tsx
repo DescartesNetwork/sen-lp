@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Button, Col, Popover, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import SwapButton from 'app/components/swapButton'
 
 import { asyncWait } from 'shared/util'

@@ -1,7 +1,7 @@
 import { utils } from '@senswap/sen-js'
 
 import { Space, Typography } from 'antd'
-import { MintSymbol } from 'app/components/mint'
+import { MintSymbol } from 'shared/antd/mint'
 
 import { usePool } from 'senhub/providers'
 import { numeric } from 'shared/util'
@@ -31,7 +31,7 @@ const PoolPrice = ({
       <Typography.Text>
         {numeric(reversed ? reversedPrice : price).format('0,0.[0000]')}
       </Typography.Text>
-      <MintSymbol mintAddress={mint_lpt} isReverse={reversed} separator=" / " />
+      <MintSymbol mintAddress={mint_lpt} reversed={reversed} separator=" / " />
     </Space>
   )
 }

@@ -16,7 +16,7 @@ import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/poolCardStatus'
 import SwapButton from 'app/components/swapButton'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'

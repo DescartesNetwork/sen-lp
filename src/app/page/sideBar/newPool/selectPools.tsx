@@ -1,5 +1,5 @@
 import { Space, Select, Divider, Typography } from 'antd'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import IonIcon from 'shared/antd/ionicon'
 
 const SelectPools = ({

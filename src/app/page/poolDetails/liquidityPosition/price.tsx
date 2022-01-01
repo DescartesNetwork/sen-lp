@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Button, Space } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import { MintAvatar } from 'app/components/mint'
+import { MintAvatar } from 'shared/antd/mint'
 
 import { usePool } from 'senhub/providers'
 import PoolPrice from 'app/components/poolPrice'
@@ -15,7 +15,7 @@ const Price = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <Space>
-      <MintAvatar mintAddress={mint_lpt} isReserve={isReverse} />
+      <MintAvatar mintAddress={mint_lpt} reversed={isReverse} />
       <PoolPrice poolAddress={poolAddress} reversed={isReverse} />
       <Button
         type="text"

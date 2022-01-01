@@ -3,7 +3,7 @@ import { utils } from '@senswap/sen-js'
 
 import { Col, Divider, Row, Space, Typography, Button } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
-import { MintSymbol } from 'app/components/mint'
+import { MintSymbol } from 'shared/antd/mint'
 
 import { usePool } from 'senhub/providers'
 import { AppState } from 'app/model'

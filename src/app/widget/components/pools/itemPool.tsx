@@ -14,9 +14,9 @@ import {
 } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import PoolCardStatus from 'app/components/poolCardStatus'
 import SwapButton from 'app/components/swapButton'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'

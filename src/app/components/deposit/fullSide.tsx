@@ -4,7 +4,7 @@ import { account, Swap, utils } from '@senswap/sen-js'
 import { Row, Col, Button, Radio, Space, Tag, RadioChangeEvent } from 'antd'
 import Summary from './summary'
 import Amount from 'app/components/amount'
-import { MintSymbol } from 'app/components/mint'
+import { MintSymbol } from 'shared/antd/mint'
 
 import { explorer } from 'shared/util'
 import useMintDecimals from 'app/hooks/useMintDecimals'

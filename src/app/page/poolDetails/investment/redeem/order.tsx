@@ -4,7 +4,7 @@ import { utils } from '@senswap/sen-js'
 import moment from 'moment'
 
 import { Card, Row, Col, Space, Typography, Button, Collapse } from 'antd'
-import { MintSymbol } from 'app/components/mint'
+import { MintSymbol } from 'shared/antd/mint'
 import IonIcon from 'shared/antd/ionicon'
 import Action from './action'
 import Caption from 'app/components/caption'

@@ -3,7 +3,7 @@ import { utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import PoolCardStatus from 'app/components/poolCardStatus'
 
 import { LPTData } from 'app/model/lpts.controller'

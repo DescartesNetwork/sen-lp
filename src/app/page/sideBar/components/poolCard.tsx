@@ -5,7 +5,7 @@ import { account } from '@senswap/sen-js'
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
 import PoolCardStatus from 'app/components/poolCardStatus'
-import { MintAvatar, MintSymbol } from 'app/components/mint'
+import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
