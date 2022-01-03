@@ -1,17 +1,17 @@
-import { Fragment, useState, useEffect, useCallback, useMemo } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
-import { account } from '@senswap/sen-js'
+import { useAccount, usePool, useWallet } from 'senhub/providers'
+import { account, utils } from '@senswap/sen-js'
 
-import { Row, Col, Modal, Button, Typography } from 'antd'
+import { Row, Col, Modal, Button, Typography, Space } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import AmountSelect from './amountSelect'
+import AmountSelect, { AmountSelectOnChnage } from './amountSelect'
 
 import { notifyError, notifySuccess } from 'app/helper'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
-import suggestions, { MintInfo } from 'app/helper/suggestions'
-import { fetchCGK } from 'shared/util'
+import { useMintPrice } from 'app/hooks/useMintPrice'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const {
   sol: { taxmanAddress },
@@ -24,125 +24,67 @@ const NewPool = () => {
   const [mintAddressA, setMintAddressA] = useState('')
   const [reserveB, setReserveB] = useState(BigInt(0))
   const [mintAddressB, setMintAddressB] = useState('')
-  const [mapMints, setMapMints] = useState<Map<string, string>>(new Map())
-  const [mintInfos, setMintInfos] = useState<Map<string, MintInfo>>()
-  const [isMintAChanged, setIsMintAChanged] = useState<boolean>(false)
-  const { accounts } = useAccount()
-  const lpts = useSelector((state: AppState) => state.lpts)
+  const [isMintAChanged, setIsMintAChanged] = useState(false)
+  const [suggestions, setSuggestions] = useState([0, 0])
+  const { lpts } = useSelector((state: AppState) => state)
   const {
     wallet: { address: walletAddress },
   } = useWallet()
+  const { accounts } = useAccount()
   const { pools } = usePool()
-  const { tokenProvider } = useMint()
 
-  const lptAddresses = useMemo(
-    () =>
-      Object.keys(lpts).map((lptAddress) => {
-        const { pool: poolAddress } = lpts[lptAddress]
-        return pools?.[poolAddress]?.mint_lpt
-      }),
-    [pools, lpts],
+  // String combination of mint_a and mint_b
+  const existedPoolKeys = Object.values(pools).map(
+    ({ mint_a, mint_b }) => `${mint_a}${mint_b}`,
   )
-
-  const filterMintAddress = () => {
-    const mintAddress = []
-    for (const accountAddress of Object.keys(accounts)) {
-      const { mint } = accounts[accountAddress]
-      if (!lptAddresses.includes(mint)) mintAddress.push(mint)
-    }
-    return mintAddress
-  }
-
-  const mintsAddress = useMemo(() => {
-    const mints = []
-    if (mintAddressA) mints.push(mintAddressA)
-    if (mintAddressB) mints.push(mintAddressB)
-    return mints
-  }, [mintAddressA, mintAddressB])
-
+  // Check the pool whether exists
+  const isExisted =
+    existedPoolKeys.includes(`${mintAddressA}${mintAddressB}`) ||
+    existedPoolKeys.includes(`${mintAddressB}${mintAddressA}`)
+  // Filtered the valid mints (exclude lp tokens)
+  const exclusiveMintAddresses = Object.values(lpts)
+    .map(({ pool }) => pools[pool]?.mint_lpt)
+    .filter((mintAddress) => account.isAddress(mintAddress))
+  const filteredMintAddress = Object.values(accounts)
+    .map(({ mint }) => mint)
+    .filter((mintAddress) => !exclusiveMintAddresses.includes(mintAddress))
+  // Mint info
+  const mintAPrice = useMintPrice(mintAddressA)
+  const decimalsA = useMintDecimals(mintAddressA) || 0
+  const mintBPrice = useMintPrice(mintAddressB)
+  const decimalsB = useMintDecimals(mintAddressB) || 0
+  // Valid to supply
   const isValid =
     reserveA &&
     reserveB &&
     account.isAddress(mintAddressA) &&
     account.isAddress(mintAddressB)
 
-  const mint_a_b = `${mintAddressA}${mintAddressB}`
-  const mint_b_a = `${mintAddressB}${mintAddressA}`
-  const isExist = mapMints.has(mint_a_b) || mapMints.has(mint_b_a)
-
-  const onSelectMintA = ({
-    amount,
-    mintAddress,
-  }: {
-    amount: bigint
-    mintAddress: string
-  }) => {
+  const onSelectMintA = ({ amount, mintAddress }: AmountSelectOnChnage) => {
     setReserveA(amount)
     setMintAddressA(mintAddress)
     setIsMintAChanged(true)
   }
 
-  const onSelectMintB = async ({
-    amount,
-    mintAddress,
-  }: {
-    amount: bigint
-    mintAddress: string
-  }) => {
+  const onSelectMintB = ({ amount, mintAddress }: AmountSelectOnChnage) => {
     setReserveB(amount)
     setMintAddressB(mintAddress)
     setIsMintAChanged(false)
   }
 
-  const suggestInfo = useMemo(() => {
-    if (!mintInfos) return
-    const mintInfoA = mintInfos.get(mintAddressA)
-    const mintInfoB = mintInfos.get(mintAddressB)
-
-    if (!mintInfoA || !mintInfoB) return
-    const { address: addressA, symbol: symbolA } = mintInfoA
-    const { address: addressB, symbol: symbolB } = mintInfoB
-
-    let suggestAmount = 0
-    let symbol = ''
-    let mintAddress = ''
-    if (isMintAChanged) {
-      suggestAmount = suggestions.calculateAmount(
-        reserveA,
-        mintInfoA,
-        mintInfoB,
-      )
-      symbol = symbolB
-      mintAddress = addressB
-    } else {
-      suggestAmount = suggestions.calculateAmount(
-        reserveB,
-        mintInfoB,
-        mintInfoA,
-      )
-      symbol = symbolA
-      mintAddress = addressA
-    }
-    return { symbol, amount: suggestAmount, address: mintAddress }
-  }, [
-    isMintAChanged,
-    mintAddressA,
-    mintAddressB,
-    mintInfos,
-    reserveA,
-    reserveB,
-  ])
-
   const onNewPool = async () => {
-    const { swap, splt, wallet } = window.sentre
-    const mintAddresses = [mintAddressA, mintAddressB]
-    const srcAddresses = await Promise.all(
-      mintAddresses.map((mintAddress) =>
-        splt.deriveAssociatedAddress(walletAddress, mintAddress),
-      ),
-    )
-    if (!wallet) return
     try {
+      const { swap, splt, wallet } = window.sentre
+      if (!wallet || !account.isAddress(walletAddress))
+        throw new Error('Wallet is not connected')
+      if (!account.isAddress(mintAddressA) || !account.isAddress(mintAddressB))
+        throw new Error('Please select both tokens')
+      const mintAddresses = [mintAddressA, mintAddressB]
+      const srcAddresses = await Promise.all(
+        mintAddresses.map((mintAddress) =>
+          splt.deriveAssociatedAddress(walletAddress, mintAddress),
+        ),
+      )
       const { txId } = await swap.initializePool(
         reserveA,
         reserveB,
@@ -161,61 +103,36 @@ const NewPool = () => {
     }
   }
 
-  const getMapMints = useCallback(() => {
-    for (let addr in pools) {
-      const pool = pools[addr]
-      const { mint_a, mint_b } = pool
-      const concatMint = `${mint_a}${mint_b}`
-      mapMints.set(concatMint, addr)
-    }
-    setMapMints(mapMints)
-  }, [mapMints, pools])
-
-  useEffect(() => {
-    getMapMints()
-  }, [getMapMints])
-
   const onClose = () => {
-    setVisible(!visible)
+    setVisible(false)
     setMintAddressA('')
     setMintAddressB('')
+    setSuggestions([0, 0])
   }
 
-  const getMintInfos = useCallback(
-    async (mintAddress: string[]) => {
-      let promise = mintAddress.map(async (mint) => {
-        const mintInfo = {} as MintInfo
-        const tokenInfo = await tokenProvider.findByAddress(mint)
-        const ticket = tokenInfo?.extensions?.coingeckoId
-        let price = 0
-        if (ticket) {
-          price = (await fetchCGK(ticket)).price
-        }
-        if (tokenInfo) {
-          mintInfo.symbol = tokenInfo.symbol
-          mintInfo.decimals = tokenInfo.decimals
-          mintInfo.address = tokenInfo.address
-          mintInfo.price = price
-        }
-        return mintInfo
-      })
-      const mintsDetails = await Promise.all(promise)
-      const mapMintsDetails = new Map<string, MintInfo>()
-      mintsDetails.forEach((mint) => {
-        mapMintsDetails.set(mint.address, mint)
-      })
-      return mapMintsDetails
-    },
-    [tokenProvider],
-  )
-
   useEffect(() => {
-    if (!mintsAddress) return
-    ;(async () => {
-      const infos = await getMintInfos(mintsAddress)
-      setMintInfos(infos)
-    })()
-  }, [mintsAddress, getMintInfos])
+    if (isMintAChanged && mintBPrice) {
+      const amount =
+        (Number(utils.undecimalize(reserveA, decimalsA)) * mintAPrice) /
+        mintBPrice
+      return setSuggestions([0, amount])
+    }
+    if (!isMintAChanged && mintAPrice) {
+      const amount =
+        (Number(utils.undecimalize(reserveB, decimalsB)) * mintBPrice) /
+        mintAPrice
+      return setSuggestions([amount, 0])
+    }
+    return setSuggestions([0, 0])
+  }, [
+    isMintAChanged,
+    reserveA,
+    mintAPrice,
+    decimalsA,
+    reserveB,
+    mintBPrice,
+    decimalsB,
+  ])
 
   return (
     <Fragment>
@@ -229,32 +146,18 @@ const NewPool = () => {
       <Modal
         visible={visible}
         onCancel={onClose}
-        title={<Typography.Title level={4}>New Pool</Typography.Title>}
-        footer={
-          <Button
-            type="primary"
-            size="large"
-            onClick={onNewPool}
-            disabled={!isValid}
-            block
-          >
-            Supply
-          </Button>
-        }
+        closeIcon={<IonIcon name="close" />}
+        footer={null}
         destroyOnClose={true}
         centered={true}
       >
-        <Row gutter={[16, 12]}>
+        <Row gutter={[24, 24]}>
           <Col span={24}>
-            <Typography.Text type="secondary">
-              This is your first time adding liquidity. It is the rate you add
-              that sets the price for that LP token pair. If you feel satisfied
-              with the rate please press the Supply button.
-            </Typography.Text>
+            <Typography.Title level={4}>New Pool</Typography.Title>
           </Col>
           <Col span={24}>
             <Typography.Text type="secondary">
-              <strong className="content">Liquidity provider incentive.</strong>{' '}
+              <strong className="content">Liquidity Provider Incentive.</strong>{' '}
               Liquidity providers earn a 0.25% fee on all trades proportional to
               their share of the pool. Fees are accrued into the pool and can be
               claimed by withdrawing your liquidity.
@@ -262,27 +165,46 @@ const NewPool = () => {
           </Col>
           <Col span={24}>
             <AmountSelect
-              mintAddresses={filterMintAddress()}
+              mintAddresses={filteredMintAddress}
               onChange={onSelectMintA}
-              suggestInfo={suggestInfo}
+              suggestion={suggestions[0]}
             />
           </Col>
           <Col span={24}>
             <AmountSelect
-              mintAddresses={filterMintAddress()}
+              mintAddresses={filteredMintAddress}
               onChange={onSelectMintB}
-              suggestInfo={suggestInfo}
+              suggestion={suggestions[1]}
             />
           </Col>
-          {isExist && (
-            <Col span={24}>
-              <Typography.Text className="caption" type="danger">
-                The pool you want to create with selected mints already exists.
-                We hightly recomment to deposit your liquidity to the pool
-                instead.
-              </Typography.Text>
-            </Col>
-          )}
+          <Col span={24}>
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <Button
+                  type="primary"
+                  onClick={onNewPool}
+                  disabled={!isValid}
+                  block
+                >
+                  Supply
+                </Button>
+              </Col>
+              {isExisted && (
+                <Col span={24}>
+                  <Space align="start">
+                    <Typography.Text className="caption" type="danger">
+                      <IonIcon name="warning-outline" />
+                    </Typography.Text>
+                    <Typography.Text className="caption" type="danger">
+                      A pool of the desired pair of tokens had already created.
+                      We highly recommend to deposit your liquidity to the pool
+                      instead.
+                    </Typography.Text>
+                  </Space>
+                </Col>
+              )}
+            </Row>
+          </Col>
         </Row>
       </Modal>
     </Fragment>

@@ -1,6 +1,9 @@
 import { Space, Select, Divider, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import IonIcon from 'shared/antd/ionicon'
+import Avatar from 'antd/lib/avatar/avatar'
+
+const DEFAULT_VALUE = 'Select'
 
 const SelectPools = ({
   mintAddresses,
@@ -9,29 +12,28 @@ const SelectPools = ({
 }: {
   mintAddresses: string[]
   activeMintAddress: string
-  onSelect: (mintAddress: any) => void
+  onSelect: (mintAddress: string) => void
 }) => {
   return (
     <Select
       onChange={onSelect}
-      value={activeMintAddress || ''}
+      value={activeMintAddress || DEFAULT_VALUE}
       bordered={false}
       suffixIcon={<Divider type="vertical" style={{ margin: 0 }} />}
       style={{ marginLeft: -7 }}
     >
-      <Select.Option value="Select">
-        <Space size={4}>
-          <MintAvatar
-            mintAddress={'Select'}
-            icon={<IonIcon name="help-outline" />}
-          />
-          <Typography.Text>Select</Typography.Text>
+      <Select.Option value={DEFAULT_VALUE}>
+        <Space>
+          <Avatar>
+            <IonIcon name="help-outline" />
+          </Avatar>
+          <Typography.Text>{DEFAULT_VALUE}</Typography.Text>
         </Space>
       </Select.Option>
       {mintAddresses.map((mintAddress, i) => {
         return (
-          <Select.Option key={mintAddress + i} value={mintAddress}>
-            <Space size={4}>
+          <Select.Option key={i} value={mintAddress}>
+            <Space>
               <MintAvatar mintAddress={mintAddress} />
               <MintSymbol mintAddress={mintAddress} />
             </Space>

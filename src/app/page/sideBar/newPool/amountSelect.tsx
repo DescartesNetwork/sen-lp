@@ -1,67 +1,48 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAccount, useWallet } from 'senhub/providers'
-import { account, AccountData, utils } from '@senswap/sen-js'
+import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Button, Typography, Space } from 'antd'
-
 import NumericInput from 'shared/antd/numericInput'
-import { numeric } from 'shared/util'
-import useTokenProvider from 'app/hooks/useTokenProvider'
-import useMintDecimals from 'shared/hooks/useMintDecimals'
 import SelectPools from './selectPools'
+import { MintSymbol } from 'shared/antd/mint'
 
-interface SuggestMintAmount {
-  symbol?: string
-  amount?: number
-  address: string
+import { numeric } from 'shared/util'
+import useMintDecimals from 'shared/hooks/useMintDecimals'
+
+export type AmountSelectOnChnage = {
+  amount: bigint
+  mintAddress: string
 }
 
 const AmountSelect = ({
   mintAddresses,
   onChange,
-  suggestInfo,
+  suggestion,
 }: {
   mintAddresses: string[]
-  onChange: ({
-    amount,
-    mintAddress,
-  }: {
-    amount: bigint
-    mintAddress: string
-  }) => void
-  suggestInfo?: SuggestMintAmount
+  onChange: ({ amount, mintAddress }: AmountSelectOnChnage) => void
+  suggestion?: number
 }) => {
   const [amount, setAmount] = useState('')
   const [activeMintAddress, setActiveMintAddress] = useState<string>('Select')
-  const [associatedAddress, setAssociatedAddress] = useState('')
+  const [accountAddress, setAccountAddress] = useState('')
   const { accounts } = useAccount()
-  const tokenInfo = useTokenProvider(activeMintAddress)
   const decimals = useMintDecimals(activeMintAddress) || 0
   const {
     wallet: { address: walletAddress },
   } = useWallet()
-  const accountData: AccountData = accounts?.[associatedAddress]
 
-  const { symbol } = tokenInfo[0] || {}
+  const { amount: a } = accounts[accountAddress] || { amount: '0' }
+  const balance = utils.undecimalize(a, decimals) || '0'
 
-  const balance = useMemo(() => {
-    const { amount } = accountData || {}
-    if (!amount || !decimals) return '0'
-    return utils.undecimalize(amount, decimals) || '0'
-  }, [accountData, decimals])
-
-  const getAssociatedAddress = useCallback(async () => {
+  const getAccountAddress = useCallback(async () => {
     const { splt } = window.sentre
-    let associatedAdd = ''
-    try {
-      associatedAdd = await account?.deriveAssociatedAddress(
-        walletAddress,
-        activeMintAddress,
-        splt.spltProgramId.toBase58(),
-        splt.splataProgramId.toBase58(),
-      )
-    } catch (er) {}
-    setAssociatedAddress(associatedAdd)
+    let associatedAdd = await splt.deriveAssociatedAddress(
+      walletAddress,
+      activeMintAddress,
+    )
+    return setAccountAddress(associatedAdd)
   }, [activeMintAddress, walletAddress])
 
   const onAmount = useCallback(
@@ -93,19 +74,13 @@ const AmountSelect = ({
   )
 
   useEffect(() => {
-    getAssociatedAddress()
-  }, [getAssociatedAddress])
-  const {
-    symbol: suggestSymbol,
-    amount: suggestAmount,
-    address: suggestAddr,
-  } = suggestInfo || {}
-  const isAddr = activeMintAddress === suggestAddr
+    getAccountAddress()
+  }, [getAccountAddress])
 
   return (
     <Row gutter={[4, 4]}>
       <NumericInput
-        placeholder={`Amount of ${symbol || 'TOKEN'}`}
+        placeholder="0"
         value={amount}
         onValue={onAmount}
         prefix={
@@ -130,20 +105,20 @@ const AmountSelect = ({
       <Col span={24}>
         <Row gutter={[4, 4]}>
           <Col span={24} flex="auto">
-            {isAddr && suggestAmount ? (
+            {suggestion ? (
               <Space size={4}>
                 <Typography.Text type="secondary" className="caption">
                   Recommend:
                 </Typography.Text>
                 <Typography.Text
                   type="danger"
-                  style={{ fontSize: 12, cursor: 'pointer' }}
-                  onClick={() => onAmount(suggestAmount?.toString() || '0')}
+                  className="caption"
+                  onClick={() => onAmount((suggestion || 0).toString())}
                 >
-                  {numeric(suggestAmount).format('0,0.[00000]a')}
+                  {numeric(suggestion).format('0,0.[0000]a')}
                 </Typography.Text>
                 <Typography.Text type="secondary" className="caption">
-                  {suggestSymbol || 'TOKEN'}
+                  <MintSymbol mintAddress={activeMintAddress} />
                 </Typography.Text>
               </Space>
             ) : null}
@@ -151,7 +126,7 @@ const AmountSelect = ({
           <Col>
             <Typography.Text type="secondary" className="caption">
               Available: {numeric(balance).format('0,0.[0000]')}{' '}
-              {symbol || 'TOKEN'}
+              <MintSymbol mintAddress={activeMintAddress} />
             </Typography.Text>
           </Col>
         </Row>
