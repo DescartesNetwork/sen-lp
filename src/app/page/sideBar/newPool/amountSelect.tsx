@@ -38,11 +38,12 @@ const AmountSelect = ({
 
   const getAccountAddress = useCallback(async () => {
     const { splt } = window.sentre
-    let associatedAdd = await splt.deriveAssociatedAddress(
+    if (!account.isAddress(activeMintAddress)) return
+    const address = await splt.deriveAssociatedAddress(
       walletAddress,
       activeMintAddress,
     )
-    return setAccountAddress(associatedAdd)
+    return setAccountAddress(address)
   }, [activeMintAddress, walletAddress])
 
   const onAmount = useCallback(
