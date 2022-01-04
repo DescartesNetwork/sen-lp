@@ -18,19 +18,19 @@ const PoolDetails = () => {
       <Col span={24}>
         <PoolDetailsHeader poolAddress={selectedPoolAddress} />
       </Col>
-      <Col xs={24} md={12}>
+      <Col xs={{ span: 24, order: 1 }} md={{ span: 12, order: 1 }}>
         <TotalValueLocked />
       </Col>
-      <Col xs={24} md={12}>
+      <Col xs={{ span: 24, order: 3 }} md={{ span: 12, order: 2 }}>
         <LiquidityPosition poolAddress={selectedPoolAddress} />
       </Col>
-      <Col xs={24} md={12}>
+      <Col xs={{ span: 24, order: 2 }} md={{ span: 12, order: 3 }}>
         <Volume24h />
       </Col>
-      <Col xs={24} md={12}>
+      <Col xs={{ span: 24, order: 4 }} md={12}>
         <Investment poolAddress={selectedPoolAddress} />
       </Col>
-      <Col xs={24} md={12}>
+      <Col xs={{ span: 24, order: 5 }} md={12}>
         <PoolManagement poolAddress={selectedPoolAddress} />
       </Col>
     </Row>
