@@ -2,13 +2,15 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
 
-import { Card, Col, Row, Typography, Spin } from 'antd'
+import { Card, Col, Row, Typography, Spin, Space, Button } from 'antd'
 import SenChart from 'app/components/chart'
 
 import PoolService from 'app/stat/logic/pool/pool'
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import { DataLoader } from 'shared/dataloader'
+import IonIcon from 'shared/antd/ionicon'
+import { useUI } from 'senhub/providers'
 
 const CHART_CONFIGS = {
   color: '#40A9FF',
@@ -25,6 +27,10 @@ const TotalValueLocked = () => {
     [],
   )
   const [isLoading, setIsLoading] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const {
+    ui: { width },
+  } = useUI()
 
   const tvlChartConfigs = {
     borderColor: CHART_CONFIGS.transparent,
@@ -62,6 +68,14 @@ const TotalValueLocked = () => {
     fetchChart()
   }, [fetchChart])
 
+  const iconName = visible ? 'chevron-down-outline' : 'chevron-forward-outline'
+  const isMobile = width < 768
+
+  useEffect(() => {
+    if (!isMobile) return setVisible(true)
+    return setVisible(false)
+  }, [isMobile])
+
   return (
     <Card bordered={false} style={{ height: 'auto' }}>
       <Spin tip="Loading..." spinning={isLoading}>
@@ -70,20 +84,32 @@ const TotalValueLocked = () => {
             <Typography.Title level={4}>Total Value Locked</Typography.Title>
           </Col>
           <Col>
-            <Typography.Title level={2}>
-              $
-              {numeric(chartData[chartData.length - 1]?.data).format(
-                '0,0.[0]a',
+            <Space>
+              <Typography.Title level={2}>
+                $
+                {numeric(chartData[chartData.length - 1]?.data).format(
+                  '0,0.[0]a',
+                )}
+              </Typography.Title>
+              {isMobile && (
+                <Button
+                  type="text"
+                  shape="circle"
+                  icon={<IonIcon name={iconName} />}
+                  onClick={() => setVisible(!visible)}
+                />
               )}
-            </Typography.Title>
+            </Space>
           </Col>
-          <Col span={24}>
-            <SenChart
-              chartData={chartData.map((e) => e.data)}
-              labels={chartData.map((e) => e.label)}
-              configs={tvlChartConfigs}
-            />
-          </Col>
+          {visible && (
+            <Col span={24}>
+              <SenChart
+                chartData={chartData.map((e) => e.data)}
+                labels={chartData.map((e) => e.label)}
+                configs={tvlChartConfigs}
+              />
+            </Col>
+          )}
         </Row>
       </Spin>
     </Card>
