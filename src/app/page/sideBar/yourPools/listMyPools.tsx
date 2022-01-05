@@ -1,21 +1,24 @@
-import { ReactElement, Fragment, useMemo } from 'react'
+import { ReactElement, Fragment } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col } from 'antd'
-import LPTCard from '../components/lptCard'
 
 import { AppState } from 'app/model'
 import { usePool, useWallet } from 'senhub/providers'
+import { useTVLSortPool } from 'app/hooks/useTVLSortPool'
+import PoolCard from '../components/poolCard'
 
 const ListMyPools = ({
-  onClick = () => {},
+  onInit = () => {},
   selectedPoolAddress,
   action = () => <Fragment />,
+  setActiveAddress = () => {},
 }: {
-  onClick?: (lptAddress: string, poolAddress: string) => void
+  onInit?: (poolAddress: string) => void
   selectedPoolAddress?: string
-  action?: (lptAddress: string, poolAddress: string) => ReactElement
+  action?: (poolAddress: string) => ReactElement
+  setActiveAddress?: (poolAddress: string) => void
 }) => {
   const lpts = useSelector((state: AppState) => state.lpts)
   const { pools } = usePool()
@@ -23,26 +26,29 @@ const ListMyPools = ({
     wallet: { address: walletAddress },
   } = useWallet()
 
-  const lptAddresses = useMemo(
-    () =>
-      Object.keys(lpts).filter((lptAddress) => {
-        const { pool: poolAddress } = lpts[lptAddress]
-        return pools[poolAddress]?.owner === walletAddress
-      }),
-    [lpts, pools, walletAddress],
-  )
+  const lptAddresses = Object.keys(lpts).filter((lptAddress) => {
+    const { pool: poolAddress } = lpts[lptAddress]
+    if (pools?.[poolAddress]?.owner === walletAddress)
+      return pools?.[poolAddress]
+    return null
+  })
+
+  const poolAddresses = lptAddresses.map((address) => {
+    const { pool: poolAddress } = lpts?.[address]
+    return poolAddress
+  })
+  const poolSortByTvl = useTVLSortPool(poolAddresses)
 
   return (
     <Row gutter={[12, 12]}>
-      {lptAddresses.map((lptAddress, i) => {
-        const { pool: poolAddress } = lpts[lptAddress]
+      {poolSortByTvl.map(({ address: poolAddress }, i) => {
         return (
-          <Col span={24} key={lptAddress + i}>
+          <Col span={24} key={poolAddress + i}>
             <LazyLoad height={78} overflow>
-              <LPTCard
-                data={lpts[lptAddress]}
-                action={action(lptAddress, poolAddress)}
-                onClick={() => onClick(lptAddress, poolAddress)}
+              <PoolCard
+                poolAddress={poolAddress}
+                action={action(poolAddress)}
+                onClick={() => setActiveAddress(poolAddress)}
                 selected={selectedPoolAddress === poolAddress}
               />
             </LazyLoad>

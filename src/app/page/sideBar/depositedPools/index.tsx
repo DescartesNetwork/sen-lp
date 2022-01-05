@@ -4,18 +4,33 @@ import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import LPTCard from '../components/lptCard'
+import PoolCard from '../components/poolCard'
 
 import { AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+import { useTVLSortPool } from 'app/hooks/useTVLSortPool'
+import { usePool } from 'senhub/providers'
 
 const DepositedPools = () => {
   const dispatch = useDispatch()
   const lpts = useSelector((state: AppState) => state.lpts)
-  const {
-    main: { selectedPoolAddress },
-  } = useSelector((state: AppState) => state)
+  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const { pools } = usePool()
 
+  const lptAddresses = Object.keys(lpts).filter((lptAddress) => {
+    const { pool: poolAddress, amount } = lpts[lptAddress]
+    if (amount !== BigInt(0)) return pools?.[poolAddress]
+    return null
+  })
+
+  let lptPoolMap: string[] = []
+
+  const poolAddresses = lptAddresses.map((address) => {
+    const { pool: poolAddress } = lpts?.[address]
+    lptPoolMap.push(address)
+    return poolAddress
+  })
+  const poolSortByTvl = useTVLSortPool(poolAddresses)
   const setActiveAddress = useCallback(
     (address: string) => {
       dispatch(selectPool(address))
@@ -44,13 +59,18 @@ const DepositedPools = () => {
 
   return (
     <Row gutter={[12, 12]}>
-      {Object.keys(lpts).map((lptAddress, i) => {
-        const { pool: poolAddress } = lpts[lptAddress]
+      {poolSortByTvl.map(({ address: poolAddress }, i) => {
         return (
-          <Col span={24} key={lptAddress + i}>
+          <Col span={24} key={poolAddress + i}>
             <LazyLoad height={78} overflow>
-              <LPTCard
-                data={lpts[lptAddress]}
+              {/* <LPTCard
+                data={lpts[address]}
+                action={action(poolAddress)}
+                onClick={() => setActiveAddress(poolAddress)}
+                selected={selectedPoolAddress === poolAddress}
+              /> */}
+              <PoolCard
+                poolAddress={poolAddress}
                 action={action(poolAddress)}
                 onClick={() => setActiveAddress(poolAddress)}
                 selected={selectedPoolAddress === poolAddress}

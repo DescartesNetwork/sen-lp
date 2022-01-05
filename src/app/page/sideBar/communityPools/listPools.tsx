@@ -1,5 +1,4 @@
-import { ReactElement, useMemo, useState, Fragment } from 'react'
-import { useSelector } from 'react-redux'
+import { ReactElement, useState, Fragment } from 'react'
 import { PoolData } from '@senswap/sen-js'
 import LazyLoad from '@senswap/react-lazyload'
 
@@ -9,7 +8,7 @@ import PoolCard from '../components/poolCard'
 
 import { usePool } from 'senhub/providers'
 import configs from 'app/configs'
-import { AppState } from 'app/model'
+import { useTVLSortPool } from 'app/hooks/useTVLSortPool'
 
 const {
   sol: { senOwner },
@@ -27,38 +26,15 @@ const ListAllPools = ({
   const [searchedPools, setSearchedPools] = useState<
     Array<PoolData & { address: string }> | undefined
   >()
-  const {
-    settings: { showArchived },
-  } = useSelector((state: AppState) => state)
   const { pools } = usePool()
 
-  const sortedPools = useMemo(
-    () =>
-      Object.keys(pools)
-        .map((address) => ({ address, ...pools[address] }))
-        .filter((pool) => {
-          const { owner } = pool || {}
-          return !senOwner.includes(owner)
-        })
-        .filter((pool) => {
-          const { reserve_a, reserve_b } = pool || {}
-          const empty = !reserve_a || !reserve_b
-          return showArchived || !empty
-        })
-        .sort(
-          (
-            { reserve_a: firstRa, reserve_b: firstRb },
-            { reserve_a: secondRa, reserve_b: secondRb },
-          ) => {
-            const firstK = firstRa * firstRb
-            const secondK = secondRa * secondRb
-            if (firstK > secondK) return -1
-            if (firstK < secondK) return 1
-            return 0
-          },
-        ),
-    [pools, showArchived],
-  )
+  const listPool = Object.keys(pools).filter((poolAddr) => {
+    const poolData = pools?.[poolAddr]
+    const { owner } = poolData
+    return !senOwner.includes(owner)
+  })
+
+  const sortedPools = useTVLSortPool(listPool)
 
   return (
     <Row gutter={[12, 12]}>

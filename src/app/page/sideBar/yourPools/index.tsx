@@ -15,17 +15,17 @@ const YourPools = () => {
   } = useSelector((state: AppState) => state)
 
   const setActiveAddress = useCallback(
-    (lptAddress: string, poolAddress: string) => {
+    (poolAddress: string) => {
       dispatch(selectPool(poolAddress))
       dispatch(handleOpenDrawer(false))
     },
     [dispatch],
   )
   const action = useCallback(
-    (lptAddress, poolAddress) => (
+    (poolAddress) => (
       <Button
         type="text"
-        onClick={() => setActiveAddress(lptAddress, poolAddress)}
+        onClick={() => setActiveAddress(poolAddress)}
         size="small"
         icon={
           <IonIcon
@@ -43,8 +43,8 @@ const YourPools = () => {
       <Col span={24}>
         <ListMyPools
           action={action}
+          setActiveAddress={setActiveAddress}
           selectedPoolAddress={selectedPoolAddress}
-          onClick={setActiveAddress}
         />
       </Col>
     </Row>

@@ -11,6 +11,7 @@ import configs from 'app/configs'
 import { usePool } from 'senhub/providers'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppState } from 'app/model'
+import { useTVLSortPool } from 'app/hooks/useTVLSortPool'
 
 const {
   sol: { senOwner },
@@ -39,6 +40,8 @@ const SentrePools = () => {
       return showArchived || !empty
     })
 
+  const sortedPools = useTVLSortPool(listSentrePools)
+
   const setActivePoolAddress = useCallback(
     async (address: string) => {
       await dispatch(selectPool(address))
@@ -57,23 +60,23 @@ const SentrePools = () => {
   )
 
   useEffect(() => {
-    if (!listSentrePools.length || selectedPoolAddress) return
-    onInit(listSentrePools[0])
-  }, [listSentrePools, onInit, selectedPoolAddress])
+    if (!sortedPools.length || selectedPoolAddress) return
+    onInit(sortedPools[0].address)
+  }, [sortedPools, onInit, selectedPoolAddress])
 
   return (
-    <Row gutter={[12, 12]}>
-      {listSentrePools.map((poolAddress, idx) => {
+    <Row gutter={[16, 16]}>
+      {sortedPools.map(({ address }, idx) => {
         return (
-          <Col span={24} key={poolAddress + idx}>
+          <Col span={24} key={address + idx}>
             <PoolCard
-              poolAddress={poolAddress}
+              poolAddress={address}
               action={
                 <Button
                   type="text"
                   onClick={(e: MouseEvent<HTMLButtonElement>) => {
                     e.stopPropagation()
-                    setActivePoolAddress(poolAddress)
+                    setActivePoolAddress(address)
                   }}
                   icon={
                     <IonIcon
@@ -83,8 +86,8 @@ const SentrePools = () => {
                   }
                 />
               }
-              onClick={() => setActivePoolAddress(poolAddress)}
-              selected={selectedPoolAddress === poolAddress}
+              onClick={() => setActivePoolAddress(address)}
+              selected={selectedPoolAddress === address}
             />
           </Col>
         )
