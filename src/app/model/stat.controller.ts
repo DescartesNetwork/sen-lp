@@ -5,7 +5,6 @@ import api from 'app/helper/api'
 
 export enum StatPool {
   endpointDetail = 'public/api/v1/detail/pools',
-  endpointDaily = 'public/api/v1/daily/pools',
 }
 
 type StatDetails = {
@@ -17,16 +16,9 @@ type StatDetails = {
   fee24h: number
   roi: number
 }
-type StatDaily = {
-  time: number
-  volume: number
-  tvl: number
-  fee: number
-}
 
 type StatData = {
   details: StatDetails
-  daily: StatDaily[]
 }
 
 const {
@@ -52,14 +44,11 @@ export const fetchStatPoolData = createAsyncThunk<
     const cacheData = state.stat[address]
     if (cacheData) return { [address]: cacheData }
 
-    const fetchDetails = api.get(
+    const details = await api.get(
       `${baseURL}/${StatPool.endpointDetail}/${address}`,
     )
-    const fetchDaily = api.get(
-      `${baseURL}/${StatPool.endpointDaily}/${address}`,
-    )
-    const [details, daily] = await Promise.all([fetchDetails, fetchDaily])
-    return { [address]: { details, daily } }
+
+    return { [address]: { details } }
   } catch (error) {
     return {}
   }
