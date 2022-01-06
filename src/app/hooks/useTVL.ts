@@ -17,6 +17,5 @@ export const useTVL = (poolAddress?: string) => {
 
   return {
     tvl,
-    getTVL,
   }
 }
