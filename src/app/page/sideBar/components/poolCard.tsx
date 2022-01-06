@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
-import PoolTVL from 'app/components/poolTVL'
 import PoolCardStatus from 'app/components/poolCardStatus'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
@@ -12,6 +11,7 @@ import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
 import { usePool } from 'senhub/providers'
+import { useTVL } from 'app/hooks/useTVL'
 
 const PoolCard = ({
   poolAddress,
@@ -26,6 +26,7 @@ const PoolCard = ({
 }) => {
   const dispatch = useDispatch()
   const { pools } = usePool()
+  const { tvl } = useTVL(poolAddress)
   const details = useSelector(
     (state: AppState) => state.stat[poolAddress]?.details,
   )
@@ -70,7 +71,7 @@ const PoolCard = ({
                 </Typography.Text>
               </Tooltip>
               <Typography.Text>
-                <PoolTVL poolAddress={poolAddress} />
+                ${numeric(tvl).format('0,0.[00]a')}
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <Typography.Text type="secondary" className="caption">

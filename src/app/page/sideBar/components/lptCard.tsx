@@ -2,7 +2,6 @@ import { Fragment, ReactElement } from 'react'
 import { utils } from '@senswap/sen-js'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
-import PoolTVL from 'app/components/poolTVL'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import PoolCardStatus from 'app/components/poolCardStatus'
 
@@ -10,6 +9,7 @@ import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
 import { usePool } from 'senhub/providers'
+import { useTVL } from 'app/hooks/useTVL'
 
 const DECIMAL = 9
 
@@ -29,6 +29,7 @@ const LPTCard = ({
   const cardStyle = selected ? 'card-active lp-card' : 'lp-card'
   const isFrozen = data.state === PoolStatus.Frozen
   const { pools } = usePool()
+  const { tvl } = useTVL(poolAddress)
 
   const mintLptAddress = pools?.[poolAddress]?.mint_lpt || ''
 
@@ -56,7 +57,7 @@ const LPTCard = ({
                 </Typography.Text>
               </Tooltip>
               <Typography.Text>
-                <PoolTVL poolAddress={poolAddress} />
+                ${numeric(tvl).format('0,0.[00]a')}
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <Typography.Text type="secondary" className="caption">

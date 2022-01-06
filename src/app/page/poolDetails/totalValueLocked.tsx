@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import moment from 'moment'
 
 import { Card, Col, Row, Typography, Spin, Space, Button } from 'antd'
 import SenChart from 'app/components/chart'
 
+import PoolService from 'app/stat/logic/pool/pool'
+import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
+import { DataLoader } from 'shared/dataloader'
 import IonIcon from 'shared/antd/ionicon'
 import { useUI } from 'senhub/providers'
-import { useFetchChart } from 'app/hooks/useFetchChart'
 
 const CHART_CONFIGS = {
   color: '#40A9FF',
@@ -16,12 +20,18 @@ const CHART_CONFIGS = {
   transparent: 'transparent',
 }
 
+const TTL_5_MIN = 300000
+
 const TotalValueLocked = () => {
+  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const [chartData, setChartData] = useState<{ data: number; label: string }[]>(
+    [],
+  )
+  const [isLoading, setIsLoading] = useState(false)
   const [visible, setVisible] = useState(true)
   const {
     ui: { width },
   } = useUI()
-  const { chartData, isLoading } = useFetchChart()
 
   const tvlChartConfigs = {
     borderColor: CHART_CONFIGS.transparent,
@@ -32,6 +42,32 @@ const TotalValueLocked = () => {
     pointHoverRadius: CHART_CONFIGS.radius,
     backgroundColor: CHART_CONFIGS.color,
   }
+
+  const fetchChart = useCallback(async () => {
+    if (!selectedPoolAddress) return
+    try {
+      setIsLoading(true)
+      const poolService = new PoolService(selectedPoolAddress)
+      const poolStat = await DataLoader.load(
+        'getDailyInfo' + selectedPoolAddress,
+        poolService.getDailyInfo,
+        { cache: { ttl: TTL_5_MIN } },
+      )
+      const chartData = Object.keys(poolStat).map((time) => {
+        return {
+          data: poolStat[time].tvl,
+          label: moment(time, 'YYYYMMDD').format('MM/DD'),
+        }
+      })
+      setChartData(chartData)
+    } catch (error) {
+    } finally {
+      setIsLoading(false)
+    }
+  }, [selectedPoolAddress])
+  useEffect(() => {
+    fetchChart()
+  }, [fetchChart])
 
   const iconName = visible ? 'chevron-down-outline' : 'chevron-forward-outline'
   const isMobile = width < 768

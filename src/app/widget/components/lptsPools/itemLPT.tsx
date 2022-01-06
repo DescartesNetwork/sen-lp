@@ -12,7 +12,6 @@ import {
   Collapse,
   Button,
 } from 'antd'
-import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCardStatus from 'app/components/poolCardStatus'
 import SwapButton from 'app/components/swapButton'
@@ -22,6 +21,7 @@ import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
 import { usePool } from 'senhub/providers'
+import { useTVL } from 'app/hooks/useTVL'
 
 const DECIMAL = 9
 
@@ -40,6 +40,7 @@ const ItemLPT = ({
   const [isActive, setIsActive] = useState(false)
   const lp = utils.undecimalize(amount, DECIMAL)
   const { pools } = usePool()
+  const { tvl } = useTVL(poolAddress)
 
   const isFrozen = pools?.[poolAddress].state === PoolStatus.Frozen
   const mintLptAddress = pools?.[poolAddress]?.mint_lpt || ''
@@ -63,7 +64,7 @@ const ItemLPT = ({
                 </Typography.Text>
               </Tooltip>
               <Typography.Text>
-                <PoolTVL poolAddress={poolAddress} />
+                ${numeric(tvl).format('0,0.[00]a')}
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <Typography.Text type="secondary" className="caption">

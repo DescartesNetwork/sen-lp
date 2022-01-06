@@ -12,7 +12,6 @@ import {
   Collapse,
   Button,
 } from 'antd'
-import PoolTVL from 'app/components/poolTVL'
 import IonIcon from 'shared/antd/ionicon'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import PoolCardStatus from 'app/components/poolCardStatus'
@@ -23,6 +22,7 @@ import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
 import { usePool } from 'senhub/providers'
+import { useTVL } from 'app/hooks/useTVL'
 
 const ItemPool = ({
   poolAddress,
@@ -37,6 +37,7 @@ const ItemPool = ({
 }) => {
   const dispatch = useDispatch()
   const [isActive, setIsActive] = useState(false)
+  const { tvl } = useTVL(poolAddress)
   const { pools } = usePool()
   const details = useSelector(
     (state: AppState) => state.stat[poolAddress]?.details,
@@ -77,7 +78,7 @@ const ItemPool = ({
                 </Typography.Text>
               </Tooltip>
               <Typography.Text>
-                <PoolTVL poolAddress={poolAddress} />
+                ${numeric(tvl).format('0,0.[00]a')}
               </Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <Typography.Text type="secondary" className="caption">
