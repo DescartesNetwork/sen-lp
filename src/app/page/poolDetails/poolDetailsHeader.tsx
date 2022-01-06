@@ -39,7 +39,7 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
           <Popover
             placement="right"
             content={
-              <Space>
+              <Space align="end">
                 <Tooltip title="Copied" visible={copied} arrowPointAtCenter>
                   <CopyToClipboard text={poolAddress}>
                     <Button
@@ -50,7 +50,12 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
                     />
                   </CopyToClipboard>
                 </Tooltip>
-                <Typography.Text>PoolAddress: {poolAddress}</Typography.Text>
+                <Space direction="vertical" size={4}>
+                  <Typography.Text type="secondary">
+                    PoolAddress
+                  </Typography.Text>
+                  <Typography.Text>{poolAddress}</Typography.Text>
+                </Space>
               </Space>
             }
           >

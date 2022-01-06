@@ -29,7 +29,7 @@ const CardDescription = ({
         </Space>
       </Col>
       <Col span={24}>
-        <Card bordered={false} bodyStyle={{ padding: 16 }}>
+        <Card bordered={false} bodyStyle={{ padding: 16 }} className="lp-card">
           <Space size={4} align="start">
             <IonIcon name="information-circle-outline" />
             <Space direction="vertical" size={0}>

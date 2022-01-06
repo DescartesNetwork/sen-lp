@@ -4,10 +4,10 @@ import moment from 'moment'
 
 import { Card, Col, Row, Typography, Spin, Space, Button } from 'antd'
 import SenChart from 'app/components/chart'
+import PoolTVL from 'app/components/poolTVL'
 
 import PoolService from 'app/stat/logic/pool/pool'
 import { AppState } from 'app/model'
-import { numeric } from 'shared/util'
 import { DataLoader } from 'shared/dataloader'
 import IonIcon from 'shared/antd/ionicon'
 import { useUI } from 'senhub/providers'
@@ -86,10 +86,7 @@ const TotalValueLocked = () => {
           <Col>
             <Space>
               <Typography.Title level={2}>
-                $
-                {numeric(chartData[chartData.length - 1]?.data).format(
-                  '0,0.[0]a',
-                )}
+                <PoolTVL poolAddress={selectedPoolAddress} />
               </Typography.Title>
               {isMobile && (
                 <Button
