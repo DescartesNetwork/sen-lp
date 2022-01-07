@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { PoolData } from '@senswap/sen-js'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col } from 'antd'
+import { Row, Col, Empty } from 'antd'
 import Search from './search'
 import PoolCard from '../components/poolCard'
 
@@ -61,10 +61,15 @@ const ListAllPools = ({
   )
 
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
       <Col span={24}>
         <Search onChange={setSearchedPools} pools={sortedPools} />
       </Col>
+      {!(searchedPools || sortedPools).length && (
+        <Col>
+          <Empty />
+        </Col>
+      )}
       {(searchedPools || sortedPools).map((poolData, i) => (
         <Col span={24} key={poolData.address + i}>
           <LazyLoad height={78} overflow>

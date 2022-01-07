@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col, Button } from 'antd'
+import { Row, Col, Button, Empty } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import LPTCard from '../components/lptCard'
 
@@ -43,7 +43,12 @@ const DepositedPools = () => {
   )
 
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
+      {!Object.keys(lpts).length && (
+        <Col>
+          <Empty />
+        </Col>
+      )}
       {Object.keys(lpts).map((lptAddress, i) => {
         const { pool: poolAddress } = lpts[lptAddress]
         return (
