@@ -17,7 +17,6 @@ export const SwapAction = ({ poolAddress }: { poolAddress: string }) => {
   const frozen = pools?.[poolAddress].state === PoolStatus.Frozen
 
   const onSwap = (originalRoute: boolean) => {
-    console.log(swapRoute, poolAddress, originalRoute)
     return history.push({
       pathname: swapRoute,
       state: { poolAddress, originalRoute },

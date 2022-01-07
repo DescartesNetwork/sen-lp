@@ -9,9 +9,17 @@ import Volume24h from './volume24h'
 import Investment from './investment'
 
 import { AppState } from 'app/model'
+import { usePool, useWallet } from 'senhub/providers'
 
 const PoolDetails = () => {
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+  const { pools } = usePool()
+  const { owner } = pools?.[selectedPoolAddress] || {}
+
+  const ownerPool = walletAddress === owner
 
   return (
     <Row gutter={[24, 24]}>
@@ -30,9 +38,11 @@ const PoolDetails = () => {
       <Col xs={{ span: 24, order: 4 }} md={12}>
         <Investment poolAddress={selectedPoolAddress} />
       </Col>
-      <Col xs={{ span: 24, order: 5 }} md={12}>
-        <PoolManagement poolAddress={selectedPoolAddress} />
-      </Col>
+      {ownerPool && (
+        <Col xs={{ span: 24, order: 5 }} md={12}>
+          <PoolManagement poolAddress={selectedPoolAddress} />
+        </Col>
+      )}
     </Row>
   )
 }

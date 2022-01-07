@@ -20,7 +20,7 @@ const FeeInput = ({
         <Typography.Text type="secondary">{title}</Typography.Text>
       </Col>
       <Col span={24}>
-        <Card bodyStyle={{ padding: 4 }} bordered={false}>
+        <Card bodyStyle={{ padding: 4 }} bordered={false} className="lp-card">
           <NumericInput
             placeholder="0"
             value={ratio}

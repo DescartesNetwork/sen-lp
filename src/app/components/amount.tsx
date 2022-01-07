@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, utils } from '@senswap/sen-js'
 
-import { Row, Col, Card, Typography, Space, Button, Divider } from 'antd'
+import { Row, Col, Typography, Space, Button, Divider } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
@@ -80,32 +80,29 @@ const Amount = ({
   return (
     <Row gutter={[4, 4]}>
       <Col span={24}>
-        <Card bodyStyle={{ padding: 8 }} bordered={false} className="lp-card">
-          <NumericInput
-            placeholder="0"
-            value={amount}
-            onValue={onAmount}
-            size="small"
-            bordered={false}
-            prefix={
-              <Space style={{ marginLeft: -4, marginRight: 7, lineHeight: 1 }}>
-                <MintAvatar mintAddress={mintAddress} />
-                <Divider type="vertical" style={{ margin: 0 }} />
-              </Space>
-            }
-            suffix={
-              <Button
-                type="text"
-                style={{ marginRight: -7 }}
-                size="small"
-                onClick={() => onAmount(balance)}
-              >
-                MAX
-              </Button>
-            }
-            max={balance}
-          />
-        </Card>
+        <NumericInput
+          placeholder="0"
+          value={amount}
+          onValue={onAmount}
+          size="large"
+          prefix={
+            <Space style={{ marginLeft: -4, marginRight: 7, lineHeight: 1 }}>
+              <MintAvatar mintAddress={mintAddress} />
+              <Divider type="vertical" style={{ margin: 0 }} />
+            </Space>
+          }
+          suffix={
+            <Button
+              type="text"
+              style={{ marginRight: -7 }}
+              size="small"
+              onClick={() => onAmount(balance)}
+            >
+              MAX
+            </Button>
+          }
+          max={balance}
+        />
       </Col>
       <Col flex="auto">
         {notEnoughBalance && (

@@ -9,6 +9,7 @@ import ListAllPools from './listPools'
 import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+import { PoolTabs, QueryParams } from 'app/constant'
 
 const {
   route: { myRoute },
@@ -23,7 +24,9 @@ const CommunityPools = () => {
     async (address: string) => {
       await dispatch(selectPool(address))
       await dispatch(handleOpenDrawer(false))
-      return history.push(`${myRoute}?poolAddress=${address}`)
+      return history.push(
+        `${myRoute}?${QueryParams.address}=${address}&${QueryParams.category}=${PoolTabs.Community}`,
+      )
     },
     [dispatch, history],
   )

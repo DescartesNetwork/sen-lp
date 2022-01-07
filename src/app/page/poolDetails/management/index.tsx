@@ -3,16 +3,7 @@ import Fee from './fee'
 import Freeze from './freeze'
 import TransferOwner from './transferOwner'
 
-import { usePool, useWallet } from 'senhub/providers'
-
 const PoolManagement = ({ poolAddress }: { poolAddress: string }) => {
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
-  const { pools } = usePool()
-  const poolData = pools[poolAddress]
-
-  if (!poolData || walletAddress !== poolData.owner) return null
   return (
     <Card
       style={{ minHeight: 285 }}

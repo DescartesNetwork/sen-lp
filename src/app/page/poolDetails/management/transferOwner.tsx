@@ -47,7 +47,7 @@ const TransferOwner = ({ address: poolAddress }: { address: string }) => {
         </Space>
       </Col>
       <Col span={24}>
-        <Card bodyStyle={{ padding: 8 }} bordered={false}>
+        <Card bodyStyle={{ padding: 8 }} bordered={false} className="lp-card">
           <Row gutter={[0, 0]}>
             <Col span={24}>
               <Typography.Text
