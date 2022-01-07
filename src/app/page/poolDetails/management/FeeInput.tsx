@@ -1,4 +1,4 @@
-import { Row, Card, Col, Typography, Space } from 'antd'
+import { Row, Col, Typography, Space } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 
 const FeeInput = ({
@@ -20,14 +20,12 @@ const FeeInput = ({
         <Typography.Text type="secondary">{title}</Typography.Text>
       </Col>
       <Col span={24}>
-        <Card bodyStyle={{ padding: 4 }} bordered={false} className="lp-card">
-          <NumericInput
-            placeholder="0"
-            value={ratio}
-            onValue={onChange}
-            bordered={false}
-          />
-        </Card>
+        <NumericInput
+          placeholder="0"
+          value={ratio}
+          onValue={onChange}
+          size="large"
+        />
       </Col>
       <Col span={24} style={{ fontSize: 12 }}>
         <Space size={4}>

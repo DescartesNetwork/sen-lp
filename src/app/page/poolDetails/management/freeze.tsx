@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { Button, Row, Col, Typography, Card, Badge, Space } from 'antd'
+import { Button, Row, Col, Typography, Badge, Space } from 'antd'
 import { usePool } from 'senhub/providers'
 import { explorer } from 'shared/util'
 import IonIcon from 'shared/antd/ionicon'
@@ -29,14 +29,12 @@ const CardDescription = ({
         </Space>
       </Col>
       <Col span={24}>
-        <Card bordered={false} bodyStyle={{ padding: 16 }} className="lp-card">
-          <Space size={4} align="start">
-            <IonIcon name="information-circle-outline" />
-            <Space direction="vertical" size={0}>
-              <Typography.Text>{description}</Typography.Text>
-            </Space>
+        <Space size={4} align="start">
+          <IonIcon name="information-circle-outline" />
+          <Space direction="vertical" size={0}>
+            <Typography.Text type="secondary">{description}</Typography.Text>
           </Space>
-        </Card>
+        </Space>
       </Col>
     </Row>
   )
