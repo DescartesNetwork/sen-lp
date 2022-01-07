@@ -2,7 +2,7 @@ import { usePool } from 'senhub/providers'
 import { useCallback, useEffect, useState } from 'react'
 import { useMintTotalValue } from './useMintTotalValue'
 
-export const usePoolTvl = (poolAddress: string) => {
+export const usePoolTvl = (poolAddress?: string) => {
   const { pools } = usePool()
   const [tvl, setTvl] = useState(0)
   const { getMintTotalValue } = useMintTotalValue()
@@ -26,7 +26,8 @@ export const usePoolTvl = (poolAddress: string) => {
   )
 
   const updateTvl = useCallback(
-    async (poolAddress: string) => {
+    async (poolAddress?: string) => {
+      if (!poolAddress) return setTvl(0)
       const poolTvl = await getTvl(poolAddress)
       setTvl(poolTvl)
     },
