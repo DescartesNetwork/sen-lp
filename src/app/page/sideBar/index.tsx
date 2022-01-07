@@ -12,7 +12,7 @@ import SettingsButton from 'app/components/settingsButton'
 import { PoolTabs, QueryParams } from 'app/constant'
 
 const SideBar = () => {
-  const [selectedTab, setSelectedTab] = useState<string>(PoolTabs.Sentre)
+  const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
   const query = new URLSearchParams(useLocation().search)
   const poolCategory = query.get(QueryParams.category) || ''
 
@@ -29,7 +29,7 @@ const SideBar = () => {
 
   useEffect(() => {
     if (!poolCategory) return
-    return setSelectedTab(poolCategory)
+    return setSelectedTab(poolCategory as PoolTabs)
   }, [poolCategory])
 
   return (
@@ -41,7 +41,7 @@ const SideBar = () => {
           </Col>
           <Col flex="auto">
             <Select
-              defaultValue={PoolTabs.Sentre}
+              value={selectedTab}
               onChange={handleChange}
               className="header-sidebar"
             >

@@ -9,7 +9,7 @@ import ListMyPools from './listMyPools'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppDispatch, AppState } from 'app/model'
 import configs from 'app/configs'
-import { PoolTabs } from 'app/constant'
+import { PoolTabs, QueryParams } from 'app/constant'
 
 const {
   route: { myRoute },
@@ -28,7 +28,7 @@ const YourPools = () => {
       dispatch(handleOpenDrawer(false))
 
       return history.push(
-        `${myRoute}?poolAddress=${poolAddress}&category=${PoolTabs.YourPools}`,
+        `${myRoute}?${QueryParams.address}=${poolAddress}&${QueryParams.category}=${PoolTabs.YourPools}`,
       )
     },
     [dispatch, history],
