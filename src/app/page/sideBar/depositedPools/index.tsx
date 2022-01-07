@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col, Button } from 'antd'
+import { Row, Col, Button, Empty } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import PoolCard from '../components/poolCard'
 

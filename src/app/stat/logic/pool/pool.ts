@@ -54,21 +54,16 @@ export default class PoolService {
     const lastTransLog = cacheTransLog[cacheTransLog.length - 1]
 
     if (fistTransLog && lastTransLog) {
-      const [beginTransLogs, afterTransLog] = await Promise.all([
+      const [beginTransLogs] = await Promise.all([
         this.poolTransLogService.collect(this.poolAddress, {
           secondFrom: fistTransLog.blockTime,
           secondTo: timeTo,
-        }),
-        this.poolTransLogService.collect(this.poolAddress, {
-          secondFrom: timeFrom,
-          secondTo: lastTransLog.blockTime,
-          lastSignature: lastTransLog.signature,
         }),
       ])
       cacheTransLog = cacheTransLog.filter(
         (trans) => trans.blockTime > timeFrom,
       )
-      cacheTransLog = [...beginTransLogs, ...cacheTransLog, ...afterTransLog]
+      cacheTransLog = [...beginTransLogs, ...cacheTransLog]
     } else {
       cacheTransLog = await this.poolTransLogService.collect(this.poolAddress, {
         secondFrom: timeFrom,

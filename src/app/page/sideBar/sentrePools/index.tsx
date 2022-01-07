@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Empty, Row } from 'antd'
 import PoolCard from '../components/poolCard'
 import IonIcon from 'shared/antd/ionicon'
 
