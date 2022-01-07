@@ -95,13 +95,16 @@
 }
 
 .lp-card {
+  box-shadow: unset !important;
   border-radius: 8px !important;
 }
 .order-card {
-  box-shadow: unset !important;
-  border-radius: 8px !important;
+  &:extend(.lp-card);
   position: relative !important;
   z-index: 1 !important;
+}
+.deposit-card {
+  &:extend(.lp-card);
 }
 
 .expand-card {

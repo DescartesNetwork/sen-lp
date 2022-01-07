@@ -12,6 +12,18 @@ export enum OrderState {
   Canceled = 5,
 }
 
+export enum PoolTabs {
+  Sentre = 'sentre-pools',
+  Deposited = 'deposited-pools',
+  YourPools = 'your-pools',
+  Community = 'community-pools',
+}
+
+export enum QueryParams {
+  address = 'poolAddress',
+  category = 'category',
+}
+
 export const VESTING = [
   { locktime: 7, discount: 0.05 },
   { locktime: 30, discount: 0.25 },

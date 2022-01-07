@@ -11,7 +11,7 @@ const Info = ({
   amounts: string[]
 }) => {
   return (
-    <Card bordered={false}>
+    <Card bordered={false} className="deposit-card">
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Typography.Text>You will receive</Typography.Text>
