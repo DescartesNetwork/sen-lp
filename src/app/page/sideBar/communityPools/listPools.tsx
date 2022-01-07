@@ -64,8 +64,6 @@ const ListAllPools = ({
     if (container && element?.offsetTop) container.scrollTop = element.offsetTop
   }, [selectedPoolAddress])
 
-  console.log(selectedPoolAddress)
-
   return (
     <Row gutter={[12, 12]} justify="center">
       <Col span={24}>
