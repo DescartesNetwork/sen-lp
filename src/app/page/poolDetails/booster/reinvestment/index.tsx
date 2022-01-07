@@ -33,7 +33,7 @@ const Reinvestment = ({ poolAddress }: { poolAddress: string }) => {
       <Col xs={24} lg={12}>
         <Space direction="vertical" size={10}>
           <Space size={4}>
-            <Typography.Text>Lock Time (days)</Typography.Text>
+            <Typography.Text>Lock Time (Days)</Typography.Text>
             <IonIcon name="alert-circle-outline" />
           </Space>
           <Space size={16}>
@@ -52,39 +52,29 @@ const Reinvestment = ({ poolAddress }: { poolAddress: string }) => {
         <Discount locktime={locktime} />
       </Col>
       <Col span={24}>
-        <Row gutter={[12, 12]}>
-          <Col span={24}>
-            <Typography.Text>
-              <span style={{ fontWeight: 700, color: 'inherit' }}>
-                SNTR Buy-back Offering:
-              </span>{' '}
-              Selling your LP tokens with juicy profit. No fee, no slippage. The
-              tokens will be unlocked after the selected period.
-            </Typography.Text>
-          </Col>
-          <Col span={24}>
-            <Form
-              poolAddress={poolAddress}
-              value={amount}
-              onChange={setAmount}
-            />
-          </Col>
-          <Col span={24}>
-            <Button
-              type="primary"
-              icon={
-                <IonIcon
-                  name={noRetailer ? 'help-circle-outline' : 'diamond'}
-                />
-              }
-              onClick={() => setVisible(true)}
-              disabled={!parseFloat(amount) || noRetailer}
-              block
-            >
-              {noRetailer ? 'There is no campaign on this pool' : 'Buy SNTR'}
-            </Button>
-          </Col>
-        </Row>
+        <Typography.Text>
+          <span style={{ fontWeight: 700, color: 'inherit' }}>
+            SNTR Buy-back Offering:
+          </span>{' '}
+          Selling your LP tokens with juicy profit. No fee, no slippage. The
+          tokens will be unlocked after the selected period.
+        </Typography.Text>
+      </Col>
+      <Col span={24}>
+        <Form poolAddress={poolAddress} value={amount} onChange={setAmount} />
+      </Col>
+      <Col span={24}>
+        <Button
+          type="primary"
+          icon={
+            <IonIcon name={noRetailer ? 'help-circle-outline' : 'diamond'} />
+          }
+          onClick={() => setVisible(true)}
+          disabled={!parseFloat(amount) || noRetailer}
+          block
+        >
+          {noRetailer ? 'There is no campaign on this pool' : 'Buy SNTR'}
+        </Button>
       </Col>
       {!noRetailer && (
         <Confirm
