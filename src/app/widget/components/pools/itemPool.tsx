@@ -60,7 +60,11 @@ const ItemPool = ({
   const defaultKey = keyExpand.toString()
 
   return (
-    <Card bodyStyle={{ padding: 12, minHeight: 78 }} hoverable>
+    <Card
+      bodyStyle={{ padding: 12, minHeight: 78 }}
+      bordered={false}
+      className="lp-card"
+    >
       <Row gutter={[12, 12]} align="top">
         <Col flex="auto">
           <Space direction="vertical">

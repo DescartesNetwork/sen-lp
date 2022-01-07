@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory, useLocation } from 'react-router-dom'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col, Button, Empty } from 'antd'
@@ -8,39 +8,44 @@ import LPTCard from '../components/lptCard'
 
 import { AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+import { PoolTabs, QueryParams } from 'app/constant'
+import configs from 'app/configs'
+
+const {
+  route: { myRoute },
+} = configs
 
 const DepositedPools = () => {
   const dispatch = useDispatch()
+  const history = useHistory()
   const lpts = useSelector((state: AppState) => state.lpts)
   const {
     main: { selectedPoolAddress },
   } = useSelector((state: AppState) => state)
+  const query = new URLSearchParams(useLocation().search)
 
-  const setActiveAddress = useCallback(
-    (address: string) => {
-      dispatch(selectPool(address))
-      dispatch(handleOpenDrawer(false))
-    },
-    [dispatch],
-  )
+  const setActiveAddress = (address: string) => {
+    dispatch(selectPool(address))
+    dispatch(handleOpenDrawer(false))
+    query.set(QueryParams.address, address)
+    query.set(QueryParams.category, PoolTabs.Sentre)
+    return history.push(`${myRoute}?${query.toString()}`)
+  }
 
-  const action = useCallback(
-    (poolAddress) => {
-      return (
-        <Button
-          type="text"
-          onClick={() => setActiveAddress(poolAddress)}
-          icon={
-            <IonIcon
-              name="arrow-forward-outline"
-              style={{ fontSize: 12, color: '#7A7B85' }}
-            />
-          }
-        />
-      )
-    },
-    [setActiveAddress],
-  )
+  const action = (poolAddress: string) => {
+    return (
+      <Button
+        type="text"
+        onClick={() => setActiveAddress(poolAddress)}
+        icon={
+          <IonIcon
+            name="arrow-forward-outline"
+            style={{ fontSize: 12, color: '#7A7B85' }}
+          />
+        }
+      />
+    )
+  }
 
   return (
     <Row gutter={[12, 12]} justify="center">

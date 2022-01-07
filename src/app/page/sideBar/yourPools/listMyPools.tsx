@@ -13,9 +13,9 @@ const ListMyPools = ({
   selectedPoolAddress,
   action = () => <Fragment />,
 }: {
-  onClick?: (lptAddress: string, poolAddress: string) => void
+  onClick?: (poolAddress: string) => void
   selectedPoolAddress?: string
-  action?: (lptAddress: string, poolAddress: string) => ReactElement
+  action?: (poolAddress: string) => ReactElement
 }) => {
   const lpts = useSelector((state: AppState) => state.lpts)
   const { pools } = usePool()
@@ -46,8 +46,8 @@ const ListMyPools = ({
             <LazyLoad height={78} overflow>
               <LPTCard
                 data={lpts[lptAddress]}
-                action={action(lptAddress, poolAddress)}
-                onClick={() => onClick(lptAddress, poolAddress)}
+                action={action(poolAddress)}
+                onClick={() => onClick(poolAddress)}
                 selected={selectedPoolAddress === poolAddress}
               />
             </LazyLoad>

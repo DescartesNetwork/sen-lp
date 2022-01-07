@@ -87,7 +87,7 @@ const Volume24h = () => {
   return (
     <Card bordered={false}>
       <Spin tip="Loading..." spinning={loading}>
-        <Row gutter={[24, 24]}>
+        <Row gutter={[24, 24]} align="middle">
           <Col flex="auto">
             <Typography.Title level={4}>24h Volume</Typography.Title>
           </Col>

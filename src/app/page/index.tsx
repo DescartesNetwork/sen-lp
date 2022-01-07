@@ -16,6 +16,7 @@ import { usePool, useUI } from 'senhub/providers'
 import { AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import configs from 'app/configs'
+import { QueryParams } from 'app/constant'
 
 const Page = () => {
   const dispatch = useDispatch()
@@ -28,7 +29,7 @@ const Page = () => {
   const { pools } = usePool()
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const query = new URLSearchParams(useLocation().search)
-  const poolAddress = query.get('poolAddress') || ''
+  const poolAddress = query.get(QueryParams.address) || ''
   const senOwner = configs.sol.senOwner
 
   const listSentrePools = Object.keys(pools).filter((poolAddr) => {

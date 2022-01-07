@@ -47,7 +47,7 @@ const Summary = ({
   }, [mint_lpt, getMint])
 
   return (
-    <Card bordered={false} className="lp-card">
+    <Card bordered={false} className="deposit-card">
       <Row gutter={[12, 12]}>
         <Col span={24}>
           <Row gutter={[12, 12]}>
