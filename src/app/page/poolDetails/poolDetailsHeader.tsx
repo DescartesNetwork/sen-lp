@@ -34,12 +34,16 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
     <Row gutter={[16, 16]}>
       <Col flex="auto">
         <Space>
-          <MintAvatar mintAddress={mint_lpt} size={32} />
-          <MintSymbol mintAddress={mint_lpt} />
+          <Space size={4}>
+            <MintAvatar mintAddress={mint_lpt} size={32} />
+            <Typography.Title level={5}>
+              <MintSymbol mintAddress={mint_lpt} />
+            </Typography.Title>
+          </Space>
           <Popover
-            placement="right"
+            placement="bottom"
             content={
-              <Space align="end">
+              <Space align="center">
                 <Tooltip title="Copied" visible={copied} arrowPointAtCenter>
                   <CopyToClipboard text={poolAddress}>
                     <Button
@@ -54,7 +58,9 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
                   <Typography.Text type="secondary">
                     PoolAddress
                   </Typography.Text>
-                  <Typography.Text>{poolAddress}</Typography.Text>
+                  <Typography.Text style={{ wordBreak: 'break-all' }}>
+                    {poolAddress}
+                  </Typography.Text>
                 </Space>
               </Space>
             }

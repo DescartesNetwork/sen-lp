@@ -99,7 +99,11 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
   }, [getMint, mint_lpt])
 
   return (
-    <Card bordered={false}>
+    <Card
+      bordered={false}
+      className="lp-card"
+      style={{ background: '#E9E9EB' }}
+    >
       <Row gutter={[24, 24]}>
         <Col span={24}>
           <Typography.Title level={4}>Liquidity Position</Typography.Title>

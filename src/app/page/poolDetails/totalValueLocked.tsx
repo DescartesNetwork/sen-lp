@@ -79,12 +79,12 @@ const TotalValueLocked = () => {
   return (
     <Card bordered={false} style={{ height: 'auto' }}>
       <Spin tip="Loading..." spinning={isLoading}>
-        <Row gutter={[24, 24]}>
+        <Row gutter={[24, 24]} align="middle">
           <Col flex="auto">
             <Typography.Title level={4}>Total Value Locked</Typography.Title>
           </Col>
           <Col>
-            <Space>
+            <Space size={0}>
               <Typography.Title level={2}>
                 <PoolTVL poolAddress={selectedPoolAddress} />
               </Typography.Title>

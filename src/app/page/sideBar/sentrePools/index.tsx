@@ -11,6 +11,7 @@ import configs from 'app/configs'
 import { usePool } from 'senhub/providers'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppState } from 'app/model'
+import { PoolTabs, QueryParams } from 'app/constant'
 
 const {
   sol: { senOwner },
@@ -26,7 +27,7 @@ const SentrePools = () => {
   } = useSelector((state: AppState) => state)
   const { pools } = usePool()
   const query = new URLSearchParams(useLocation().search)
-  const poolAddress = query.get('poolAddress') || ''
+  const poolAddress = query.get(QueryParams.address) || ''
 
   const listSentrePools = Object.keys(pools)
     .filter((poolAddr) => {
@@ -39,14 +40,13 @@ const SentrePools = () => {
       return showArchived || !empty
     })
 
-  const setActivePoolAddress = useCallback(
-    async (address: string) => {
-      await dispatch(selectPool(address))
-      await dispatch(handleOpenDrawer(false))
-      return history.push(`${myRoute}?poolAddress=${address}`)
-    },
-    [dispatch, history],
-  )
+  const setActivePoolAddress = async (address: string) => {
+    await dispatch(selectPool(address))
+    await dispatch(handleOpenDrawer(false))
+    query.set(QueryParams.address, address)
+    query.set(QueryParams.category, PoolTabs.Sentre)
+    return history.push(`${myRoute}?${query.toString()}`)
+  }
 
   const onInit = useCallback(
     (address) => {
