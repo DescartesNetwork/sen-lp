@@ -24,7 +24,7 @@ const Redeem = ({ poolAddress }: { poolAddress: string }) => {
       style={{ height: 282 }}
       className="scrollbar"
       justify="center"
-      align="middle"
+      align="top"
     >
       {!orderAddresses.length && (
         <Col>
