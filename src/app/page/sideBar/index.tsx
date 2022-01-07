@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Col, Row, Select } from 'antd'
 import CommunityPools from './communityPools'
@@ -14,12 +14,13 @@ const SideBar = () => {
     setSelectPools(value)
   }
 
-  const PoolsSelected = () => {
+  const poolsSelected = useMemo(() => {
     if (selectPools === 'sentre-pools') return <SentrePools />
     if (selectPools === 'community-pools') return <CommunityPools />
     if (selectPools === 'deposited-pools') return <DepositedPools />
     return <YourPools />
-  }
+  }, [selectPools])
+
   return (
     <Row gutter={[12, 24]} className="side-bar">
       <Col span={24}>
@@ -48,8 +49,8 @@ const SideBar = () => {
           </Col>
         </Row>
       </Col>
-      <Col span={24} className="body-sidebar scrollbar">
-        <PoolsSelected />
+      <Col span={24} className="body-sidebar scrollbar" id="scroll-container">
+        {poolsSelected}
       </Col>
     </Row>
   )
