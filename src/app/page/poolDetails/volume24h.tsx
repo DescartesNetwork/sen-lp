@@ -26,7 +26,7 @@ const Volume24h = () => {
   const [chartData, setChartData] = useState<{ data: number; label: string }[]>(
     [],
   )
-  const [isLoading, setIsLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(true)
   const {
     ui: { width },
@@ -45,7 +45,7 @@ const Volume24h = () => {
   const fetchChart = useCallback(async () => {
     if (!selectedPoolAddress) return
     try {
-      setIsLoading(true)
+      setLoading(true)
       const poolService = new PoolService(selectedPoolAddress)
       const poolStat = await DataLoader.load(
         'getDailyInfo' + selectedPoolAddress,
@@ -61,7 +61,7 @@ const Volume24h = () => {
       setChartData(chartData)
     } catch (error) {
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }, [selectedPoolAddress])
 
@@ -86,7 +86,7 @@ const Volume24h = () => {
 
   return (
     <Card bordered={false}>
-      <Spin tip="Loading..." spinning={isLoading}>
+      <Spin tip="Loading..." spinning={loading}>
         <Row gutter={[24, 24]}>
           <Col flex="auto">
             <Typography.Title level={4}>24h Volume</Typography.Title>

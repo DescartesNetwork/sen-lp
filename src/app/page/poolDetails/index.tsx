@@ -6,7 +6,7 @@ import LiquidityPosition from './liquidityPosition'
 import PoolManagement from './management'
 import TotalValueLocked from './totalValueLocked'
 import Volume24h from './volume24h'
-import Investment from './investment'
+import Booster from './booster'
 
 import { AppState } from 'app/model'
 
@@ -28,7 +28,7 @@ const PoolDetails = () => {
         <Volume24h />
       </Col>
       <Col xs={{ span: 24, order: 4 }} md={12}>
-        <Investment poolAddress={selectedPoolAddress} />
+        <Booster poolAddress={selectedPoolAddress} />
       </Col>
       <Col xs={{ span: 24, order: 5 }} md={12}>
         <PoolManagement poolAddress={selectedPoolAddress} />
