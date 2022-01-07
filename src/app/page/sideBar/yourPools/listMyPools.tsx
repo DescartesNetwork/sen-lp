@@ -2,7 +2,7 @@ import { ReactElement, Fragment, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col } from 'antd'
+import { Row, Col, Empty } from 'antd'
 import LPTCard from '../components/lptCard'
 
 import { AppState } from 'app/model'
@@ -33,7 +33,12 @@ const ListMyPools = ({
   )
 
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
+      {!lptAddresses.length && (
+        <Col>
+          <Empty />
+        </Col>
+      )}
       {lptAddresses.map((lptAddress, i) => {
         const { pool: poolAddress } = lpts[lptAddress]
         return (

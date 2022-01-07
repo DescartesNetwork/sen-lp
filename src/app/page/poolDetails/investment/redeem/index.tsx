@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Col, Row, Typography } from 'antd'
+import { Col, Empty, Row } from 'antd'
 import Order from './order'
 
 import { AppState } from 'app/model'
@@ -19,9 +19,17 @@ const Redeem = ({ poolAddress }: { poolAddress: string }) => {
   })
 
   return (
-    <Row gutter={[16, 16]} style={{ height: 282 }} className="scrollbar">
+    <Row
+      gutter={[16, 16]}
+      style={{ height: 282 }}
+      className="scrollbar"
+      justify="center"
+      align="middle"
+    >
       {!orderAddresses.length && (
-        <Typography.Text type="secondary">No available order</Typography.Text>
+        <Col>
+          <Empty />
+        </Col>
       )}
       {orderAddresses.map((orderAddress) => (
         <Col span={24} key={orderAddress}>

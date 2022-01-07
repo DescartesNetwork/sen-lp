@@ -1,9 +1,9 @@
-import { ReactElement, useMemo, useState, Fragment } from 'react'
+import { ReactElement, useMemo, useState, Fragment, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { PoolData } from '@senswap/sen-js'
+import { account, PoolData } from '@senswap/sen-js'
 import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col } from 'antd'
+import { Row, Col, Empty } from 'antd'
 import Search from './search'
 import PoolCard from '../components/poolCard'
 
@@ -36,10 +36,7 @@ const ListAllPools = ({
     () =>
       Object.keys(pools)
         .map((address) => ({ address, ...pools[address] }))
-        .filter((pool) => {
-          const { owner } = pool || {}
-          return !senOwner.includes(owner)
-        })
+        .filter(({ owner }) => !senOwner.includes(owner))
         .filter((pool) => {
           const { reserve_a, reserve_b } = pool || {}
           const empty = !reserve_a || !reserve_b
@@ -60,19 +57,31 @@ const ListAllPools = ({
     [pools, showArchived],
   )
 
+  useEffect(() => {
+    if (!account.isAddress(selectedPoolAddress)) return
+    const element = document.getElementById(selectedPoolAddress)
+    const container = document.getElementById('scroll-container')
+    if (container && element?.offsetTop) container.scrollTop = element.offsetTop
+  }, [selectedPoolAddress])
+
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
       <Col span={24}>
         <Search onChange={setSearchedPools} pools={sortedPools} />
       </Col>
-      {(searchedPools || sortedPools).map((poolData, i) => (
-        <Col span={24} key={poolData.address + i}>
+      {!(searchedPools || sortedPools).length && (
+        <Col>
+          <Empty />
+        </Col>
+      )}
+      {(searchedPools || sortedPools).map(({ address: poolAddress }, i) => (
+        <Col id={poolAddress} span={24} key={i}>
           <LazyLoad height={78} overflow>
             <PoolCard
-              poolAddress={poolData.address}
-              action={action(poolData.address)}
-              onClick={() => onClick(poolData.address)}
-              selected={selectedPoolAddress === poolData.address}
+              poolAddress={poolAddress}
+              action={action(poolAddress)}
+              onClick={() => onClick(poolAddress)}
+              selected={selectedPoolAddress === poolAddress}
             />
           </LazyLoad>
         </Col>

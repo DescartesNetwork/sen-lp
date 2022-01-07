@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Empty, Row } from 'antd'
 import PoolCard from '../components/poolCard'
 import IonIcon from 'shared/antd/ionicon'
 
@@ -62,7 +62,12 @@ const SentrePools = () => {
   }, [listSentrePools, onInit, selectedPoolAddress])
 
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
+      {!listSentrePools.length && (
+        <Col>
+          <Empty />
+        </Col>
+      )}
       {listSentrePools.map((poolAddress, idx) => {
         return (
           <Col span={24} key={poolAddress + idx}>

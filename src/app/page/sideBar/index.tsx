@@ -20,7 +20,7 @@ const SideBar = () => {
     setSelectedTab(value)
   }
 
-  const PoolsSelected = useMemo(() => {
+  const poolsSelected = useMemo(() => {
     if (selectedTab === PoolTabs.Sentre) return <SentrePools />
     if (selectedTab === PoolTabs.Community) return <CommunityPools />
     if (selectedTab === PoolTabs.Deposited) return <DepositedPools />
@@ -64,8 +64,8 @@ const SideBar = () => {
           </Col>
         </Row>
       </Col>
-      <Col span={24} className="body-sidebar scrollbar">
-        {PoolsSelected}
+      <Col span={24} className="body-sidebar scrollbar" id="scroll-container">
+        {poolsSelected}
       </Col>
     </Row>
   )
