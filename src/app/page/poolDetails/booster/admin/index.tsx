@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import LazyLoad from '@senswap/react-lazyload'
 
-import { Row, Col, Space, Typography, Switch } from 'antd'
+import { Row, Col, Space, Typography, Switch, Table } from 'antd'
 import NewRetailer from './newRetailer'
 import RetailerState from './retailerState'
-import Order from './order'
+import { ADMIN_COLUMNS } from './column'
 
 import { AppDispatch, AppState } from 'app/model'
 import { usePool, useWallet } from 'senhub/providers'
 import { getOrders } from 'app/model/orders.controller'
-import { OrderState } from 'app/constant'
+
+import './index.less'
 
 const Admin = ({ poolAddress }: { poolAddress: string }) => {
   const [lite, setLite] = useState(true)
@@ -33,12 +33,20 @@ const Admin = ({ poolAddress }: { poolAddress: string }) => {
     const { mint_bid } = retailers[retailerAddress]
     return mint_bid === poolData?.mint_lpt
   })
-  const orderAddresses = Object.keys(orders).filter((orderAddress) => {
-    const { retailer, state } = orders[orderAddress]
-    let cond = retailer === retailerAddress
-    if (lite) cond = cond && state === OrderState.Open
-    return cond
-  })
+
+  const listOrder = useMemo(
+    () =>
+      Object.keys(orders).map((address) => {
+        return { ...orders[address], address }
+      }),
+    [orders],
+  )
+  // const orderAddresses = Object.keys(orders).filter((orderAddress) => {
+  //   const { retailer, state } = orders[orderAddress]
+  //   let cond = retailer === retailerAddress
+  //   if (lite) cond = cond && state === OrderState.Open
+  //   return cond
+  // })
 
   const fetchOrders = useCallback(async () => {
     await dispatch(getOrders({ retailer: walletAddress }))
@@ -68,15 +76,15 @@ const Admin = ({ poolAddress }: { poolAddress: string }) => {
         )}
       </Col>
       <Col span={24}>
-        <Row gutter={[16, 16]} style={{ height: 234 }} className="scrollbar">
-          {orderAddresses.map((orderAddress) => (
-            <Col span={24} key={orderAddress}>
-              <LazyLoad height={125} overflow>
-                <Order orderAddress={orderAddress} />
-              </LazyLoad>
-            </Col>
-          ))}
-        </Row>
+        <Table
+          className="scrollbar"
+          columns={ADMIN_COLUMNS}
+          dataSource={listOrder}
+          rowClassName={(record, index) => (index % 2 ? 'odd-row' : 'even-row')}
+          pagination={false}
+          scroll={{ y: 182, x: 420 }}
+          rowKey={(record) => Number(record.created_at)}
+        />
       </Col>
     </Row>
   )
