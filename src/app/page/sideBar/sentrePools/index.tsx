@@ -1,4 +1,4 @@
-import { useCallback, useEffect, MouseEvent } from 'react'
+import { useCallback, useEffect, MouseEvent, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -24,29 +24,37 @@ const SentrePools = () => {
   const {
     main: { selectedPoolAddress },
   } = useSelector((state: AppState) => state)
+  const location = useLocation()
 
-  const query = new URLSearchParams(useLocation().search)
-  const poolAddress = query.get(QueryParams.address) || ''
   const { sentrePools } = useSentrePools()
   const { filteredPools } = useFilterPools(sentrePools)
   const listPoolAddress = Object.keys(filteredPools)
 
-  const setActivePoolAddress = async (address: string) => {
-    await dispatch(selectPool(address))
-    await dispatch(handleOpenDrawer(false))
-    query.set(QueryParams.address, address)
-    query.set(QueryParams.category, PoolTabs.Sentre)
-    return history.push(`${myRoute}?${query.toString()}`)
-  }
+  const query = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
+  )
+
+  const setActivePoolAddress = useCallback(
+    async (address: string) => {
+      await dispatch(selectPool(address))
+      await dispatch(handleOpenDrawer(false))
+      query.set(QueryParams.address, address)
+      query.set(QueryParams.category, PoolTabs.Sentre)
+      return history.push(`${myRoute}?${query.toString()}`)
+    },
+    [dispatch, history, query],
+  )
 
   const onInitSelectPool = useCallback(() => {
-    if (!listPoolAddress.length || selectedPoolAddress)
-      return dispatch(selectPool(''))
+    const poolAddress = query.get(QueryParams.address) || ''
+    if (!listPoolAddress.length || selectedPoolAddress) return
+
     const addr = account.isAddress(poolAddress)
       ? poolAddress
       : listPoolAddress[0]
-    return dispatch(selectPool(addr))
-  }, [dispatch, listPoolAddress, poolAddress, selectedPoolAddress])
+    setActivePoolAddress(addr)
+  }, [listPoolAddress, query, selectedPoolAddress, setActivePoolAddress])
 
   useEffect(() => {
     onInitSelectPool()

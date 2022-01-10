@@ -6,9 +6,7 @@ import { Row, Col, Empty } from 'antd'
 import PoolCard from '../components/poolCard'
 
 import { useCommunityPools } from 'app/hooks/pools/useCommunityPools'
-import { useFilterPools } from 'app/hooks/pools/useFilterPools'
-import { useSearchedPools } from 'app/hooks/pools/useSearchedPools'
-import { useSortedPools } from 'app/hooks/pools/useSortedPools'
+import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
 
 const ListAllPools = ({
   onClick = () => {},
@@ -20,9 +18,7 @@ const ListAllPools = ({
   action?: (poolAddress: string) => ReactElement
 }) => {
   const { communityPools } = useCommunityPools()
-  const { filteredPools } = useFilterPools(communityPools)
-  const { searchedPools } = useSearchedPools(filteredPools)
-  const { sortedPools } = useSortedPools(searchedPools)
+  const { listPoolAddress } = useListPoolAddress(communityPools)
 
   useEffect(() => {
     if (!account.isAddress(selectedPoolAddress)) return
@@ -33,12 +29,12 @@ const ListAllPools = ({
 
   return (
     <Row gutter={[12, 12]} justify="center">
-      {!sortedPools.length ? (
+      {!listPoolAddress.length ? (
         <Col>
           <Empty />
         </Col>
       ) : (
-        Object.keys(sortedPools).map((poolAddress) => (
+        listPoolAddress.map((poolAddress) => (
           <Col id={poolAddress} span={24} key={poolAddress}>
             <LazyLoad height={78} overflow>
               <PoolCard

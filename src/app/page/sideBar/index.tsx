@@ -10,6 +10,7 @@ import DepositedPools from './depositedPools'
 
 import SettingsButton from 'app/components/settingsButton'
 import { PoolTabs, QueryParams } from 'app/constant'
+import Search from './components/search'
 
 const SideBar = () => {
   const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
@@ -63,6 +64,9 @@ const SideBar = () => {
             <NewPool />
           </Col>
         </Row>
+      </Col>
+      <Col span={24}>
+        <Search />
       </Col>
       <Col span={24} className="body-sidebar scrollbar" id="scroll-container">
         {poolsSelected}
