@@ -12,7 +12,7 @@ import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppState } from 'app/model'
 import { PoolTabs, QueryParams } from 'app/constant'
 import { useSentrePools } from 'app/hooks/pools/useSentrePools'
-import { useFilterPools } from 'app/hooks/pools/useFilterPools'
+import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
 
 const {
   route: { myRoute },
@@ -27,8 +27,7 @@ const SentrePools = () => {
   const location = useLocation()
 
   const { sentrePools } = useSentrePools()
-  const { filteredPools } = useFilterPools(sentrePools)
-  const listPoolAddress = Object.keys(filteredPools)
+  const { listPoolAddress } = useListPoolAddress(sentrePools)
 
   const query = useMemo(
     () => new URLSearchParams(location.search),
@@ -89,6 +88,7 @@ const SentrePools = () => {
               }
               onClick={() => setActivePoolAddress(poolAddress)}
               selected={selectedPoolAddress === poolAddress}
+              apy
             />
           </Col>
         )

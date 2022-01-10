@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col, Empty } from 'antd'
-import LPTCard from '../components/lptCard'
 
 import { AppState } from 'app/model'
 import { usePool, useWallet } from 'senhub/providers'
+import PoolCard from '../components/poolCard'
 
 const ListMyPools = ({
   onClick = () => {},
@@ -44,11 +44,12 @@ const ListMyPools = ({
         return (
           <Col span={24} key={lptAddress + i}>
             <LazyLoad height={78} overflow>
-              <LPTCard
-                data={lpts[lptAddress]}
+              <PoolCard
+                poolAddress={poolAddress}
                 action={action(poolAddress)}
                 onClick={() => onClick(poolAddress)}
                 selected={selectedPoolAddress === poolAddress}
+                myLp
               />
             </LazyLoad>
           </Col>
