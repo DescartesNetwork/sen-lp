@@ -13,6 +13,7 @@ import HotPools from './components/pools'
 import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+import { PoolTabs } from 'app/constant'
 
 const Widget = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -38,8 +39,8 @@ const Widget = () => {
         <Header />
       </Col>
       <Col span={24} className="body-widget">
-        {selectedCategoryPool === 'sentre' ||
-        selectedCategoryPool === 'community' ? (
+        {selectedCategoryPool === PoolTabs.Sentre ||
+        selectedCategoryPool === PoolTabs.Community ? (
           <HotPools onClick={setActiveAddress} />
         ) : (
           <LptsPools onClick={setActiveAddress} />

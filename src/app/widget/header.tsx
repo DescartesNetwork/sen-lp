@@ -5,6 +5,7 @@ import { Col, Select, Row, Typography } from 'antd'
 
 import { AppDispatch } from 'app/model'
 import { selectCategoryPool } from 'app/model/main.controller'
+import { PoolTabs } from 'app/constant'
 
 const Header = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -14,7 +15,7 @@ const Header = () => {
   }
 
   useEffect(() => {
-    dispatch(selectCategoryPool('sentre'))
+    dispatch(selectCategoryPool(PoolTabs.Sentre))
   }, [dispatch])
 
   return (
@@ -26,14 +27,14 @@ const Header = () => {
       </Col>
       <Col>
         <Select
-          defaultValue="sentre"
+          defaultValue={PoolTabs.Sentre}
           onChange={handleChange}
           className="header-select"
         >
-          <Select.Option value="sentre">Sentre</Select.Option>
-          <Select.Option value="community">Community</Select.Option>
-          <Select.Option value="deposited">Deposited</Select.Option>
-          <Select.Option value="your-pools">Your pools</Select.Option>
+          <Select.Option value={PoolTabs.Sentre}>Sentre</Select.Option>
+          <Select.Option value={PoolTabs.Community}>Community</Select.Option>
+          <Select.Option value={PoolTabs.Deposited}>Deposited</Select.Option>
+          <Select.Option value={PoolTabs.YourPools}>Your pools</Select.Option>
         </Select>
       </Col>
     </Row>
