@@ -20,7 +20,7 @@ const PoolCard = ({
   selected = false,
 }: {
   poolAddress: string
-  onClick?: () => void
+  onClick?: (poolAddress: string) => void
   action?: ReactElement
   selected?: boolean
 }) => {
@@ -50,7 +50,7 @@ const PoolCard = ({
     <Card
       className={cardStyle}
       bodyStyle={{ padding: 12, height: 78 }}
-      onClick={onClick}
+      onClick={() => onClick(poolAddress)}
       bordered={selected}
       hoverable
     >
