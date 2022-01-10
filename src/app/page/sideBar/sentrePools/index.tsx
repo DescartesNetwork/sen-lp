@@ -8,13 +8,13 @@ import PoolCard from '../components/poolCard'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
-import { usePool } from 'senhub/providers'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppState } from 'app/model'
 import { PoolTabs, QueryParams } from 'app/constant'
+import { useSentrePools } from 'app/hooks/pools/useSentrePools'
+import { useFilterPools } from 'app/hooks/pools/useFilterPools'
 
 const {
-  sol: { senOwners },
   route: { myRoute },
 } = configs
 
@@ -23,22 +23,13 @@ const SentrePools = () => {
   const dispatch = useDispatch()
   const {
     main: { selectedPoolAddress },
-    settings: { showArchived },
   } = useSelector((state: AppState) => state)
-  const { pools } = usePool()
+
   const query = new URLSearchParams(useLocation().search)
   const poolAddress = query.get(QueryParams.address) || ''
-
-  const listSentrePools = Object.keys(pools)
-    .filter((poolAddr) => {
-      const { owner } = pools[poolAddr] || {}
-      return senOwners.includes(owner)
-    })
-    .filter((poolAddr) => {
-      const { reserve_a, reserve_b } = pools[poolAddr] || {}
-      const empty = !reserve_a || !reserve_b
-      return showArchived || !empty
-    })
+  const { sentrePools } = useSentrePools()
+  const { filteredPools } = useFilterPools(sentrePools)
+  const listPoolAddress = Object.keys(filteredPools)
 
   const setActivePoolAddress = async (address: string) => {
     await dispatch(selectPool(address))
@@ -48,27 +39,27 @@ const SentrePools = () => {
     return history.push(`${myRoute}?${query.toString()}`)
   }
 
-  const onInit = useCallback(
-    (address) => {
-      const addr = account.isAddress(poolAddress) ? poolAddress : address
-      return dispatch(selectPool(addr))
-    },
-    [dispatch, poolAddress],
-  )
+  const onInitSelectPool = useCallback(() => {
+    if (!listPoolAddress.length || selectedPoolAddress)
+      return dispatch(selectPool(''))
+    const addr = account.isAddress(poolAddress)
+      ? poolAddress
+      : listPoolAddress[0]
+    return dispatch(selectPool(addr))
+  }, [dispatch, listPoolAddress, poolAddress, selectedPoolAddress])
 
   useEffect(() => {
-    if (!listSentrePools.length || selectedPoolAddress) return
-    onInit(listSentrePools[0])
-  }, [listSentrePools, onInit, selectedPoolAddress])
+    onInitSelectPool()
+  }, [onInitSelectPool])
 
   return (
     <Row gutter={[12, 12]} justify="center">
-      {!listSentrePools.length && (
+      {!listPoolAddress.length && (
         <Col>
           <Empty />
         </Col>
       )}
-      {listSentrePools.map((poolAddress, idx) => {
+      {listPoolAddress.map((poolAddress, idx) => {
         return (
           <Col span={24} key={poolAddress + idx}>
             <PoolCard

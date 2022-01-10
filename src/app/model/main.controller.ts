@@ -4,6 +4,7 @@ export type State = {
   selectedPoolAddress: string
   visible: boolean
   selectedCategoryPool: string
+  search: string
 }
 
 const NAME = 'main'
@@ -11,6 +12,7 @@ const initialState: State = {
   selectedPoolAddress: '',
   visible: false,
   selectedCategoryPool: '',
+  search: '',
 }
 
 /**
