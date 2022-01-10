@@ -8,12 +8,51 @@ import ItemPool from './itemPool'
 import { usePool } from 'senhub/providers'
 import { AppState } from 'app/model'
 import configs from 'app/configs'
+import { PoolTabs } from 'app/constant'
 
 const {
   sol: { senOwner },
 } = configs
 
-const ListPools = ({
+const SentrePools = ({
+  onClick = () => {},
+  action = () => <Fragment />,
+}: {
+  onClick?: (poolAddress: string) => void
+  action?: (poolAddress: string) => ReactElement
+}) => {
+  const { pools } = usePool()
+
+  const listSentrePools = useMemo(
+    () =>
+      Object.keys(pools).filter((poolAddr) => {
+        const poolData = pools?.[poolAddr]
+        const { owner } = poolData
+        return senOwner.includes(owner)
+      }),
+    [pools],
+  )
+  if (!listSentrePools.length) return <Empty />
+
+  return (
+    <Fragment>
+      {listSentrePools.map((poolAddress, i) => (
+        <Col span={24} key={poolAddress + i}>
+          <LazyLoad height={78} overflow>
+            <ItemPool
+              poolAddress={poolAddress}
+              action={action(poolAddress)}
+              onClick={() => onClick(poolAddress)}
+              keyExpand={i + 1}
+            />
+          </LazyLoad>
+        </Col>
+      ))}
+    </Fragment>
+  )
+}
+
+const CommunityPool = ({
   onInit = () => {},
   onClick = () => {},
   action = () => <Fragment />,
@@ -23,9 +62,7 @@ const ListPools = ({
   action?: (poolAddress: string) => ReactElement
 }) => {
   const { pools } = usePool()
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
+
   const sortedPools = useMemo(
     () =>
       Object.keys(pools)
@@ -46,18 +83,12 @@ const ListPools = ({
     [pools],
   )
 
-  const listSentrePools = Object.keys(pools).filter((poolAddr) => {
-    const poolData = pools?.[poolAddr]
-    const { owner } = poolData
-    return senOwner.includes(owner)
-  })
-
   useEffect(() => {
     if (!sortedPools.length) return
     onInit(sortedPools[0]?.address)
   }, [onInit, sortedPools])
 
-  const CommunityPool = () => (
+  return (
     <Fragment>
       {sortedPools.map((poolData, i) => (
         <Col span={24} key={poolData.address + i}>
@@ -73,29 +104,32 @@ const ListPools = ({
       ))}
     </Fragment>
   )
+}
 
-  if (!listSentrePools.length) return <Empty />
-
-  const SentrePools = () => (
-    <Fragment>
-      {listSentrePools.map((poolAddress, i) => (
-        <Col span={24} key={poolAddress + i}>
-          <LazyLoad height={78} overflow>
-            <ItemPool
-              poolAddress={poolAddress}
-              action={action(poolAddress)}
-              onClick={() => onClick(poolAddress)}
-              keyExpand={i + 1}
-            />
-          </LazyLoad>
-        </Col>
-      ))}
-    </Fragment>
+const ListPools = ({
+  onInit = () => {},
+  onClick = () => {},
+  action = () => <Fragment />,
+}: {
+  onInit?: (poolAddress: string) => void
+  onClick?: (poolAddress: string) => void
+  action?: (poolAddress: string) => ReactElement
+}) => {
+  const selectedCategoryPool = useSelector(
+    (state: AppState) => state.main.selectedCategoryPool,
+  )
+  const isSentrePools = useMemo(
+    () => selectedCategoryPool === PoolTabs.Sentre,
+    [selectedCategoryPool],
   )
 
   return (
     <Row gutter={[12, 12]}>
-      {selectedCategoryPool === 'sentre' ? <SentrePools /> : <CommunityPool />}
+      {isSentrePools ? (
+        <SentrePools onClick={onClick} action={action} />
+      ) : (
+        <CommunityPool onInit={onInit} onClick={onClick} action={action} />
+      )}
     </Row>
   )
 }
