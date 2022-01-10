@@ -10,7 +10,7 @@ import { AppState } from 'app/model'
 import configs from 'app/configs'
 
 const {
-  sol: { senOwner },
+  sol: { senOwners },
 } = configs
 
 const ListPools = ({
@@ -49,7 +49,7 @@ const ListPools = ({
   const listSentrePools = Object.keys(pools).filter((poolAddr) => {
     const poolData = pools?.[poolAddr]
     const { owner } = poolData
-    return senOwner.includes(owner)
+    return senOwners.includes(owner)
   })
 
   useEffect(() => {

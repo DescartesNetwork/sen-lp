@@ -14,7 +14,7 @@ import { AppState } from 'app/model'
 import { PoolTabs, QueryParams } from 'app/constant'
 
 const {
-  sol: { senOwner },
+  sol: { senOwners },
   route: { myRoute },
 } = configs
 
@@ -32,7 +32,7 @@ const SentrePools = () => {
   const listSentrePools = Object.keys(pools)
     .filter((poolAddr) => {
       const { owner } = pools[poolAddr] || {}
-      return senOwner.includes(owner)
+      return senOwners.includes(owner)
     })
     .filter((poolAddr) => {
       const { reserve_a, reserve_b } = pools[poolAddr] || {}

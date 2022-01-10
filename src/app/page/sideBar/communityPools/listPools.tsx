@@ -12,7 +12,7 @@ import configs from 'app/configs'
 import { AppState } from 'app/model'
 
 const {
-  sol: { senOwner },
+  sol: { senOwners },
 } = configs
 
 const ListAllPools = ({
@@ -36,7 +36,7 @@ const ListAllPools = ({
     () =>
       Object.keys(pools)
         .map((address) => ({ address, ...pools[address] }))
-        .filter(({ owner }) => !senOwner.includes(owner))
+        .filter(({ owner }) => !senOwners.includes(owner))
         .filter((pool) => {
           const { reserve_a, reserve_b } = pool || {}
           const empty = !reserve_a || !reserve_b
