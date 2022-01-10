@@ -32,7 +32,6 @@ const ConfirmOrder = ({
   const askAmount = utils.undecimalize(orderData.ask_amount, askDecimals)
 
   const lockTime = Number(orderData.locked_time) / (24 * 60 * 60)
-  console.log(lockTime)
 
   const discount =
     VESTING.find(({ locktime: l }) => l === lockTime)?.discount || 0
