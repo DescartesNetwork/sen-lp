@@ -68,7 +68,7 @@ const Fee = ({ address: poolAddress }: { address: string }) => {
   return (
     <Row gutter={[16, 24]}>
       <Col span={24}>
-        <Row gutter={[4, 4]}>
+        <Row gutter={[16, 16]}>
           <Col span={24}>
             <FeeInput
               title="Fee (%)"
