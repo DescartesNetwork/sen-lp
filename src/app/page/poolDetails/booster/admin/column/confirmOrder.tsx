@@ -76,7 +76,7 @@ const ConfirmOrder = ({
   }
 
   return (
-    <Row gutter={[16, 24]} style={{ background: '#F4F4F5' }}>
+    <Row gutter={[16, 24]}>
       <Col span={24}>
         <Row align="middle" justify="space-between">
           <Col>
@@ -111,14 +111,14 @@ const ConfirmOrder = ({
       <Col>
         <Card
           bordered={false}
-          style={{ boxShadow: 'none' }}
-          bodyStyle={{ background: '#E9E9EB', borderRadius: 8, padding: 16 }}
+          className="confirm-info"
+          style={{ boxShadow: 'none', borderRadius: 8 }}
+          bodyStyle={{ padding: 16 }}
         >
           <Row gutter={[12, 12]}>
             <Col span={24}>
               <Row>
                 <Col flex="auto">
-                  {' '}
                   <Typography.Text type="secondary">Order ID</Typography.Text>
                 </Col>
                 <Typography.Text>
@@ -129,7 +129,6 @@ const ConfirmOrder = ({
             <Col span={24}>
               <Row>
                 <Col flex="auto">
-                  {' '}
                   <Typography.Text type="secondary">Start day</Typography.Text>
                 </Col>
                 <Col>
