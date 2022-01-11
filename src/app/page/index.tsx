@@ -30,7 +30,7 @@ const Page = () => {
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const query = new URLSearchParams(useLocation().search)
   const poolAddress = query.get(QueryParams.address) || ''
-  const senOwner = configs.sol.senOwner
+  const senOwner = configs.sol.senOwners
 
   const listSentrePools = Object.keys(pools).filter((poolAddr) => {
     const poolData = pools?.[poolAddr]

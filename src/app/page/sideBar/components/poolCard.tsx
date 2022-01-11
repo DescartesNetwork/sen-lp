@@ -12,27 +12,33 @@ import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
 import { usePool } from 'senhub/providers'
+import { useMyLp } from 'app/hooks/useMyLp'
 
 const PoolCard = ({
   poolAddress,
   onClick = () => {},
   action = <Fragment />,
   selected = false,
+  apy,
+  myLp,
 }: {
   poolAddress: string
-  onClick?: () => void
+  onClick?: (poolAddress: string) => void
   action?: ReactElement
   selected?: boolean
+  apy?: boolean
+  myLp?: boolean
 }) => {
   const dispatch = useDispatch()
-  const { pools } = usePool()
   const details = useSelector(
     (state: AppState) => state.stat[poolAddress]?.details,
   )
-  const { state: poolState, mint_lpt: mintLptAddress } =
-    pools[poolAddress] || {}
+  const {
+    pools: { [poolAddress]: poolData },
+  } = usePool()
+  const myLpValue = useMyLp(poolAddress)
 
-  const apy = useMemo(() => {
+  const apyValue = useMemo(() => {
     if (!details) return 0
     const roi = details.roi || 0
     return Math.pow(1 + roi / 100, 365) - 1
@@ -43,14 +49,14 @@ const PoolCard = ({
     dispatch(fetchStatPoolData({ address: poolAddress }))
   }, [dispatch, poolAddress])
 
-  const frozen = poolState === PoolStatus.Frozen
+  const frozen = poolData?.state === PoolStatus.Frozen
   const cardStyle = selected ? 'card-active lp-card' : 'lp-card'
 
   return (
     <Card
       className={cardStyle}
       bodyStyle={{ padding: 12, height: 78 }}
-      onClick={onClick}
+      onClick={() => onClick(poolAddress)}
       bordered={selected}
       hoverable
     >
@@ -58,9 +64,9 @@ const PoolCard = ({
         <Col span={24} flex="auto">
           <Space direction="vertical">
             <Space>
-              <MintAvatar mintAddress={mintLptAddress} size={24} />
+              <MintAvatar mintAddress={poolData?.mint_lpt} size={24} />
               <Typography.Text type={frozen ? 'secondary' : undefined}>
-                <MintSymbol mintAddress={mintLptAddress} />
+                <MintSymbol mintAddress={poolData?.mint_lpt} />
               </Typography.Text>
             </Space>
             <Space>
@@ -72,13 +78,30 @@ const PoolCard = ({
               <Typography.Text>
                 <PoolTVL poolAddress={poolAddress} />
               </Typography.Text>
-              <Divider type="vertical" style={{ margin: 0 }} />
-              <Typography.Text type="secondary" className="caption">
-                APY:
-              </Typography.Text>
-              <Typography.Text>
-                {numeric(apy).format('0,0.[00]%')}
-              </Typography.Text>
+              {/* Apy */}
+              {apy && (
+                <Fragment>
+                  <Divider type="vertical" style={{ margin: 0 }} />
+                  <Typography.Text type="secondary" className="caption">
+                    APY:
+                  </Typography.Text>
+                  <Typography.Text>
+                    {numeric(apyValue).format('0,0.[00]%')}
+                  </Typography.Text>
+                </Fragment>
+              )}
+              {/* MyLp */}
+              {myLp && (
+                <Fragment>
+                  <Divider type="vertical" style={{ margin: 0 }} />
+                  <Typography.Text type="secondary" className="caption">
+                    My LP:
+                  </Typography.Text>
+                  <Typography.Text>
+                    {numeric(myLpValue.balance).format('0,0.[00]')}
+                  </Typography.Text>
+                </Fragment>
+              )}
             </Space>
           </Space>
         </Col>

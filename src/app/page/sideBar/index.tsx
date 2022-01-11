@@ -10,9 +10,14 @@ import DepositedPools from './depositedPools'
 
 import SettingsButton from 'app/components/settingsButton'
 import { PoolTabs, QueryParams } from 'app/constant'
+import Search from './components/search'
+import { account } from '@senswap/sen-js'
+import { useSelector } from 'react-redux'
+import { AppState } from 'app/model'
 
 const SideBar = () => {
   const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
+  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const query = new URLSearchParams(useLocation().search)
   const poolCategory = query.get(QueryParams.category) || ''
 
@@ -26,6 +31,13 @@ const SideBar = () => {
     if (selectedTab === PoolTabs.Deposited) return <DepositedPools />
     return <YourPools />
   }, [selectedTab])
+
+  useEffect(() => {
+    if (!account.isAddress(selectedPoolAddress)) return
+    const element = document.getElementById(selectedPoolAddress)
+    const container = document.getElementById('scroll-container')
+    if (container && element?.offsetTop) container.scrollTop = element.offsetTop
+  }, [selectedPoolAddress])
 
   useEffect(() => {
     if (!poolCategory) return
@@ -63,6 +75,9 @@ const SideBar = () => {
             <NewPool />
           </Col>
         </Row>
+      </Col>
+      <Col span={24}>
+        <Search />
       </Col>
       <Col span={24} className="body-sidebar scrollbar" id="scroll-container">
         {poolsSelected}

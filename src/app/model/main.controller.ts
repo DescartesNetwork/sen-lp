@@ -4,6 +4,7 @@ export type State = {
   selectedPoolAddress: string
   visible: boolean
   selectedCategoryPool: string
+  search: string
 }
 
 const NAME = 'main'
@@ -11,6 +12,7 @@ const initialState: State = {
   selectedPoolAddress: '',
   visible: false,
   selectedCategoryPool: '',
+  search: '',
 }
 
 /**
@@ -36,6 +38,13 @@ export const handleOpenDrawer = createAsyncThunk(
   },
 )
 
+export const onSearch = createAsyncThunk(
+  `${NAME}/onSearch`,
+  async (search: string) => {
+    return { search }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -56,6 +65,10 @@ const slice = createSlice({
       )
       .addCase(
         selectCategoryPool.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        onSearch.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

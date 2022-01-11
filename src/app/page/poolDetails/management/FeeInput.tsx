@@ -16,8 +16,14 @@ const FeeInput = ({
 }) => {
   return (
     <Row gutter={[4, 4]}>
-      <Col span={24}>
+      <Col flex="auto">
         <Typography.Text type="secondary">{title}</Typography.Text>
+      </Col>
+      <Col style={{ fontSize: 12 }}>
+        <Space size={4}>
+          <Typography.Text type="secondary">{label}:</Typography.Text>
+          <Typography.Text>{currentRatio}%</Typography.Text>
+        </Space>
       </Col>
       <Col span={24}>
         <NumericInput
@@ -26,12 +32,6 @@ const FeeInput = ({
           onValue={onChange}
           size="large"
         />
-      </Col>
-      <Col span={24} style={{ fontSize: 12 }}>
-        <Space size={4}>
-          <Typography.Text type="secondary">{label}:</Typography.Text>
-          <Typography.Text>{currentRatio}%</Typography.Text>
-        </Space>
       </Col>
     </Row>
   )

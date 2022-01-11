@@ -1,4 +1,4 @@
-import { useCallback, useEffect, MouseEvent } from 'react'
+import { useCallback, useEffect, MouseEvent, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { useHistory, useLocation } from 'react-router-dom'
@@ -8,13 +8,13 @@ import PoolCard from '../components/poolCard'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
-import { usePool } from 'senhub/providers'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppState } from 'app/model'
 import { PoolTabs, QueryParams } from 'app/constant'
+import { useSentrePools } from 'app/hooks/pools/useSentrePools'
+import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
 
 const {
-  sol: { senOwner },
   route: { myRoute },
 } = configs
 
@@ -23,52 +23,50 @@ const SentrePools = () => {
   const dispatch = useDispatch()
   const {
     main: { selectedPoolAddress },
-    settings: { showArchived },
   } = useSelector((state: AppState) => state)
-  const { pools } = usePool()
-  const query = new URLSearchParams(useLocation().search)
-  const poolAddress = query.get(QueryParams.address) || ''
+  const location = useLocation()
 
-  const listSentrePools = Object.keys(pools)
-    .filter((poolAddr) => {
-      const { owner } = pools[poolAddr] || {}
-      return senOwner.includes(owner)
-    })
-    .filter((poolAddr) => {
-      const { reserve_a, reserve_b } = pools[poolAddr] || {}
-      const empty = !reserve_a || !reserve_b
-      return showArchived || !empty
-    })
+  const { sentrePools } = useSentrePools()
+  const { listPoolAddress } = useListPoolAddress(sentrePools)
 
-  const setActivePoolAddress = async (address: string) => {
-    await dispatch(selectPool(address))
-    await dispatch(handleOpenDrawer(false))
-    query.set(QueryParams.address, address)
-    query.set(QueryParams.category, PoolTabs.Sentre)
-    return history.push(`${myRoute}?${query.toString()}`)
-  }
-
-  const onInit = useCallback(
-    (address) => {
-      const addr = account.isAddress(poolAddress) ? poolAddress : address
-      return dispatch(selectPool(addr))
-    },
-    [dispatch, poolAddress],
+  const query = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
   )
 
+  const setActivePoolAddress = useCallback(
+    async (address: string) => {
+      await dispatch(selectPool(address))
+      await dispatch(handleOpenDrawer(false))
+      query.set(QueryParams.address, address)
+      query.set(QueryParams.category, PoolTabs.Sentre)
+      return history.push(`${myRoute}?${query.toString()}`)
+    },
+    [dispatch, history, query],
+  )
+
+  const onInitSelectPool = useCallback(() => {
+    const poolAddress = query.get(QueryParams.address) || ''
+    if (!listPoolAddress.length || selectedPoolAddress) return
+
+    const addr = account.isAddress(poolAddress)
+      ? poolAddress
+      : listPoolAddress[0]
+    setActivePoolAddress(addr)
+  }, [listPoolAddress, query, selectedPoolAddress, setActivePoolAddress])
+
   useEffect(() => {
-    if (!listSentrePools.length || selectedPoolAddress) return
-    onInit(listSentrePools[0])
-  }, [listSentrePools, onInit, selectedPoolAddress])
+    onInitSelectPool()
+  }, [onInitSelectPool])
 
   return (
     <Row gutter={[12, 12]} justify="center">
-      {!listSentrePools.length && (
+      {!listPoolAddress.length && (
         <Col>
           <Empty />
         </Col>
       )}
-      {listSentrePools.map((poolAddress, idx) => {
+      {listPoolAddress.map((poolAddress, idx) => {
         return (
           <Col span={24} key={poolAddress + idx}>
             <PoolCard
@@ -90,6 +88,7 @@ const SentrePools = () => {
               }
               onClick={() => setActivePoolAddress(poolAddress)}
               selected={selectedPoolAddress === poolAddress}
+              apy
             />
           </Col>
         )
