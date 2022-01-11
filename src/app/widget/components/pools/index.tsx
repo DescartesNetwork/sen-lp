@@ -5,14 +5,11 @@ import LazyLoad from '@senswap/react-lazyload'
 import { Row, Col, Empty } from 'antd'
 import ItemPool from './itemPool'
 
-import { usePool } from 'senhub/providers'
 import { AppState } from 'app/model'
-import configs from 'app/configs'
 import { PoolTabs } from 'app/constant'
-
-const {
-  sol: { senOwners },
-} = configs
+import { useSentrePools } from 'app/hooks/pools/useSentrePools'
+import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
+import { useCommunityPools } from 'app/hooks/pools/useCommunityPools'
 
 const SentrePools = ({
   onClick = () => {},
@@ -21,23 +18,14 @@ const SentrePools = ({
   onClick?: (poolAddress: string) => void
   action?: (poolAddress: string) => ReactElement
 }) => {
-  const { pools } = usePool()
+  const { sentrePools } = useSentrePools()
+  const { listPoolAddress } = useListPoolAddress(sentrePools)
 
-  const listSentrePools = useMemo(
-    () =>
-      Object.keys(pools).filter((poolAddr) => {
-        const poolData = pools?.[poolAddr]
-        const { owner } = poolData
-        return senOwners.includes(owner)
-      }),
-    [pools],
-  )
-  if (!listSentrePools.length) return <Empty />
-
+  if (!listPoolAddress.length) return <Empty />
   return (
     <Fragment>
-      {listSentrePools.map((poolAddress, i) => (
-        <Col span={24} key={poolAddress + i}>
+      {listPoolAddress.map((poolAddress, i) => (
+        <Col span={24} key={poolAddress}>
           <LazyLoad height={78} overflow>
             <ItemPool
               poolAddress={poolAddress}
@@ -61,42 +49,23 @@ const CommunityPool = ({
   onClick?: (poolAddress: string) => void
   action?: (poolAddress: string) => ReactElement
 }) => {
-  const { pools } = usePool()
-
-  const sortedPools = useMemo(
-    () =>
-      Object.keys(pools)
-        .map((address) => ({ address, ...pools[address] }))
-        .sort(
-          (
-            { reserve_a: firstRa, reserve_b: firstRb },
-            { reserve_a: secondRa, reserve_b: secondRb },
-          ) => {
-            const firstK = firstRa * firstRb
-            const secondK = secondRa * secondRb
-            if (firstK > secondK) return -1
-            if (firstK < secondK) return 1
-            return 0
-          },
-        ),
-
-    [pools],
-  )
+  const { communityPools } = useCommunityPools()
+  const { listPoolAddress } = useListPoolAddress(communityPools)
 
   useEffect(() => {
-    if (!sortedPools.length) return
-    onInit(sortedPools[0]?.address)
-  }, [onInit, sortedPools])
+    if (!listPoolAddress.length) return
+    onInit(listPoolAddress[0])
+  }, [onInit, listPoolAddress])
 
   return (
     <Fragment>
-      {sortedPools.map((poolData, i) => (
-        <Col span={24} key={poolData.address + i}>
+      {listPoolAddress.map((poolAddress, i) => (
+        <Col span={24} key={poolAddress}>
           <LazyLoad height={78} overflow>
             <ItemPool
-              poolAddress={poolData.address}
-              action={action(poolData.address)}
-              onClick={() => onClick(poolData.address)}
+              poolAddress={poolAddress}
+              action={action(poolAddress)}
+              onClick={() => onClick(poolAddress)}
               keyExpand={i + 1}
             />
           </LazyLoad>
