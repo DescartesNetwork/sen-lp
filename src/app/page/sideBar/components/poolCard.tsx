@@ -49,7 +49,7 @@ const PoolCard = ({
     dispatch(fetchStatPoolData({ address: poolAddress }))
   }, [dispatch, poolAddress])
 
-  const frozen = poolData.state === PoolStatus.Frozen
+  const frozen = poolData?.state === PoolStatus.Frozen
   const cardStyle = selected ? 'card-active lp-card' : 'lp-card'
 
   return (
@@ -64,9 +64,9 @@ const PoolCard = ({
         <Col span={24} flex="auto">
           <Space direction="vertical">
             <Space>
-              <MintAvatar mintAddress={poolData.mint_lpt} size={24} />
+              <MintAvatar mintAddress={poolData?.mint_lpt} size={24} />
               <Typography.Text type={frozen ? 'secondary' : undefined}>
-                <MintSymbol mintAddress={poolData.mint_lpt} />
+                <MintSymbol mintAddress={poolData?.mint_lpt} />
               </Typography.Text>
             </Space>
             <Space>

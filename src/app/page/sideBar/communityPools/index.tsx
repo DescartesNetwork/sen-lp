@@ -37,7 +37,7 @@ const CommunityPools = () => {
   )
 
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
       {!listPoolAddress.length ? (
         <Col>
           <Empty />

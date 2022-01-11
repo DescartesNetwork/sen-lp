@@ -16,7 +16,8 @@ export const useYourPools = () => {
     for (const lptAddr in lpts) {
       const { pool } = lpts[lptAddr]
       const poolData = pools[pool]
-      if (poolData.owner === wallet.address) newYourPools[pool] = poolData
+      if (poolData && poolData.owner === wallet.address)
+        newYourPools[pool] = poolData
     }
     return setYourPools(newYourPools)
   }, [lpts, pools, wallet.address])

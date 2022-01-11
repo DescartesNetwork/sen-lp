@@ -15,7 +15,7 @@ export const useFilterPools = (pools: PoolsState) => {
 
   const checkArchivedPools = useCallback(
     (poolAddress: string) => {
-      const { reserve_a, reserve_b } = pools[poolAddress]
+      const { reserve_a, reserve_b } = pools[poolAddress] || {}
       return !reserve_a || !reserve_b
     },
     [pools],
