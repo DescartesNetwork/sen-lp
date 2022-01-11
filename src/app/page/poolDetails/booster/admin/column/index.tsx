@@ -13,7 +13,6 @@ export const ADMIN_COLUMNS = [
     title: 'PAY',
     dataIndex: 'ask_amount',
     key: 'ask_amount',
-    minWidth: 145,
     render: (askAmount: bigint, record: OrderType) => (
       <ColumnAsk ask_amount={askAmount} retailer={record.retailer} />
     ),
@@ -22,7 +21,6 @@ export const ADMIN_COLUMNS = [
     title: 'RECEIVE',
     dataIndex: 'bid_amount',
     key: 'bid_amount',
-    minWidth: 120,
     render: (bidAmount: bigint, record: OrderType) => (
       <ColumnBid bid_amount={bidAmount} retailer={record.retailer} />
     ),

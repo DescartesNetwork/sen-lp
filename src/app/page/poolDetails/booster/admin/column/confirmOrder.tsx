@@ -15,6 +15,8 @@ import { AppState } from 'app/model'
 import { OrderType } from '.'
 import configs from 'app/configs'
 
+const FORMAT_DATE = "'DD/MM/YYYY'"
+
 const ConfirmOrder = ({
   orderData,
   onClose,
@@ -22,7 +24,9 @@ const ConfirmOrder = ({
   orderData: OrderType
   onClose: (visible: boolean) => void
 }) => {
-  const [loading, setLoading] = useState(false)
+  const [loadingApprove, setLoadingApprove] = useState(false)
+  const [loadingReject, setLoadingReject] = useState(false)
+
   const { retailers } = useSelector((state: AppState) => state)
 
   const { mint_bid, mint_ask } = retailers[orderData.retailer] || {}
@@ -43,13 +47,13 @@ const ConfirmOrder = ({
         sol: { purchasing },
       } = configs
       if (!wallet) throw new Error('Wallet is not connected')
-      await setLoading(true)
+      await setLoadingReject(true)
       const { txId } = await purchasing.rejectOrder(orderData.address, wallet)
       return notifySuccess('Reject the order', txId)
     } catch (er: any) {
       return notifyError(er)
     } finally {
-      return setLoading(false)
+      return setLoadingReject(false)
     }
   }
 
@@ -60,14 +64,14 @@ const ConfirmOrder = ({
         sol: { purchasing },
       } = configs
       if (!wallet) throw new Error('Wallet is not connected')
-      await setLoading(true)
+      await setLoadingApprove(true)
       const { txId } = await purchasing.approveOrder(orderData.address, wallet)
       return notifySuccess('Approve the order', txId)
     } catch (er: any) {
       return notifyError(er)
     } finally {
       onClose(false)
-      return setLoading(false)
+      return setLoadingApprove(false)
     }
   }
 
@@ -130,7 +134,7 @@ const ConfirmOrder = ({
                 </Col>
                 <Col>
                   {moment(Number(orderData.created_at) * 1000).format(
-                    'DD/MM/YYYY',
+                    FORMAT_DATE,
                   )}
                 </Col>
               </Row>
@@ -162,10 +166,10 @@ const ConfirmOrder = ({
       </Col>
       <Col span={24} style={{ textAlign: 'right' }}>
         <Space size={4}>
-          <Button loading={loading} onClick={onReject}>
+          <Button loading={loadingReject} onClick={onReject}>
             Reject
           </Button>
-          <Button loading={loading} onClick={onApprove} type="primary">
+          <Button loading={loadingApprove} onClick={onApprove} type="primary">
             Approve
           </Button>
         </Space>

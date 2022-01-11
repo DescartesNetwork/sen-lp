@@ -21,7 +21,7 @@ const ColumnAsk = ({
   const askAmount = utils.undecimalize(ask_amount, askDecimals)
 
   return (
-    <Typography.Text style={{ fontWeight: 700 }} ellipsis>
+    <Typography.Text style={{ fontWeight: 700 }}>
       <Space size={4}>
         {numeric(askAmount).format('0,0.[0000]')}
         <MintSymbol mintAddress={mint_ask} />

@@ -20,7 +20,7 @@ const ColumnBid = ({
   const bidAmount = utils.undecimalize(bid_amount, bidDecimals)
 
   return (
-    <Typography.Text ellipsis>
+    <Typography.Text>
       {numeric(bidAmount).format('0,0.[0000]')} LP
     </Typography.Text>
   )

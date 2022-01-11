@@ -82,7 +82,7 @@ const Admin = ({ poolAddress }: { poolAddress: string }) => {
           dataSource={listOrder}
           rowClassName={(record, index) => (index % 2 ? 'odd-row' : 'even-row')}
           pagination={false}
-          scroll={{ y: 182, x: 420 }}
+          scroll={{ y: 182, x: 500 }}
           rowKey={(record) => Number(record.created_at)}
         />
       </Col>
