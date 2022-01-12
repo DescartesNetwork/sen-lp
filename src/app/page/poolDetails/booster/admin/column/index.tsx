@@ -1,8 +1,12 @@
+import LazyLoad from '@senswap/react-lazyload'
+
 import { OrderData } from '@senswap/sen-js'
 import { Typography } from 'antd'
 import ColumnAsk from './columnAsk'
 import ColumnBid from './columnBid'
 import ColumnStatus from './columnStatus'
+
+const ROW_HEIGHT = 52
 
 export type OrderType = OrderData & {
   address: string
@@ -13,37 +17,44 @@ export const ADMIN_COLUMNS = [
     title: 'PAY',
     dataIndex: 'ask_amount',
     key: 'ask_amount',
-    render: (askAmount: bigint, record: OrderType) => (
-      <ColumnAsk ask_amount={askAmount} retailer={record.retailer} />
+    render: (ask_amount: bigint, record: OrderType) => (
+      <LazyLoad height={ROW_HEIGHT} overflow>
+        <ColumnAsk orderAddress={record.address} />
+      </LazyLoad>
     ),
   },
   {
     title: 'RECEIVE',
     dataIndex: 'bid_amount',
     key: 'bid_amount',
-    render: (bidAmount: bigint, record: OrderType) => (
-      <ColumnBid bid_amount={bidAmount} retailer={record.retailer} />
+    render: (bid_amount: bigint, record: OrderType) => (
+      <LazyLoad height={ROW_HEIGHT} overflow>
+        <ColumnBid orderAddress={record.address} />
+      </LazyLoad>
     ),
   },
   {
     title: 'LOCKED',
     dataIndex: 'locked_time',
     key: 'locked_time',
-    width: 80,
+    width: 100,
     render: (locked_time: bigint) => (
-      <Typography.Text>
-        {Number(locked_time) / (24 * 60 * 60)} days
-      </Typography.Text>
+      <LazyLoad height={ROW_HEIGHT} overflow>
+        <Typography.Text>
+          {Number(locked_time) / (24 * 60 * 60)} days
+        </Typography.Text>
+      </LazyLoad>
     ),
   },
-
   {
     title: 'ACTIONS',
     key: 'state',
     dataIndex: 'state',
     width: 100,
     render: (state: number, record: OrderType) => (
-      <ColumnStatus state={state} orderData={record} />
+      <LazyLoad height={ROW_HEIGHT} overflow>
+        <ColumnStatus state={state} orderData={record} />
+      </LazyLoad>
     ),
   },
 ]
