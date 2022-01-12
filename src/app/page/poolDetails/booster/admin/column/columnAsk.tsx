@@ -8,17 +8,12 @@ import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { numeric } from 'shared/util'
 import { MintSymbol } from 'shared/antd/mint'
 
-const ColumnAsk = ({
-  ask_amount,
-  retailer,
-}: {
-  ask_amount: bigint
-  retailer: string
-}) => {
-  const { retailers } = useSelector((state: AppState) => state)
-  const { mint_ask } = retailers[retailer] || {}
+const ColumnAsk = ({ orderAddress }: { orderAddress: string }) => {
+  const { retailers, orders } = useSelector((state: AppState) => state)
+  const ordersDetail = orders[orderAddress]
+  const { mint_ask } = retailers[ordersDetail.retailer] || {}
   const askDecimals = useMintDecimals(mint_ask) || 0
-  const askAmount = utils.undecimalize(ask_amount, askDecimals)
+  const askAmount = utils.undecimalize(ordersDetail.ask_amount, askDecimals)
 
   return (
     <Typography.Text style={{ fontWeight: 700 }}>

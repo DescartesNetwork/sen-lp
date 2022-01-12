@@ -15,7 +15,7 @@ import { AppState } from 'app/model'
 import { OrderType } from '.'
 import configs from 'app/configs'
 
-const FORMAT_DATE = "'DD/MM/YYYY'"
+const FORMAT_DATE = 'DD/MM/YYYY'
 
 const ConfirmOrder = ({
   orderData,

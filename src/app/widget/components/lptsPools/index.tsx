@@ -47,10 +47,13 @@ const LptsPools = ({
     onInit(lptAddresses[0])
   }, [onInit, lptAddresses, lpts])
 
-  if (!lptAddresses.length) return <Empty />
-
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
+      {!lptAddresses.length && (
+        <Col>
+          <Empty />
+        </Col>
+      )}
       {lptAddresses.map((lptAddress, i) => {
         const { pool: poolAddress } = lpts[lptAddress]
         return (
