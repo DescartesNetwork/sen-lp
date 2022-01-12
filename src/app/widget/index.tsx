@@ -8,7 +8,7 @@ import LptWatcher from 'app/components/watcher/lptWatcher'
 import RetailerWatcher from 'app/components/watcher/retailerWatcher'
 import OrderWatcher from 'app/components/watcher/orderWatcher'
 import LptsPools from './components/lptsPools'
-import HotPools from './components/pools'
+import ListPools from './components/pools'
 
 import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
@@ -41,7 +41,7 @@ const Widget = () => {
       <Col span={24} className="body-widget">
         {selectedCategoryPool === PoolTabs.Sentre ||
         selectedCategoryPool === PoolTabs.Community ? (
-          <HotPools onClick={setActiveAddress} />
+          <ListPools onClick={setActiveAddress} />
         ) : (
           <LptsPools onClick={setActiveAddress} />
         )}
