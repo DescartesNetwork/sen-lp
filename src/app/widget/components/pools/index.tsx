@@ -21,9 +21,13 @@ const SentrePools = ({
   const { sentrePools } = useSentrePools()
   const { listPoolAddress } = useListPoolAddress(sentrePools)
 
-  if (!listPoolAddress.length) return <Empty />
   return (
     <Fragment>
+      {!listPoolAddress.length && (
+        <Col>
+          <Empty />
+        </Col>
+      )}
       {listPoolAddress.map((poolAddress, i) => (
         <Col span={24} key={poolAddress}>
           <LazyLoad height={78} overflow>
@@ -93,7 +97,7 @@ const ListPools = ({
   )
 
   return (
-    <Row gutter={[12, 12]}>
+    <Row gutter={[12, 12]} justify="center">
       {isSentrePools ? (
         <SentrePools onClick={onClick} action={action} />
       ) : (
