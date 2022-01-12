@@ -5,6 +5,7 @@ export type State = {
   visible: boolean
   selectedCategoryPool: string
   search: string
+  prevSelectedPool: boolean
 }
 
 const NAME = 'main'
@@ -13,6 +14,7 @@ const initialState: State = {
   visible: false,
   selectedCategoryPool: '',
   search: '',
+  prevSelectedPool: false,
 }
 
 /**
@@ -35,6 +37,13 @@ export const handleOpenDrawer = createAsyncThunk(
   `${NAME}/handleOpenDrawer`,
   async (condition: boolean) => {
     return { visible: condition }
+  },
+)
+
+export const checkPrevSelectedPool = createAsyncThunk(
+  `${NAME}/checkPrevSelectedPool`,
+  async (condition: boolean) => {
+    return { prevSelectedPool: condition }
   },
 )
 
@@ -69,6 +78,10 @@ const slice = createSlice({
       )
       .addCase(
         onSearch.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        checkPrevSelectedPool.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
