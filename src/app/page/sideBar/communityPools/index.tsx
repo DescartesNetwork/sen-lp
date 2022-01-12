@@ -8,7 +8,11 @@ import PoolCard from '../components/poolCard'
 
 import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
-import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+import {
+  checkPrevSelectedPool,
+  handleOpenDrawer,
+  selectPool,
+} from 'app/model/main.controller'
 import { PoolTabs, QueryParams } from 'app/constant'
 import { useCommunityPools } from 'app/hooks/pools/useCommunityPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
@@ -43,24 +47,28 @@ const CommunityPools = () => {
           <Empty />
         </Col>
       ) : (
-        listPoolAddress.map((poolAddress) => (
-          <Col id={poolAddress} span={24} key={poolAddress}>
-            <LazyLoad height={78} overflow>
-              <PoolCard
-                poolAddress={poolAddress}
-                action={
-                  <PoolCardAction
-                    poolAddress={poolAddress}
-                    category={PoolTabs.Community}
-                  />
-                }
-                onClick={setActivePoolAddress}
-                selected={selectedPoolAddress === poolAddress}
-                apy
-              />
-            </LazyLoad>
-          </Col>
-        ))
+        listPoolAddress.map((poolAddress) => {
+          if (poolAddress === selectedPoolAddress)
+            dispatch(checkPrevSelectedPool(true))
+          return (
+            <Col id={poolAddress} span={24} key={poolAddress}>
+              <LazyLoad height={78} overflow>
+                <PoolCard
+                  poolAddress={poolAddress}
+                  action={
+                    <PoolCardAction
+                      poolAddress={poolAddress}
+                      category={PoolTabs.Community}
+                    />
+                  }
+                  onClick={setActivePoolAddress}
+                  selected={selectedPoolAddress === poolAddress}
+                  apy
+                />
+              </LazyLoad>
+            </Col>
+          )
+        })
       )}
     </Row>
   )
