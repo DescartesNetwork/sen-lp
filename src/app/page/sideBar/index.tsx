@@ -17,7 +17,9 @@ import { AppState } from 'app/model'
 
 const SideBar = () => {
   const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
-  const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
+  const { selectedPoolAddress, prevSelectedPool } = useSelector(
+    (state: AppState) => state.main,
+  )
   const query = new URLSearchParams(useLocation().search)
   const poolCategory = query.get(QueryParams.category) || ''
 
@@ -32,12 +34,25 @@ const SideBar = () => {
     return <YourPools />
   }, [selectedTab])
 
+  const isInViewport = (element: HTMLElement | null) => {
+    if (!element) return
+    const rect = element.getBoundingClientRect()
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    )
+  }
+
   useEffect(() => {
-    if (!account.isAddress(selectedPoolAddress)) return
+    if (!prevSelectedPool || !account.isAddress(selectedPoolAddress)) return
     const element = document.getElementById(selectedPoolAddress)
+    if (isInViewport(element) || !element) return // reject when pool card inviewport
     const container = document.getElementById('scroll-container')
     if (container && element?.offsetTop) container.scrollTop = element.offsetTop
-  }, [selectedPoolAddress])
+  }, [prevSelectedPool, selectedPoolAddress])
 
   useEffect(() => {
     if (!poolCategory) return
