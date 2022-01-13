@@ -1,5 +1,6 @@
 import { Fragment, ReactElement, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { usePool } from '@senhub/providers'
 
 import {
   Row,
@@ -22,7 +23,6 @@ import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
 import { fetchStatPoolData } from 'app/model/stat.controller'
 import { PoolStatus } from 'app/constant'
-import { usePool } from 'senhub/providers'
 
 const ItemPool = ({
   poolAddress,

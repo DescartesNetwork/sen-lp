@@ -1,11 +1,11 @@
 import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
+import { useWallet } from '@senhub/providers'
 
 import { notifyError } from 'app/helper'
 import { AppDispatch } from 'app/model'
 import { getOrders, upsetOrder } from 'app/model/orders.controller'
-import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
 
 const {

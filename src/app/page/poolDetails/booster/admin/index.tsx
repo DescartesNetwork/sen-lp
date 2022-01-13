@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { forceCheck } from '@senswap/react-lazyload'
+import { usePool, useWallet } from '@senhub/providers'
 
 import { Row, Col, Space, Typography, Switch, Table, Button } from 'antd'
 import NewRetailer from './newRetailer'
@@ -9,7 +10,6 @@ import RetailerState from './retailerState'
 import { ADMIN_COLUMNS } from './column'
 
 import { AppDispatch, AppState } from 'app/model'
-import { usePool, useWallet } from 'senhub/providers'
 import { getOrders } from 'app/model/orders.controller'
 
 import './index.less'

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
+import { useMint, usePool } from '@senhub/providers'
 
-import { useMint, usePool } from 'senhub/providers'
 import { fetchCGK } from 'shared/util'
 
 /**

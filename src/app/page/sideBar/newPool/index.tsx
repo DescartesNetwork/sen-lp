@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useAccount, usePool, useWallet } from 'senhub/providers'
+import { useAccount, usePool, useWallet } from '@senhub/providers'
 import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Modal, Button, Typography, Space } from 'antd'

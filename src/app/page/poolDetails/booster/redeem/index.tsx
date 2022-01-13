@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
+import { usePool } from '@senhub/providers'
 
 import { Col, Empty, Row } from 'antd'
 import Order from './order'
 
 import { AppState } from 'app/model'
-import { usePool } from 'senhub/providers'
 
 const Redeem = ({ poolAddress }: { poolAddress: string }) => {
   const { orders, retailers } = useSelector((state: AppState) => state)

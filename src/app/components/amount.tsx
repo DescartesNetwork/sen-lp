@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, utils } from '@senswap/sen-js'
+import { useAccount, useWallet } from '@senhub/providers'
 
 import { Row, Col, Typography, Space, Button, Divider } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 
-import { useAccount, useWallet } from 'senhub/providers'
 import { numeric } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 

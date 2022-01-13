@@ -1,9 +1,9 @@
+import { usePool, useWallet } from '@senhub/providers'
+
 import { Card, Tabs } from 'antd'
 import Redeem from './redeem'
 import Reinvestment from './reinvestment'
 import Admin from './admin'
-
-import { usePool, useWallet } from 'senhub/providers'
 
 const Booster = ({ poolAddress }: { poolAddress: string }) => {
   const {

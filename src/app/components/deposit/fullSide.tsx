@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
+import { useAccount, useMint, usePool, useWallet } from '@senhub/providers'
 
 import { Row, Col, Button, Radio, Space, Tag, RadioChangeEvent } from 'antd'
 import Summary from './summary'
@@ -8,7 +9,6 @@ import { MintSymbol } from 'shared/antd/mint'
 
 import { explorer } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
-import { useAccount, useMint, usePool, useWallet } from 'senhub/providers'
 
 const FullSide = ({
   poolAddress,

@@ -1,9 +1,9 @@
 import { utils } from '@senswap/sen-js'
+import { usePool } from '@senhub/providers'
 
 import { Space, Typography } from 'antd'
 import { MintSymbol } from 'shared/antd/mint'
 
-import { usePool } from 'senhub/providers'
 import { numeric } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 

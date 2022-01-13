@@ -1,10 +1,10 @@
 import { useDispatch } from 'react-redux'
+import { useUI } from '@senhub/providers'
 
 import { Affix, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { handleOpenDrawer } from 'app/model/main.controller'
-import { useUI } from 'senhub/providers'
 
 const ViewPoolButton = () => {
   const dispatch = useDispatch()

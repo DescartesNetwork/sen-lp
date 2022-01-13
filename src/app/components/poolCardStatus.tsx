@@ -1,7 +1,8 @@
+import { usePool, useWallet } from '@senhub/providers'
+
 import { Space } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
-import { usePool, useWallet } from 'senhub/providers'
 import { PoolStatus } from 'app/constant'
 
 const PoolCardStatus = ({ poolAddress }: { poolAddress: string }) => {

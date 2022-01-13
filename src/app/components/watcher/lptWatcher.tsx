@@ -1,11 +1,11 @@
 import { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
+import { useAccount, useWallet } from '@senhub/providers'
 
 import { notifyError } from 'app/helper'
 import { AppDispatch } from 'app/model'
 import { getLPTs, upsetLPT } from 'app/model/lpts.controller'
-import { useAccount, useWallet } from 'senhub/providers'
 
 // Watch id
 let watchId = 0

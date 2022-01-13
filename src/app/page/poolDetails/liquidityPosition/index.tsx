@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
+import { useMint, usePool } from '@senhub/providers'
 
 import { Card, Col, Row, Space, Typography } from 'antd'
 import Price from './price'
@@ -9,7 +10,6 @@ import { MintSymbol } from 'shared/antd/mint'
 
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
-import { useMint, usePool } from 'senhub/providers'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 const APY_DATE = 365

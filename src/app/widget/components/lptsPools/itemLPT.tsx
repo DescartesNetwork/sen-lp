@@ -1,5 +1,6 @@
 import { Fragment, ReactElement, useState } from 'react'
 import { utils } from '@senswap/sen-js'
+import { usePool } from '@senhub/providers'
 
 import {
   Row,
@@ -21,7 +22,6 @@ import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import { LPTData } from 'app/model/lpts.controller'
 import { PoolStatus } from 'app/constant'
 import { numeric } from 'shared/util'
-import { usePool } from 'senhub/providers'
 
 const DECIMAL = 9
 

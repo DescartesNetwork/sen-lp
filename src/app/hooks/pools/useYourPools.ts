@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-
-import { usePool, useWallet } from 'senhub/providers'
-import { PoolsState } from 'os/store/pools.reducer'
 import { useSelector } from 'react-redux'
+import { usePool, useWallet } from '@senhub/providers'
+
+import { PoolsState } from 'os/store/pools.reducer'
 import { AppState } from 'app/model'
 
 export const useYourPools = () => {

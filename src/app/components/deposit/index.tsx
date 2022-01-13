@@ -1,9 +1,9 @@
 import { utils } from '@senswap/sen-js'
+import { usePool } from '@senhub/providers'
 
 import { Row, Col, Typography } from 'antd'
 import FullSide from './fullSide'
 
-import { usePool } from 'senhub/providers'
 import { useState } from 'react'
 
 const FEE_DECIMALS_PERCENT = 7
