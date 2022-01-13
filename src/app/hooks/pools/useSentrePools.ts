@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
+import { usePool } from '@senhub/providers'
 
-import { usePool } from 'senhub/providers'
 import configs from 'app/configs'
 import { PoolsState } from 'os/store/pools.reducer'
 

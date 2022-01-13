@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useWallet } from '@senhub/providers'
 
 import { AppState } from 'app/model'
-import { useWallet } from 'senhub/providers'
 import configs from 'app/configs'
 
 const LIMIT = 10000

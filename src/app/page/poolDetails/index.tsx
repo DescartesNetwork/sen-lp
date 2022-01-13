@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { usePool, useWallet } from '@senhub/providers'
 
 import { Col, Row } from 'antd'
 import PoolDetailsHeader from './poolDetailsHeader'
@@ -9,7 +10,6 @@ import Volume24h from './volume24h'
 import Booster from './booster'
 
 import { AppState } from 'app/model'
-import { usePool, useWallet } from 'senhub/providers'
 
 const PoolDetails = () => {
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)

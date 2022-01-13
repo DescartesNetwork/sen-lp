@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
 import { useDispatch, useSelector } from 'react-redux'
+import { account } from '@senswap/sen-js'
+import { usePool, useUI } from '@senhub/providers'
 
 import { Row, Col, Modal, Typography, Card } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -12,7 +13,6 @@ import LptWatcher from 'app/components/watcher/lptWatcher'
 import RetailerWatcher from 'app/components/watcher/retailerWatcher'
 import OrderWatcher from 'app/components/watcher/orderWatcher'
 
-import { usePool, useUI } from 'senhub/providers'
 import { AppState } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import configs from 'app/configs'

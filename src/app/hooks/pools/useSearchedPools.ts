@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 import { forceCheck } from '@senswap/react-lazyload'
+import { useMint } from '@senhub/providers'
 
 import { PoolsState } from 'os/store/pools.reducer'
-import { useMint } from 'senhub/providers'
 import { AppState } from 'app/model'
 
 const KEYSIZE = 3

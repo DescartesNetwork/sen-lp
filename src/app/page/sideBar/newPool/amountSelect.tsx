@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useAccount, useWallet } from 'senhub/providers'
+import { useAccount, useWallet } from '@senhub/providers'
 import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Button, Typography, Space } from 'antd'

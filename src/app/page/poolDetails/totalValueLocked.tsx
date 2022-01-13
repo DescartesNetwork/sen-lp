@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useUI } from '@senhub/providers'
 import moment from 'moment'
 
 import { Card, Col, Row, Typography, Spin, Space, Button } from 'antd'
@@ -10,7 +11,6 @@ import PoolService from 'app/stat/logic/pool/pool'
 import { AppState } from 'app/model'
 import { DataLoader } from 'shared/dataloader'
 import IonIcon from 'shared/antd/ionicon'
-import { useUI } from 'senhub/providers'
 
 const CHART_CONFIGS = {
   color: '#40A9FF',

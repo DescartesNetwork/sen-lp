@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
+import { account } from '@senswap/sen-js'
+import { usePool } from '@senhub/providers'
 
 import { Button, Col, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
@@ -9,8 +11,6 @@ import Discount from './discount'
 
 import { VESTING } from 'app/constant'
 import { AppState } from 'app/model'
-import { usePool } from 'senhub/providers'
-import { account } from '@senswap/sen-js'
 
 const LOCKTIMES = VESTING.map(({ locktime }) => locktime)
 

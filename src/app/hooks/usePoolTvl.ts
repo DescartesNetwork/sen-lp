@@ -1,5 +1,6 @@
-import { usePool } from 'senhub/providers'
 import { useCallback, useEffect, useState } from 'react'
+import { usePool } from '@senhub/providers'
+
 import { useMintTotalValue } from './useMintTotalValue'
 
 export const usePoolTvl = (poolAddress?: string) => {
