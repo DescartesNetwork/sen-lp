@@ -37,7 +37,6 @@ export const ADMIN_COLUMNS = [
     title: 'LOCKED',
     dataIndex: 'locked_time',
     key: 'locked_time',
-    width: 100,
     render: (locked_time: bigint) => (
       <LazyLoad height={ROW_HEIGHT} overflow>
         <Typography.Text>
@@ -50,7 +49,6 @@ export const ADMIN_COLUMNS = [
     title: 'ACTIONS',
     key: 'state',
     dataIndex: 'state',
-    width: 100,
     render: (state: number, record: OrderType) => (
       <LazyLoad height={ROW_HEIGHT} overflow>
         <ColumnStatus state={state} orderData={record} />

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
 
-import { Space, Typography } from 'antd'
+import { Typography } from 'antd'
 
 import { AppState } from 'app/model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
@@ -17,10 +17,8 @@ const ColumnAsk = ({ orderAddress }: { orderAddress: string }) => {
 
   return (
     <Typography.Text style={{ fontWeight: 700 }}>
-      <Space size={4}>
-        {numeric(askAmount).format('0,0.[0000]')}
-        <MintSymbol mintAddress={mint_ask} />
-      </Space>
+      {numeric(askAmount).format('0,0.[0000]')}{' '}
+      <MintSymbol mintAddress={mint_ask} />
     </Typography.Text>
   )
 }
