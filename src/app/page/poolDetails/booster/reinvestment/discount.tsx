@@ -4,6 +4,7 @@ import { Col, Popover, Row, Space, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { VESTING } from 'app/constant'
+import { numeric } from 'shared/util'
 
 const PriceInfo = ({
   label = '',
@@ -57,7 +58,7 @@ const Discount = ({ locktime }: { locktime: number }) => {
       <Col span={24}>
         <PriceInfo
           label="SNTR Buy-back"
-          value={Math.round((discount + 1) * 100)}
+          value={numeric((discount + 1) * 100).format('0.[00]')}
           discount
         />
       </Col>
