@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { forceCheck } from '@senswap/react-lazyload'
 import { usePool, useWallet } from '@senhub/providers'
 
 import { Row, Col, Space, Typography, Switch, Table, Button } from 'antd'
@@ -11,7 +10,7 @@ import { ADMIN_COLUMNS } from './column'
 
 import { AppDispatch, AppState } from 'app/model'
 import { getOrders } from 'app/model/orders.controller'
-
+import { OrderState } from 'app/constant'
 import './index.less'
 
 const AMOUNT_ROW = 6
@@ -38,35 +37,23 @@ const Admin = ({ poolAddress }: { poolAddress: string }) => {
     return mint_bid === poolData?.mint_lpt
   })
 
-  const listOrder = useMemo(
-    () =>
-      Object.keys(orders).map((address) => {
-        return { ...orders[address], address }
-      }),
-    [orders],
-  )
-
-  // const orderAddresses = Object.keys(orders).filter((orderAddress) => {
-  //   const { retailer, state } = orders[orderAddress]
-  //   let cond = retailer === retailerAddress
-  //   if (lite) cond = cond && state === OrderState.Open
-  //   return cond
-  // })
+  const listOrder = useMemo(() => {
+    const orderAddresses = Object.keys(orders).filter((orderAddress) => {
+      const { retailer, state } = orders[orderAddress]
+      let cond = retailer === retailerAddress
+      if (lite) cond = cond && state === OrderState.Open
+      return cond
+    })
+    return orderAddresses.map((address) => ({ ...orders[address], address }))
+  }, [orders, retailerAddress, lite])
 
   const fetchOrders = useCallback(async () => {
-    await dispatch(getOrders({ retailer: walletAddress }))
-  }, [dispatch, walletAddress])
+    await dispatch(getOrders({ retailer: retailerAddress }))
+  }, [dispatch, retailerAddress])
 
   useEffect(() => {
     fetchOrders()
   }, [fetchOrders])
-
-  useEffect(() => {
-    // fix lazyload
-    setTimeout(() => {
-      forceCheck()
-    }, 500)
-  }, [])
 
   return (
     <Row gutter={[24, 12]} justify="center">
