@@ -11,7 +11,6 @@ import { ADMIN_COLUMNS } from './column'
 import { AppDispatch, AppState } from 'app/model'
 import { getOrders } from 'app/model/orders.controller'
 import { OrderState } from 'app/constant'
-
 import './index.less'
 
 const AMOUNT_ROW = 6
