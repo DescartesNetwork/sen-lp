@@ -46,14 +46,15 @@ const SentrePools = () => {
   )
 
   const onInitSelectPool = useCallback(() => {
+    if (!listPoolAddress.length) return
+
     const poolAddress = query.get(QueryParams.address) || ''
-    if (!listPoolAddress.length || selectedPoolAddress) return
 
     const addr = account.isAddress(poolAddress)
       ? poolAddress
       : listPoolAddress[0]
     setActivePoolAddress(addr)
-  }, [listPoolAddress, query, selectedPoolAddress, setActivePoolAddress])
+  }, [listPoolAddress, query, setActivePoolAddress])
 
   useEffect(() => {
     onInitSelectPool()
