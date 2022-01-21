@@ -4,6 +4,7 @@ import { OrderData } from '@senswap/sen-js'
 import { Typography } from 'antd'
 import ColumnAsk from './columnAsk'
 import ColumnBid from './columnBid'
+import ColumnDiscount from './columnDiscount'
 import ColumnStatus from './columnStatus'
 
 const ROW_HEIGHT = 52
@@ -42,6 +43,14 @@ export const ADMIN_COLUMNS = [
         <Typography.Text>
           {Number(locked_time) / (24 * 60 * 60)} days
         </Typography.Text>
+      </LazyLoad>
+    ),
+  },
+  {
+    title: 'DISCOUNT',
+    render: (record: OrderType) => (
+      <LazyLoad height={ROW_HEIGHT} overflow>
+        <ColumnDiscount orderAddress={record.address} />
       </LazyLoad>
     ),
   },
