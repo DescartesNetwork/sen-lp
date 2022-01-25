@@ -1,5 +1,6 @@
-import { Col, Radio, RadioChangeEvent, Row, Table } from 'antd'
 import { useState } from 'react'
+
+import { Col, RadioChangeEvent, Row, Table } from 'antd'
 import { DATA_DEMO, HISTORY_COLUMN } from './columnHistory'
 import FilterHistory from './filterHistory'
 
