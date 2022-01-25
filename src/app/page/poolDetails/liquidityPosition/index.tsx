@@ -6,11 +6,13 @@ import { useMint, usePool } from '@senhub/providers'
 import { Card, Col, Row, Space, Typography } from 'antd'
 import Price from './price'
 import LiquidityAction from './liquidityAction'
+import History from './history'
 import { MintSymbol } from 'shared/antd/mint'
 
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import IonIcon from 'shared/antd/ionicon'
 
 const APY_DATE = 365
 
@@ -61,6 +63,8 @@ const Title = ({
 
 const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
   const [supply, setSupply] = useState<number>(0)
+  const [visisble, setVisible] = useState(false)
+
   const lpts = useSelector((state: AppState) => state.lpts)
   const roi = useSelector(
     (state: AppState) => state.stat?.[poolAddress]?.details?.roi,
@@ -102,7 +106,18 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
     <Card bordered={false}>
       <Row gutter={[24, 24]}>
         <Col span={24}>
-          <Typography.Title level={4}>Liquidity Position</Typography.Title>
+          <Row>
+            <Col flex="auto">
+              <Typography.Title level={4}>Liquidity Position</Typography.Title>
+            </Col>
+            <Col>
+              <IonIcon
+                style={{ cursor: 'pointer', fontSize: 16 }}
+                name="document-text-outline"
+                onClick={() => setVisible(true)}
+              />
+            </Col>
+          </Row>
         </Col>
         <Col span={24}>
           <Row gutter={[20, 20]}>
@@ -159,6 +174,7 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
           <LiquidityAction lpt={lpt} poolAddress={poolAddress} />
         </Col>
       </Row>
+      <History visible={visisble} setVisible={setVisible} />
     </Card>
   )
 }
