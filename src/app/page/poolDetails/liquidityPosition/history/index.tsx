@@ -3,6 +3,8 @@ import IonIcon from 'shared/antd/ionicon'
 import DepositHistory from './depositHistory'
 import WithDrawHistory from './withdrawHistory'
 
+import './index.less'
+
 const History = ({
   visible,
   setVisible,
