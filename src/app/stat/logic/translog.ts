@@ -110,7 +110,7 @@ export class TransLogService {
       programId: instructionData.programId.toString(),
       data: (instructionData as PartiallyDecodedInstruction).data,
     }
-    transLog.actionType = ''
+
     transLog.actionType = this.parseAction(transLog)
 
     return transLog

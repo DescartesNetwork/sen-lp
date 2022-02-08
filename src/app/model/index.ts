@@ -7,6 +7,7 @@ import lpts from 'app/model/lpts.controller'
 import retailers from 'app/model/retailers.controller'
 import orders from 'app/model/orders.controller'
 import settings from 'app/model/settings.controller'
+import history from 'app/model/history.controller'
 
 /**
  * Isolated store
@@ -22,6 +23,7 @@ const model = configureStore({
     retailers,
     orders,
     settings,
+    history,
   },
 })
 
