@@ -4,7 +4,6 @@ import { Typography } from 'antd'
 
 import { HistoryDepositType } from 'app/model/history.controller'
 import ColumnToken from './columnToken'
-import ColumnLp from '../columnLp'
 
 export const HISTORY_DEPOSIT_COLUMN = [
   {
@@ -19,16 +18,9 @@ export const HISTORY_DEPOSIT_COLUMN = [
   {
     title: 'TOKEN',
     dataIndex: 'token',
-    width: 220,
+    width: 300,
     render: (text: string, record: HistoryDepositType) => (
       <ColumnToken record={record} />
-    ),
-  },
-  {
-    title: 'LIQUIDITY POSITION',
-    dataIndex: 'liquidity',
-    render: (text: string, record: HistoryDepositType) => (
-      <ColumnLp amount_a={record.amount_a} amount_b={record.amount_b} />
     ),
   },
 ]
