@@ -18,7 +18,7 @@ const FilterHistory = ({ onChange }: FilterProps) => {
   return (
     <Radio.Group
       onChange={onChange}
-      style={{ width: '100%' }}
+      style={{ width: '100%', textAlign: 'center' }}
       defaultValue={FilterOptions.SEVEN_DAYS}
     >
       <Radio.Button style={RADIO_STYLE} value={FilterOptions.SEVEN_DAYS}>
