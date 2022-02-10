@@ -1,11 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import base58 from 'bs58'
 
-import {
-  PROGRAM_DATA_CODE_SCHEMA,
-  PROGRAM_DATA_DELTA_A_SCHEMA,
-  PROGRAM_DATA_DELTA_B_SCHEMA,
-} from 'app/stat/constants/schema'
 import { ActionTransfer } from 'app/stat/entities/trans-log'
 import { DateHelper } from 'app/stat/helpers/date'
 import PoolTransLogService from 'app/stat/logic/pool/poolTranslog'
@@ -13,8 +8,13 @@ import PoolTransLogService from 'app/stat/logic/pool/poolTranslog'
 /**
  * Store constructor
  */
+export const PROGRAM_DATA_SCHEMA = [
+  { key: 'code', type: 'u8' },
+  { key: 'delta_a', type: 'u64' },
+  { key: 'delta_b', type: 'u64' },
+]
 
-export type HistoryWithdrawType = {
+export type HistoryWithdraw = {
   time: number
   mint_a: string
   amount_a: bigint
@@ -22,15 +22,15 @@ export type HistoryWithdrawType = {
   mint_b: string
 }
 
-export type HistoryDepositType = {
+export type HistoryDeposit = {
   time: number
   amount_a: bigint
   amount_b: bigint
 }
 
 export type State = {
-  depositHistories: HistoryDepositType[]
-  withdrawHistories: HistoryWithdrawType[]
+  depositHistories: HistoryDeposit[]
+  withdrawHistories: HistoryWithdraw[]
 }
 
 const NAME = 'history'
@@ -60,41 +60,33 @@ export const fetchWithdrawHistories = createAsyncThunk<
 >(`${NAME}/fetchWithdrawHistories`, async ({ days }) => {
   const walletAddress = await window.sentre.wallet?.getAddress()
   if (!walletAddress) throw new Error('Wallet is not connected')
-  const {
-    sentre: { splt },
-  } = window
+
   const transLogs = await getTransLogs(days, walletAddress)
 
-  const withdrawHistories: HistoryWithdrawType[] = []
+  const withdrawHistories: HistoryWithdraw[] = []
 
   for (const transLog of transLogs) {
     if (transLog.actionType !== 'REMOVE_LIQUIDITY') continue
 
-    const history = {} as HistoryWithdrawType
-    const actionTransfers: ActionTransfer[] = []
+    const actionTransfers: ActionTransfer[] = [...transLog.actionTransfers]
 
-    for (const actionTransfer of transLog.actionTransfers) {
-      if (!actionTransfer.destination) continue
-
-      const accountAddress = await splt.deriveAssociatedAddress(
-        walletAddress,
-        actionTransfer.destination.mint,
+    for (let i = 0; i < actionTransfers.length; i += 2) {
+      if (
+        !actionTransfers[i].destination ||
+        !actionTransfers[i + 1].destination
       )
-      if (accountAddress === actionTransfer.destination.address)
-        actionTransfers.push(actionTransfer)
+        continue
+
+      const history: HistoryWithdraw = {
+        time: transLog.blockTime,
+        mint_a: actionTransfers[i].destination?.mint || '',
+        amount_a: BigInt(actionTransfers[i].amount),
+        mint_b: actionTransfers[i + 1].destination?.mint || '',
+        amount_b: BigInt(actionTransfers[i + 1].amount),
+      }
+
+      withdrawHistories.push(history)
     }
-
-    const actionTransfer_a = actionTransfers[0]
-    const actionTransfer_b = actionTransfers[1]
-    if (!actionTransfer_a.destination || !actionTransfer_b.destination) continue
-
-    history.time = transLog.blockTime
-    history.mint_a = actionTransfer_a.destination.mint
-    history.amount_a = BigInt(actionTransfer_a.amount)
-    history.mint_b = actionTransfer_b.destination.mint
-    history.amount_b = BigInt(actionTransfer_b.amount)
-
-    withdrawHistories.push(history)
   }
 
   return { withdrawHistories }
@@ -109,7 +101,7 @@ export const fetchDepositHistory = createAsyncThunk<
   const { struct } = require('soprox-abi')
 
   const transLogs = await getTransLogs(days, walletAddress)
-  const depositHistories: HistoryDepositType[] = []
+  const depositHistories: HistoryDeposit[] = []
 
   for (const transLog of transLogs) {
     if (transLog.actionType !== 'ADD_LIQUIDITY') continue
@@ -117,20 +109,16 @@ export const fetchDepositHistory = createAsyncThunk<
     const programDataEncode = transLog.programInfo?.data
     if (!programDataEncode) continue
     const dataBuffer = base58.decode(programDataEncode)
-    const actionLayout = new struct([
-      PROGRAM_DATA_CODE_SCHEMA,
-      PROGRAM_DATA_DELTA_A_SCHEMA,
-      PROGRAM_DATA_DELTA_B_SCHEMA,
-    ])
+    const actionLayout = new struct(PROGRAM_DATA_SCHEMA)
 
     const programDataDecode: { delta_a: bigint; delta_b: bigint } =
       actionLayout.fromBuffer(Buffer.from(dataBuffer))
 
-    const history = {} as HistoryDepositType
-
-    history.time = transLog.blockTime
-    history.amount_a = programDataDecode.delta_a
-    history.amount_b = programDataDecode.delta_b
+    const history: HistoryDeposit = {
+      time: transLog.blockTime,
+      amount_a: programDataDecode.delta_a,
+      amount_b: programDataDecode.delta_b,
+    }
 
     depositHistories.push(history)
   }

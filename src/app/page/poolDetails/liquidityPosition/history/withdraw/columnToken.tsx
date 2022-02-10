@@ -1,13 +1,13 @@
 import { utils } from '@senswap/sen-js'
 
 import { Space, Typography } from 'antd'
-import { HistoryWithdrawType } from 'app/model/history.controller'
+import { HistoryWithdraw } from 'app/model/history.controller'
 import { MintSymbol } from 'shared/antd/mint'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 
 import { numeric } from 'shared/util'
 
-const ColumnToken = ({ record }: { record: HistoryWithdrawType }) => {
+const ColumnToken = ({ record }: { record: HistoryWithdraw }) => {
   const decimalA = useMintDecimals(record.mint_a) || 0
   const decimalB = useMintDecimals(record.mint_b) || 0
 

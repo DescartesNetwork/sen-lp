@@ -2,16 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Col, RadioChangeEvent, Row, Table } from 'antd'
-import FilterHistory from '../filterHistory'
+import SelectDay, { DayOptions } from '../selectDay'
 
 import { fetchDepositHistory } from 'app/model/history.controller'
 import { AppState } from 'app/model'
-import { HISTORY_DEPOSIT_COLUMN } from './column'
+import { HISTORY_DEPOSIT_COLUMNS } from './columns'
+import { notifyError } from 'app/helper'
 
 const DepositHistory = () => {
-  const [filterOption, setFilterOption] = useState(7)
+  const [filterOption, setFilterOption] = useState(DayOptions.SEVEN_DAYS)
   const [isLoading, setIsLoading] = useState(false)
-
   const {
     history: { depositHistories },
   } = useSelector((state: AppState) => state)
@@ -26,7 +26,7 @@ const DepositHistory = () => {
         }),
       )
     } catch (er) {
-      console.error(er)
+      notifyError(er)
     } finally {
       setIsLoading(false)
     }
@@ -36,21 +36,21 @@ const DepositHistory = () => {
     fetchHistory()
   }, [fetchHistory])
 
-  const onFilter = (e: RadioChangeEvent) => {
+  const onSelect = (e: RadioChangeEvent) => {
     setFilterOption(e.target.value)
   }
 
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <FilterHistory onChange={onFilter} />
+        <SelectDay onChange={onSelect} />
       </Col>
       <Col span={24}>
         <Table
           pagination={false}
           rowClassName={(record, index) => (index % 2 ? 'odd-row' : 'even-row')}
           dataSource={depositHistories}
-          columns={HISTORY_DEPOSIT_COLUMN}
+          columns={HISTORY_DEPOSIT_COLUMNS}
           rowKey={(record) => record.time}
           loading={isLoading}
           scroll={{ y: 300 }}

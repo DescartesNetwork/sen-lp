@@ -2,16 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Col, RadioChangeEvent, Row, Table } from 'antd'
-import FilterHistory from '../filterHistory'
+import SelectDay, { DayOptions } from '../selectDay'
 
 import { AppState } from 'app/model'
 import { fetchWithdrawHistories } from 'app/model/history.controller'
-import { HISTORY_COLUMN } from './columnHistory'
+import { HISTORY_COLUMNS } from './columns'
+import { notifyError } from 'app/helper'
 
 const WithDrawHistory = () => {
-  const [filterOption, setFilterOption] = useState(7)
+  const [filterOption, setFilterOption] = useState(DayOptions.SEVEN_DAYS)
   const [isLoading, setIsLoading] = useState(false)
-
   const {
     history: { withdrawHistories },
   } = useSelector((state: AppState) => state)
@@ -26,7 +26,7 @@ const WithDrawHistory = () => {
         }),
       )
     } catch (er) {
-      console.error(er)
+      notifyError(er)
     } finally {
       setIsLoading(false)
     }
@@ -36,21 +36,21 @@ const WithDrawHistory = () => {
     fetchHistory()
   }, [fetchHistory])
 
-  const onFilter = (e: RadioChangeEvent) => {
+  const onSelect = (e: RadioChangeEvent) => {
     setFilterOption(e.target.value)
   }
 
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <FilterHistory onChange={onFilter} />
+        <SelectDay onChange={onSelect} />
       </Col>
       <Col span={24}>
         <Table
           pagination={false}
           rowClassName={(record, index) => (index % 2 ? 'odd-row' : 'even-row')}
           dataSource={withdrawHistories}
-          columns={HISTORY_COLUMN}
+          columns={HISTORY_COLUMNS}
           rowKey={(record) => record.time}
           loading={isLoading}
           scroll={{ y: 300 }}
