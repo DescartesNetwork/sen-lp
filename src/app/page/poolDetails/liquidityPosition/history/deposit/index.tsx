@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { usePool } from '@senhub/providers'
 
 import { Col, RadioChangeEvent, Row, Table } from 'antd'
 import SelectDay, { DayOptions } from '../selectDay'
@@ -8,16 +9,18 @@ import { fetchDepositHistory } from 'app/model/history.controller'
 import { AppState } from 'app/model'
 import { HISTORY_DEPOSIT_COLUMNS } from './columns'
 import { notifyError } from 'app/helper'
-import usePoolData from 'app/hooks/usePoolData'
 
 const DepositHistory = () => {
   const [pastDays, setPastDays] = useState(DayOptions.SEVEN_DAYS)
   const [isLoading, setIsLoading] = useState(false)
   const {
     history: { depositHistories },
+    main: { selectedPoolAddress: poolAddress },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
-  const poolData = usePoolData()
+  const {
+    pools: { [poolAddress]: poolData },
+  } = usePool()
 
   const fetchHistory = useCallback(async () => {
     setIsLoading(true)
