@@ -59,7 +59,6 @@ const validatedHistory = (
   actionTransfers: ActionTransfer[],
   poolData: PoolData,
 ) => {
-  let validated = false
   const { treasury_a, treasury_b } = poolData
   const treasury = [treasury_a, treasury_b]
 
@@ -67,24 +66,13 @@ const validatedHistory = (
     const { source, destination } = action
     if (!source || !destination) continue
 
-    let address = ''
-    switch (actionType) {
-      case SwapActionType.AddLiquidity:
-        address = destination.address
-        break
-      case SwapActionType.RemoveLiquidity:
-        address = source.address
-        break
-      default:
-        break
-    }
+    if (actionType === SwapActionType.AddLiquidity)
+      return treasury.includes(destination.address)
 
-    if (treasury.includes(address)) {
-      validated = true
-      break
-    }
+    if (actionType === SwapActionType.RemoveLiquidity)
+      return treasury.includes(source.address)
   }
-  return validated
+  return false
 }
 
 export const fetchWithdrawHistories = createAsyncThunk<
