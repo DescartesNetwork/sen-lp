@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import base58 from 'bs58'
+import { PoolData } from '@senswap/sen-js'
 
 import { DateHelper } from 'app/stat/helpers/date'
 import PoolTransLogService, {
   SwapActionType,
 } from 'app/stat/logic/pool/poolTranslog'
 import { ActionTransfer } from 'app/stat/entities/trans-log'
-import { PoolData } from '@senswap/sen-js'
 
 /**
  * Store constructor
