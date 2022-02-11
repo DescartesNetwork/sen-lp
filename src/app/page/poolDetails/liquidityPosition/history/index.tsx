@@ -1,7 +1,7 @@
 import { Modal, Tabs } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
-import DepositHistory from './depositHistory'
-import WithDrawHistory from './withdrawHistory'
+import DepositHistory from './deposit'
+import WithDrawHistory from './withdraw'
 
 import './index.less'
 
