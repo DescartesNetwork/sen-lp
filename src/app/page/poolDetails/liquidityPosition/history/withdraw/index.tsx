@@ -13,11 +13,11 @@ import { notifyError } from 'app/helper'
 const WithDrawHistory = () => {
   const [pastDays, setPastDays] = useState(DayOptions.SEVEN_DAYS)
   const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
   const {
     history: { withdrawHistories },
     main: { selectedPoolAddress: poolAddress },
   } = useSelector((state: AppState) => state)
-  const dispatch = useDispatch()
   const {
     pools: { [poolAddress]: poolData },
   } = usePool()

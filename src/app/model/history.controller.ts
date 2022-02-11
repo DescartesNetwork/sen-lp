@@ -60,17 +60,17 @@ const validatedHistory = (
   poolData: PoolData,
 ) => {
   const { treasury_a, treasury_b } = poolData
-  const treasury = [treasury_a, treasury_b]
+  const treasuries = [treasury_a, treasury_b]
 
   for (const action of actionTransfers) {
     const { source, destination } = action
     if (!source || !destination) continue
 
     if (actionType === SwapActionType.AddLiquidity)
-      return treasury.includes(destination.address)
+      return treasuries.includes(destination.address)
 
     if (actionType === SwapActionType.RemoveLiquidity)
-      return treasury.includes(source.address)
+      return treasuries.includes(source.address)
   }
   return false
 }
@@ -134,7 +134,7 @@ export const fetchDepositHistory = createAsyncThunk<
     if (actionType !== SwapActionType.AddLiquidity) continue
     if (!validatedHistory(actionType, actionTransfers, poolData)) continue
 
-    /** Get delta_a, delta_b from programData */
+    /** Parse delta_a, delta_b from programData */
     const programDataEncode = programInfo?.data
     if (!programDataEncode) continue
     const dataBuffer = base58.decode(programDataEncode)

@@ -13,11 +13,11 @@ import { notifyError } from 'app/helper'
 const DepositHistory = () => {
   const [pastDays, setPastDays] = useState(DayOptions.SEVEN_DAYS)
   const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
   const {
     history: { depositHistories },
     main: { selectedPoolAddress: poolAddress },
   } = useSelector((state: AppState) => state)
-  const dispatch = useDispatch()
   const {
     pools: { [poolAddress]: poolData },
   } = usePool()

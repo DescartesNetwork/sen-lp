@@ -21,6 +21,7 @@ const ColumnToken = ({ record }: { record: HistoryDeposit }) => {
   } = usePool()
   const decimalA = useMintDecimals(mint_a) || 0
   const decimalB = useMintDecimals(mint_b) || 0
+
   return (
     <Typography.Text>
       <Space size={4}>

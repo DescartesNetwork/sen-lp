@@ -10,11 +10,11 @@ export enum DayOptions {
   NINETY_DAYS = 90,
 }
 
-type SelectProps = {
+const SelectDay = ({
+  onChange,
+}: {
   onChange: (e: RadioChangeEvent) => void
-}
-
-const SelectDay = ({ onChange }: SelectProps) => {
+}) => {
   return (
     <Radio.Group
       onChange={onChange}
