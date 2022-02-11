@@ -1,9 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import base58 from 'bs58'
 
-import { ActionTransfer } from 'app/stat/entities/trans-log'
 import { DateHelper } from 'app/stat/helpers/date'
-import PoolTransLogService from 'app/stat/logic/pool/poolTranslog'
+import PoolTransLogService, {
+  SwapActionType,
+} from 'app/stat/logic/pool/poolTranslog'
+import { ActionTransfer } from 'app/stat/entities/trans-log'
+import { PoolData } from '@senswap/sen-js'
 
 /**
  * Store constructor
@@ -16,10 +19,7 @@ export const PROGRAM_DATA_SCHEMA = [
 
 export type HistoryWithdraw = {
   time: number
-  mint_a: string
-  amount_a: bigint
-  amount_b: bigint
-  mint_b: string
+  actions: { mint: string; amount: bigint; decimals: number }[]
 }
 
 export type HistoryDeposit = {
@@ -54,39 +54,77 @@ const getTransLogs = async (days: number, walletAddress: string) => {
   return transLogs
 }
 
+const validatedHistory = (
+  actionType: string,
+  actionTransfers: ActionTransfer[],
+  poolData: PoolData,
+) => {
+  let validated = false
+  const { treasury_a, treasury_b } = poolData
+  const treasury = [treasury_a, treasury_b]
+
+  for (const action of actionTransfers) {
+    const { source, destination } = action
+    if (!source || !destination) continue
+
+    let address = ''
+    switch (actionType) {
+      case SwapActionType.AddLiquidity:
+        address = destination.address
+        break
+      case SwapActionType.RemoveLiquidity:
+        address = source.address
+        break
+      default:
+        break
+    }
+
+    if (treasury.includes(address)) {
+      validated = true
+      break
+    }
+  }
+  return validated
+}
+
 export const fetchWithdrawHistories = createAsyncThunk<
   Partial<State>,
-  { days: number }
->(`${NAME}/fetchWithdrawHistories`, async ({ days }) => {
+  { days: number; poolData: PoolData }
+>(`${NAME}/fetchWithdrawHistories`, async ({ days, poolData }) => {
+  const {
+    sentre: { splt },
+  } = window
   const walletAddress = await window.sentre.wallet?.getAddress()
   if (!walletAddress) throw new Error('Wallet is not connected')
 
   const transLogs = await getTransLogs(days, walletAddress)
-
   const withdrawHistories: HistoryWithdraw[] = []
 
   for (const transLog of transLogs) {
-    if (transLog.actionType !== 'REMOVE_LIQUIDITY') continue
+    const { actionType, actionTransfers, blockTime } = transLog
+    if (actionType !== SwapActionType.RemoveLiquidity) continue
+    if (!validatedHistory(actionType, actionTransfers, poolData)) continue
 
-    const actionTransfers: ActionTransfer[] = [...transLog.actionTransfers]
-
-    for (let i = 0; i < actionTransfers.length; i += 2) {
-      if (
-        !actionTransfers[i].destination ||
-        !actionTransfers[i + 1].destination
-      )
-        continue
-
-      const history: HistoryWithdraw = {
-        time: transLog.blockTime,
-        mint_a: actionTransfers[i].destination?.mint || '',
-        amount_a: BigInt(actionTransfers[i].amount),
-        mint_b: actionTransfers[i + 1].destination?.mint || '',
-        amount_b: BigInt(actionTransfers[i + 1].amount),
-      }
-
-      withdrawHistories.push(history)
+    const withdrawData: HistoryWithdraw = {
+      time: blockTime,
+      actions: [],
     }
+    for (const action of actionTransfers) {
+      const { amount, source, destination } = action
+      if (!source || !destination) continue
+      const { mint, address, decimals } = destination
+      const mintAccount = await splt.deriveAssociatedAddress(
+        walletAddress,
+        mint,
+      )
+      if (address !== mintAccount) continue
+      withdrawData.actions.push({
+        mint,
+        amount: BigInt(amount),
+        decimals,
+      })
+    }
+    withdrawHistories.push(withdrawData)
   }
 
   return { withdrawHistories }
@@ -94,8 +132,8 @@ export const fetchWithdrawHistories = createAsyncThunk<
 
 export const fetchDepositHistory = createAsyncThunk<
   Partial<State>,
-  { days: number }
->(`${NAME}/fetchDepositHistory`, async ({ days }) => {
+  { days: number; poolData: PoolData }
+>(`${NAME}/fetchDepositHistory`, async ({ days, poolData }) => {
   const walletAddress = await window.sentre.wallet?.getAddress()
   if (!walletAddress) throw new Error('Wallet is not connected')
   const { struct } = require('soprox-abi')
@@ -104,9 +142,12 @@ export const fetchDepositHistory = createAsyncThunk<
   const depositHistories: HistoryDeposit[] = []
 
   for (const transLog of transLogs) {
-    if (transLog.actionType !== 'ADD_LIQUIDITY') continue
+    const { blockTime, actionType, programInfo, actionTransfers } = transLog
+    if (actionType !== SwapActionType.AddLiquidity) continue
+    if (!validatedHistory(actionType, actionTransfers, poolData)) continue
 
-    const programDataEncode = transLog.programInfo?.data
+    /** Get delta_a, delta_b from programData */
+    const programDataEncode = programInfo?.data
     if (!programDataEncode) continue
     const dataBuffer = base58.decode(programDataEncode)
     const actionLayout = new struct(PROGRAM_DATA_SCHEMA)
@@ -115,7 +156,7 @@ export const fetchDepositHistory = createAsyncThunk<
       actionLayout.fromBuffer(Buffer.from(dataBuffer))
 
     const history: HistoryDeposit = {
-      time: transLog.blockTime,
+      time: blockTime,
       amount_a: programDataDecode.delta_a,
       amount_b: programDataDecode.delta_b,
     }

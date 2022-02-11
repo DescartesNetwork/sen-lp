@@ -8,36 +8,34 @@ import { fetchDepositHistory } from 'app/model/history.controller'
 import { AppState } from 'app/model'
 import { HISTORY_DEPOSIT_COLUMNS } from './columns'
 import { notifyError } from 'app/helper'
+import usePoolData from 'app/hooks/usePoolData'
 
 const DepositHistory = () => {
-  const [filterOption, setFilterOption] = useState(DayOptions.SEVEN_DAYS)
+  const [pastDays, setPastDays] = useState(DayOptions.SEVEN_DAYS)
   const [isLoading, setIsLoading] = useState(false)
   const {
     history: { depositHistories },
   } = useSelector((state: AppState) => state)
   const dispatch = useDispatch()
+  const poolData = usePoolData()
 
   const fetchHistory = useCallback(async () => {
     setIsLoading(true)
     try {
-      await dispatch(
-        fetchDepositHistory({
-          days: filterOption,
-        }),
-      )
+      await dispatch(fetchDepositHistory({ days: pastDays, poolData }))
     } catch (er) {
       notifyError(er)
     } finally {
       setIsLoading(false)
     }
-  }, [dispatch, filterOption])
+  }, [dispatch, pastDays, poolData])
 
   useEffect(() => {
     fetchHistory()
   }, [fetchHistory])
 
   const onSelect = (e: RadioChangeEvent) => {
-    setFilterOption(e.target.value)
+    setPastDays(e.target.value)
   }
 
   return (

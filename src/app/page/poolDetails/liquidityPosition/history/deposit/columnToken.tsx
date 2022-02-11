@@ -14,11 +14,9 @@ const ColumnToken = ({ record }: { record: HistoryDeposit }) => {
   const {
     main: { selectedPoolAddress: poolAddress },
   } = useSelector((state: AppState) => state)
-  const { pools } = usePool()
-  const { mint_a, mint_b } = pools[poolAddress]
+  const { mint_a, mint_b } = usePool().pools?.[poolAddress] || ''
   const decimalA = useMintDecimals(mint_a) || 0
   const decimalB = useMintDecimals(mint_b) || 0
-
   return (
     <Typography.Text>
       <Space size={4}>
