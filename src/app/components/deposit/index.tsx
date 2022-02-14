@@ -1,10 +1,9 @@
+import { useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import { usePool } from '@senhub/providers'
 
 import { Row, Col, Typography } from 'antd'
 import FullSide from './fullSide'
-
-import { useState } from 'react'
 
 const FEE_DECIMALS_PERCENT = 7
 
@@ -17,7 +16,7 @@ const Deposit = ({
 }) => {
   const { pools } = usePool()
   const [selectMint, setSelectMint] = useState('all')
-  const { fee_ratio, tax_ratio } = pools[poolAddress] || {}
+  const { fee_ratio, tax_ratio } = pools?.[poolAddress] || {}
   const feeRatio = fee_ratio || BigInt(0)
   const taxRatio = tax_ratio || BigInt(0)
 
@@ -50,6 +49,7 @@ const Deposit = ({
           automatically re-balance itself.
         </Typography.Paragraph>
       </Col>
+      {/* {account.isAddress(poolAddress) && ( */}
       <Col span={24}>
         <FullSide
           poolAddress={poolAddress}
@@ -57,6 +57,7 @@ const Deposit = ({
           onChange={setSelectMint}
         />
       </Col>
+      {/* )} */}
     </Row>
   )
 }

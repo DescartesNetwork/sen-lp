@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { Col, Row } from 'antd'
 import Header from './header'
@@ -8,18 +8,13 @@ import LptWatcher from 'app/components/watcher/lptWatcher'
 import RetailerWatcher from 'app/components/watcher/retailerWatcher'
 import OrderWatcher from 'app/components/watcher/orderWatcher'
 import LptsPools from './components/lptsPools'
-import ListPools from './components/pools'
 
 import configs from 'app/configs'
-import { AppDispatch, AppState } from 'app/model'
+import { AppDispatch } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
-import { PoolTabs } from 'app/constant'
 
 const Widget = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
   const history = useHistory()
   const {
     manifest: { appId },
@@ -39,12 +34,7 @@ const Widget = () => {
         <Header />
       </Col>
       <Col span={24} className="body-widget">
-        {selectedCategoryPool === PoolTabs.Sentre ||
-        selectedCategoryPool === PoolTabs.Community ? (
-          <ListPools onClick={setActiveAddress} />
-        ) : (
-          <LptsPools onClick={setActiveAddress} />
-        )}
+        <LptsPools onClick={setActiveAddress} />
       </Col>
       <Col span={24} style={{ height: 16 }} />
       <LptWatcher />

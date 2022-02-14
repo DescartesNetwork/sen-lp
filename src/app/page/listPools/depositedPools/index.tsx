@@ -6,13 +6,18 @@ import { Row, Col, Button, Empty } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
 import { AppState } from 'app/model'
-import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+import {
+  handleOpenDrawer,
+  onSetTotalTvl,
+  selectPool,
+} from 'app/model/main.controller'
 import { PoolTabs, QueryParams } from 'app/constant'
 import configs from 'app/configs'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import PoolCard from '../components/poolCard'
 import { useDepositedPools } from 'app/hooks/pools/useDepositedPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
+import { useTotalPoolTvl } from 'app/hooks/useTotalPoolTvl'
 
 const {
   route: { myRoute },
@@ -28,6 +33,7 @@ const DepositedPools = () => {
   } = useSelector((state: AppState) => state)
   const { depositedPools } = useDepositedPools()
   const { listPoolAddress } = useListPoolAddress(depositedPools)
+  const totalTvl = useTotalPoolTvl(listPoolAddress)
 
   const setActiveAddress = useCallback(
     (address: string) => {
@@ -39,6 +45,10 @@ const DepositedPools = () => {
     },
     [dispatch, history, query],
   )
+
+  useEffect(() => {
+    dispatch(onSetTotalTvl(totalTvl))
+  }, [dispatch, totalTvl])
 
   const action = useCallback(
     (poolAddress: string) => {

@@ -1,14 +1,28 @@
-import { Card, Tabs } from 'antd'
+import { Modal, Tabs } from 'antd'
 import Fee from './fee'
 import Freeze from './freeze'
 import TransferOwner from './transferOwner'
 
-const PoolManagement = ({ poolAddress }: { poolAddress: string }) => {
+type PropsType = {
+  poolAddress: string
+  visible?: boolean
+  onClose?: () => void
+}
+
+const PoolManagement = ({
+  poolAddress,
+  visible = false,
+  onClose = () => {},
+}: PropsType) => {
   return (
-    <Card
+    <Modal
+      visible={visible}
+      onCancel={onClose}
+      centered
+      closable={false}
+      footer={false}
       style={{ minHeight: 285 }}
       bodyStyle={{ padding: 0 }}
-      bordered={false}
     >
       <Tabs style={{ padding: 24 }}>
         <Tabs.TabPane key="freeze-thaw" tab="Freeze/Thaw">
@@ -21,7 +35,7 @@ const PoolManagement = ({ poolAddress }: { poolAddress: string }) => {
           <TransferOwner address={poolAddress} />
         </Tabs.TabPane>
       </Tabs>
-    </Card>
+    </Modal>
   )
 }
 

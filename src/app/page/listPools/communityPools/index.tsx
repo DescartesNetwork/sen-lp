@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import LazyLoad from '@senswap/react-lazyload'
@@ -9,14 +9,15 @@ import PoolCard from '../components/poolCard'
 import configs from 'app/configs'
 import { AppDispatch, AppState } from 'app/model'
 import {
-  checkPrevSelectedPool,
   handleOpenDrawer,
+  onSetTotalTvl,
   selectPool,
 } from 'app/model/main.controller'
 import { PoolTabs, QueryParams } from 'app/constant'
 import { useCommunityPools } from 'app/hooks/pools/useCommunityPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
 import PoolCardAction from '../components/poolCardAction'
+import { useTotalPoolTvl } from 'app/hooks/useTotalPoolTvl'
 
 const {
   route: { myRoute },
@@ -28,17 +29,22 @@ const CommunityPools = () => {
   const { selectedPoolAddress } = useSelector((state: AppState) => state.main)
   const { communityPools } = useCommunityPools()
   const { listPoolAddress } = useListPoolAddress(communityPools)
+  const totalTvl = useTotalPoolTvl(listPoolAddress)
 
   const setActivePoolAddress = useCallback(
     async (address: string) => {
       await dispatch(selectPool(address))
       await dispatch(handleOpenDrawer(false))
       return history.push(
-        `${myRoute}?${QueryParams.address}=${address}&${QueryParams.category}=${PoolTabs.Community}`,
+        `${myRoute}/details?${QueryParams.address}=${address}`,
       )
     },
     [dispatch, history],
   )
+
+  useEffect(() => {
+    dispatch(onSetTotalTvl(totalTvl))
+  }, [dispatch, totalTvl])
 
   return (
     <Row gutter={[12, 12]} justify="center">
@@ -48,8 +54,6 @@ const CommunityPools = () => {
         </Col>
       ) : (
         listPoolAddress.map((poolAddress) => {
-          if (poolAddress === selectedPoolAddress)
-            dispatch(checkPrevSelectedPool(true))
           return (
             <Col id={poolAddress} span={24} key={poolAddress}>
               <LazyLoad height={78} overflow>

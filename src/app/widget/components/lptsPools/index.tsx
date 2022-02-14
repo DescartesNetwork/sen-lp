@@ -18,9 +18,6 @@ const LptsPools = ({
   action?: (lptAddress: string, poolAddress: string) => ReactElement
 }) => {
   const lpts = useSelector((state: AppState) => state.lpts)
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
   const { pools } = usePool()
   const {
     wallet: { address: walletAddress },
@@ -29,17 +26,16 @@ const LptsPools = ({
   const lptAddresses = useMemo(
     () =>
       Object.keys(lpts).filter((lptAddress) => {
-        const { pool: poolAddress, amount } = lpts[lptAddress]
-        if (selectedCategoryPool === 'deposited' && amount !== BigInt(0))
-          return pools[poolAddress]
-        else if (
-          selectedCategoryPool === 'your-pools' &&
-          pools?.[poolAddress]?.owner === walletAddress
-        )
-          return pools[poolAddress]
-        return null
+        const { pool: poolAddress } = lpts[lptAddress]
+        // if (selectedCategoryPool === 'deposited' && amount !== BigInt(0))
+        //   return pools[poolAddress]
+        // else if (
+        //   selectedCategoryPool === 'your-pools' &&
+        //   pools?.[poolAddress]?.owner === walletAddress
+        // )
+        return pools[poolAddress]
       }),
-    [pools, lpts, walletAddress, selectedCategoryPool],
+    [pools, lpts],
   )
 
   useEffect(() => {

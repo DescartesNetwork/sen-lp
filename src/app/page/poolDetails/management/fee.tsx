@@ -18,8 +18,8 @@ const Fee = ({ address: poolAddress }: { address: string }) => {
   const [feeRatio, setFeeRatio] = useState<string>('')
   const [taxRatio, setTaxRatio] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const poolData = pools[poolAddress]
-  const { fee_ratio, tax_ratio } = poolData || {}
+  const poolData = pools?.[poolAddress] || {}
+  const { fee_ratio, tax_ratio } = poolData
 
   const onUpdateFee = async () => {
     setLoading(true)

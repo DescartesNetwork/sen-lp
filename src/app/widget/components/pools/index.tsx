@@ -88,21 +88,10 @@ const ListPools = ({
   onClick?: (poolAddress: string) => void
   action?: (poolAddress: string) => ReactElement
 }) => {
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
-  const isSentrePools = useMemo(
-    () => selectedCategoryPool === PoolTabs.Sentre,
-    [selectedCategoryPool],
-  )
-
   return (
     <Row gutter={[12, 12]} justify="center">
-      {isSentrePools ? (
-        <SentrePools onClick={onClick} action={action} />
-      ) : (
-        <CommunityPool onInit={onInit} onClick={onClick} action={action} />
-      )}
+      <SentrePools onClick={onClick} action={action} />
+      {/* <CommunityPool onInit={onInit} onClick={onClick} action={action} /> */}
     </Row>
   )
 }
