@@ -17,6 +17,7 @@ export enum SwapActionType {
 const ACTION_TYPE: Record<number, SwapActionType> = {
   0: SwapActionType.InitPool,
   1: SwapActionType.AddLiquidity,
+  10: SwapActionType.AddLiquidity,
   2: SwapActionType.RemoveLiquidity,
   3: SwapActionType.Swap,
   8: SwapActionType.Route,
@@ -31,6 +32,7 @@ export default class PoolTransLogService extends TransLogService {
     const programDataDecode: { code: number } = actionLayout.fromBuffer(
       Buffer.from(dataBuffer),
     )
+
     return ACTION_TYPE[programDataDecode.code] || ''
   }
 }
