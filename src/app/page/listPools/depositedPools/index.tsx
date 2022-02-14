@@ -11,7 +11,7 @@ import {
   onSetTotalTvl,
   selectPool,
 } from 'app/model/main.controller'
-import { PoolTabs, QueryParams } from 'app/constant'
+import { QueryParams } from 'app/constant'
 import configs from 'app/configs'
 import { useCallback, useEffect, useMemo } from 'react'
 import PoolCard from '../components/poolCard'
@@ -40,8 +40,7 @@ const DepositedPools = () => {
       dispatch(selectPool(address))
       dispatch(handleOpenDrawer(false))
       query.set(QueryParams.address, address)
-      query.set(QueryParams.category, PoolTabs.Sentre)
-      return history.push(`${myRoute}?${query.toString()}`)
+      return history.push(`${myRoute}/details?${query.toString()}`)
     },
     [dispatch, history, query],
   )

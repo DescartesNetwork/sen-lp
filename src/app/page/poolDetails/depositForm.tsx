@@ -1,6 +1,10 @@
-import { Card, Tabs } from 'antd'
+import { Button, Card, Modal, Tabs } from 'antd'
 import Deposit from 'app/components/deposit'
 import Withdraw from 'app/components/withdraw'
+import { useState } from 'react'
+import IonIcon from 'shared/antd/ionicon'
+import DepositHistory from './history/deposit'
+import WithDrawHistory from './history/withdraw'
 
 const DepositForm = ({
   poolAddress,
@@ -9,9 +13,21 @@ const DepositForm = ({
   poolAddress: string
   lpt?: number
 }) => {
+  const [visible, setVisible] = useState(false)
+
   return (
     <Card bordered={false} style={{ height: '100%' }}>
-      <Tabs>
+      <Tabs
+        tabBarExtraContent={
+          <Button
+            type="text"
+            size="small"
+            shape="circle"
+            icon={<IonIcon name="document-outline" />}
+            onClick={() => setVisible(true)}
+          />
+        }
+      >
         <Tabs.TabPane tab="Deposit" key="deposit">
           <Deposit poolAddress={poolAddress} />
         </Tabs.TabPane>
@@ -19,6 +35,21 @@ const DepositForm = ({
           <Withdraw poolAddress={poolAddress} />
         </Tabs.TabPane>
       </Tabs>
+      <Modal
+        closeIcon={<IonIcon name="close-outline" />}
+        visible={visible}
+        onCancel={() => setVisible(false)}
+        footer={false}
+      >
+        <Tabs>
+          <Tabs.TabPane tab="Deposit" key="deposit-history">
+            <DepositHistory />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Withdraw" key="withdraw-history">
+            <WithDrawHistory />
+          </Tabs.TabPane>
+        </Tabs>
+      </Modal>
     </Card>
   )
 }

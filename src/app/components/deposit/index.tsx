@@ -49,7 +49,6 @@ const Deposit = ({
           automatically re-balance itself.
         </Typography.Paragraph>
       </Col>
-      {/* {account.isAddress(poolAddress) && ( */}
       <Col span={24}>
         <FullSide
           poolAddress={poolAddress}
@@ -57,7 +56,6 @@ const Deposit = ({
           onChange={setSelectMint}
         />
       </Col>
-      {/* )} */}
     </Row>
   )
 }
