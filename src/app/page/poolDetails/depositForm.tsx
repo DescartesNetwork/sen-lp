@@ -14,9 +14,12 @@ const DepositForm = ({
   lpt?: number
 }) => {
   const [visible, setVisible] = useState(false)
+  const [selectedTab, setSelectedTab] = useState('deposit')
+
+  const isDeposit = selectedTab === 'deposit'
 
   return (
-    <Card bordered={false} style={{ height: '100%' }}>
+    <Card bordered={false} style={{ height: isDeposit ? '100%' : 'auto' }}>
       <Tabs
         tabBarExtraContent={
           <Button
@@ -27,6 +30,8 @@ const DepositForm = ({
             onClick={() => setVisible(true)}
           />
         }
+        activeKey={selectedTab}
+        onChange={setSelectedTab}
       >
         <Tabs.TabPane tab="Deposit" key="deposit">
           <Deposit poolAddress={poolAddress} />

@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { useUI } from '@senhub/providers'
 
 import { Card, Col, Row, Typography, Space, Button } from 'antd'
@@ -8,6 +9,7 @@ import PoolTVL from 'app/components/poolTVL'
 import { AppState } from 'app/model'
 import IonIcon from 'shared/antd/ionicon'
 import LiquidityPosition from './liquidityPosition'
+import { QueryParams } from 'app/constant'
 
 const TotalValueLocked = () => {
   const {
@@ -17,7 +19,11 @@ const TotalValueLocked = () => {
   const {
     ui: { width },
   } = useUI()
+  const location = useLocation()
+  const query = useMemo(() => new URLSearchParams(location.search), [location])
+  const queryPoolAddress = query.get(QueryParams.address) || ''
 
+  const poolAddress = queryPoolAddress || selectedPoolAddress
   const iconName = visible ? 'chevron-down-outline' : 'chevron-forward-outline'
   const isMobile = width < 768
 
@@ -35,7 +41,7 @@ const TotalValueLocked = () => {
         <Col>
           <Space size={0}>
             <Typography.Title level={2}>
-              <PoolTVL poolAddress={selectedPoolAddress} />
+              <PoolTVL poolAddress={poolAddress} />
             </Typography.Title>
             {isMobile && (
               <Button
@@ -49,7 +55,7 @@ const TotalValueLocked = () => {
         </Col>
         {visible && (
           <Col span={24}>
-            <LiquidityPosition poolAddress={selectedPoolAddress} />
+            <LiquidityPosition poolAddress={poolAddress} />
           </Col>
         )}
       </Row>

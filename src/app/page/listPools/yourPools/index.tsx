@@ -26,8 +26,9 @@ const YourPools = () => {
     (poolAddress: string) => {
       dispatch(selectPool(poolAddress))
       dispatch(handleOpenDrawer(false))
-
-      return history.push(`${myRoute}?${QueryParams.address}=${poolAddress}`)
+      return history.push(
+        `${myRoute}/details?${QueryParams.address}=${poolAddress}`,
+      )
     },
     [dispatch, history],
   )

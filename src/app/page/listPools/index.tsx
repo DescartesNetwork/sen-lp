@@ -67,7 +67,7 @@ const ListPools = () => {
                 </Col>
                 <Col>
                   <Typography.Title level={2}>
-                    {numeric(tvl).format('0,0.[00]a')}
+                    ${numeric(tvl).format('0,0.[00]a')}
                   </Typography.Title>
                 </Col>
               </Row>
