@@ -1,10 +1,15 @@
+import { useState } from 'react'
+
+import { usePool, useWallet } from '@senhub/providers'
 import { Button, Card, Modal, Tabs } from 'antd'
 import Deposit from 'app/components/deposit'
 import Withdraw from 'app/components/withdraw'
-import { useState } from 'react'
 import IonIcon from 'shared/antd/ionicon'
 import DepositHistory from './history/deposit'
 import WithDrawHistory from './history/withdraw'
+import Reinvestment from './booster/reinvestment'
+import Redeem from './booster/redeem'
+import Admin from './booster/admin'
 
 const DepositForm = ({
   poolAddress,
@@ -15,7 +20,12 @@ const DepositForm = ({
 }) => {
   const [visible, setVisible] = useState(false)
   const [selectedTab, setSelectedTab] = useState('deposit')
+  const {
+    wallet: { address: walletAddress },
+  } = useWallet()
+  const { pools } = usePool()
 
+  const isOwner = walletAddress === pools[poolAddress]?.owner
   const isDeposit = selectedTab === 'deposit'
 
   return (
@@ -39,6 +49,17 @@ const DepositForm = ({
         <Tabs.TabPane tab="Withdraw" key="withdraw">
           <Withdraw poolAddress={poolAddress} />
         </Tabs.TabPane>
+        <Tabs.TabPane key="reinvestmnet" tab="Reinvestment">
+          <Reinvestment poolAddress={poolAddress} />
+        </Tabs.TabPane>
+        <Tabs.TabPane key="redeem" tab="Redeem">
+          <Redeem poolAddress={poolAddress} />
+        </Tabs.TabPane>
+        {isOwner ? (
+          <Tabs.TabPane key="admin" tab="Admin">
+            <Admin poolAddress={poolAddress} />
+          </Tabs.TabPane>
+        ) : null}
       </Tabs>
       <Modal
         closeIcon={<IonIcon name="close-outline" />}
