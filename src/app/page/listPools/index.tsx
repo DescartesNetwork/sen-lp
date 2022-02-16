@@ -74,11 +74,7 @@ const ListPools = () => {
             </Card>
           </Col>
           <Col span={24}>
-            <Card
-              bordered={false}
-              style={{ height: 578 }}
-              bodyStyle={{ padding: 0 }}
-            >
+            <Card bordered={false} bodyStyle={{ padding: 0 }}>
               <Row gutter={[12, 24]} className="side-bar">
                 <Col span={24}>
                   <Row gutter={[8, 8]} wrap={false}>

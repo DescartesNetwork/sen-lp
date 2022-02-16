@@ -45,6 +45,7 @@ const PoolDetails = () => {
               type="text"
               icon={<IonIcon name="arrow-back-outline" />}
               onClick={onBack}
+              style={{ margin: -12 }}
             >
               Back
             </Button>
