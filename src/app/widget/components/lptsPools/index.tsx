@@ -1,4 +1,4 @@
-import { ReactElement, Fragment, useEffect, useMemo } from 'react'
+import { ReactElement, Fragment, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import LazyLoad from '@senswap/react-lazyload'
 import { usePool, useWallet } from '@senhub/providers'
@@ -7,20 +7,18 @@ import { Row, Col, Empty } from 'antd'
 import ItemLPT from './itemLPT'
 
 import { AppState } from 'app/model'
+import { PoolTabs } from 'app/constant'
 
 const LptsPools = ({
-  onInit = () => {},
+  selectedTab,
   onClick = () => {},
   action = () => <Fragment />,
 }: {
-  onInit?: (poolAddress: string) => void
+  selectedTab: string
   onClick?: (poolAddress: string) => void
   action?: (lptAddress: string, poolAddress: string) => ReactElement
 }) => {
   const lpts = useSelector((state: AppState) => state.lpts)
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
   const { pools } = usePool()
   const {
     wallet: { address: walletAddress },
@@ -29,32 +27,26 @@ const LptsPools = ({
   const lptAddresses = useMemo(
     () =>
       Object.keys(lpts).filter((lptAddress) => {
-        const { pool: poolAddress, amount } = lpts[lptAddress]
-        if (selectedCategoryPool === 'deposited' && amount !== BigInt(0))
-          return pools[poolAddress]
+        const { pool: poolAddress } = lpts[lptAddress]
+        if (selectedTab === PoolTabs.Deposited) return pools[poolAddress]
         else if (
-          selectedCategoryPool === 'your-pools' &&
+          selectedTab === PoolTabs.YourPools &&
           pools?.[poolAddress]?.owner === walletAddress
         )
           return pools[poolAddress]
         return null
       }),
-    [pools, lpts, walletAddress, selectedCategoryPool],
+    [lpts, selectedTab, pools, walletAddress],
   )
-
-  useEffect(() => {
-    if (!lptAddresses.length) return
-    onInit(lptAddresses[0])
-  }, [onInit, lptAddresses, lpts])
 
   return (
     <Row gutter={[12, 12]} justify="center">
-      {!lptAddresses.length && (
+      {!lptAddresses?.length && (
         <Col>
           <Empty />
         </Col>
       )}
-      {lptAddresses.map((lptAddress, i) => {
+      {lptAddresses?.map((lptAddress, i) => {
         const { pool: poolAddress } = lpts[lptAddress]
         return (
           <Col span={24} key={lptAddress + i}>

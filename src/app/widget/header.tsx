@@ -1,23 +1,14 @@
-import { useEffect } from 'react'
-import { useDispatch } from 'react-redux'
-
 import { Col, Select, Row, Typography } from 'antd'
 
-import { AppDispatch } from 'app/model'
-import { selectCategoryPool } from 'app/model/main.controller'
 import { PoolTabs } from 'app/constant'
 
-const Header = () => {
-  const dispatch = useDispatch<AppDispatch>()
-
-  const handleChange = (value: string) => {
-    dispatch(selectCategoryPool(value))
-  }
-
-  useEffect(() => {
-    dispatch(selectCategoryPool(PoolTabs.Sentre))
-  }, [dispatch])
-
+const Header = ({
+  selectedTab,
+  onSelectedTab,
+}: {
+  selectedTab?: string
+  onSelectedTab: (selected: string) => void
+}) => {
   return (
     <Row gutter={24} align="middle" className="header-widget">
       <Col flex="auto">
@@ -27,8 +18,8 @@ const Header = () => {
       </Col>
       <Col>
         <Select
-          defaultValue={PoolTabs.Sentre}
-          onChange={handleChange}
+          value={selectedTab}
+          onChange={onSelectedTab}
           className="header-select"
         >
           <Select.Option value={PoolTabs.Sentre}>Sentre</Select.Option>

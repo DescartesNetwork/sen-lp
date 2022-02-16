@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import { Col, Row } from 'antd'
 import Header from './header'
@@ -11,15 +11,13 @@ import LptsPools from './components/lptsPools'
 import ListPools from './components/pools'
 
 import configs from 'app/configs'
-import { AppDispatch, AppState } from 'app/model'
+import { AppDispatch } from 'app/model'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { PoolTabs } from 'app/constant'
 
 const Widget = () => {
+  const [selectedTab, setSelectedTab] = useState(PoolTabs.Sentre)
   const dispatch = useDispatch<AppDispatch>()
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
   const history = useHistory()
   const {
     manifest: { appId },
@@ -33,17 +31,21 @@ const Widget = () => {
     },
     [dispatch, history, appId],
   )
+
   return (
     <Row className="widget">
       <Col span={24}>
-        <Header />
+        <Header
+          selectedTab={selectedTab}
+          onSelectedTab={(val) => setSelectedTab(val as PoolTabs)}
+        />
       </Col>
       <Col span={24} className="body-widget">
-        {selectedCategoryPool === PoolTabs.Sentre ||
-        selectedCategoryPool === PoolTabs.Community ? (
-          <ListPools onClick={setActiveAddress} />
+        {selectedTab === PoolTabs.Sentre ||
+        selectedTab === PoolTabs.Community ? (
+          <ListPools selectedTab={selectedTab} />
         ) : (
-          <LptsPools onClick={setActiveAddress} />
+          <LptsPools selectedTab={selectedTab} onClick={setActiveAddress} />
         )}
       </Col>
       <Col span={24} style={{ height: 16 }} />

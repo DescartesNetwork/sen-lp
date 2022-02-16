@@ -1,6 +1,5 @@
-import { useCallback, useEffect, MouseEvent, useMemo } from 'react'
+import { useCallback, MouseEvent, useMemo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { account } from '@senswap/sen-js'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import { Button, Col, Empty, Row } from 'antd'
@@ -8,11 +7,12 @@ import PoolCard from '../components/poolCard'
 import IonIcon from 'shared/antd/ionicon'
 
 import configs from 'app/configs'
-import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
+import { onSetTotalTvl, selectPool } from 'app/model/main.controller'
 import { AppState } from 'app/model'
-import { PoolTabs, QueryParams } from 'app/constant'
+import { QueryParams } from 'app/constant'
 import { useSentrePools } from 'app/hooks/pools/useSentrePools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
+import { useTotalPoolTvl } from 'app/hooks/useTotalPoolTvl'
 
 const {
   route: { myRoute },
@@ -28,6 +28,7 @@ const SentrePools = () => {
 
   const { sentrePools } = useSentrePools()
   const { listPoolAddress } = useListPoolAddress(sentrePools)
+  const totalTvl = useTotalPoolTvl(listPoolAddress)
 
   const query = useMemo(
     () => new URLSearchParams(location.search),
@@ -37,28 +38,17 @@ const SentrePools = () => {
   const setActivePoolAddress = useCallback(
     async (address: string) => {
       await dispatch(selectPool(address))
-      await dispatch(handleOpenDrawer(false))
       query.set(QueryParams.address, address)
-      query.set(QueryParams.category, PoolTabs.Sentre)
-      return history.push(`${myRoute}?${query.toString()}`)
+      return history.push(
+        `${myRoute}/${QueryParams.details}?${query.toString()}`,
+      )
     },
     [dispatch, history, query],
   )
 
-  const onInitSelectPool = useCallback(() => {
-    if (!listPoolAddress.length) return
-
-    const poolAddress = query.get(QueryParams.address) || ''
-
-    const addr = account.isAddress(poolAddress)
-      ? poolAddress
-      : listPoolAddress[0]
-    setActivePoolAddress(addr)
-  }, [listPoolAddress, query, setActivePoolAddress])
-
   useEffect(() => {
-    onInitSelectPool()
-  }, [onInitSelectPool])
+    dispatch(onSetTotalTvl(totalTvl))
+  }, [dispatch, totalTvl])
 
   return (
     <Row gutter={[12, 12]} justify="center">
