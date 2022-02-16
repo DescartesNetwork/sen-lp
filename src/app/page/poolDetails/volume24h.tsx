@@ -85,7 +85,7 @@ const Volume24h = () => {
   }, [chartData])
 
   return (
-    <Card bordered={false}>
+    <Card bordered={false} style={{ height: '100%' }}>
       <Spin tip="Loading..." spinning={loading}>
         <Row gutter={[24, 24]} align="middle">
           <Col flex="auto">

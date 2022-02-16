@@ -20,6 +20,7 @@ export enum PoolTabs {
 }
 
 export enum QueryParams {
+  details = 'details',
   address = 'poolAddress',
   category = 'category',
 }

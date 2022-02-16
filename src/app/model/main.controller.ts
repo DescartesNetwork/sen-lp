@@ -3,18 +3,16 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export type State = {
   selectedPoolAddress: string
   visible: boolean
-  selectedCategoryPool: string
   search: string
-  prevSelectedPool: boolean
+  tvl: number
 }
 
 const NAME = 'main'
 const initialState: State = {
   selectedPoolAddress: '',
   visible: false,
-  selectedCategoryPool: '',
   search: '',
-  prevSelectedPool: false,
+  tvl: 0,
 }
 
 /**
@@ -24,13 +22,7 @@ const initialState: State = {
 export const selectPool = createAsyncThunk(
   `${NAME}/selectPool`,
   async (poolAddress: string) => {
-    return { selectedPoolAddress: poolAddress, selectedLptAddress: '' }
-  },
-)
-export const selectCategoryPool = createAsyncThunk(
-  `${NAME}/selectCategoryPool`,
-  async (category: string) => {
-    return { selectedCategoryPool: category }
+    return { selectedPoolAddress: poolAddress }
   },
 )
 export const handleOpenDrawer = createAsyncThunk(
@@ -40,17 +32,16 @@ export const handleOpenDrawer = createAsyncThunk(
   },
 )
 
-export const checkPrevSelectedPool = createAsyncThunk(
-  `${NAME}/checkPrevSelectedPool`,
-  async (condition: boolean) => {
-    return { prevSelectedPool: condition }
-  },
-)
-
 export const onSearch = createAsyncThunk(
   `${NAME}/onSearch`,
   async (search: string) => {
     return { search }
+  },
+)
+export const onSetTotalTvl = createAsyncThunk(
+  `${NAME}/onSetTotalTvl`,
+  async (tvl: number) => {
+    return { tvl }
   },
 )
 
@@ -73,15 +64,11 @@ const slice = createSlice({
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        selectCategoryPool.fulfilled,
-        (state, { payload }) => void Object.assign(state, payload),
-      )
-      .addCase(
         onSearch.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       )
       .addCase(
-        checkPrevSelectedPool.fulfilled,
+        onSetTotalTvl.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })

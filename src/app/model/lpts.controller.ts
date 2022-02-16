@@ -7,7 +7,6 @@ import { account, AccountData, utils } from '@senswap/sen-js'
 export type LPTData = AccountData & {
   pool: string
   selectedPoolAddress?: string
-  selectedLPTAddress?: string
 }
 export type State = Record<string, LPTData>
 

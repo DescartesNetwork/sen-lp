@@ -44,7 +44,7 @@ const CardDescription = ({
 const Freeze = ({ address }: { address: string }) => {
   const { pools } = usePool()
   const [loading, setLoading] = useState(false)
-  const poolData = pools[address]
+  const poolData = pools?.[address]
 
   const onFreezePool = async () => {
     setLoading(true)
