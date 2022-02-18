@@ -36,7 +36,7 @@ const CommunityPools = () => {
       await dispatch(selectPool(address))
       await dispatch(handleOpenDrawer(false))
       return history.push(
-        `${myRoute}/details?${QueryParams.address}=${address}`,
+        `${myRoute}/${QueryParams.details}?${QueryParams.address}=${address}`,
       )
     },
     [dispatch, history],
