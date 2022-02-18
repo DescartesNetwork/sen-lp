@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useCallback, useMemo, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import { Col, Row } from 'antd'
@@ -12,8 +12,8 @@ import ListPools from './components/pools'
 
 import configs from 'app/configs'
 import { AppDispatch } from 'app/model'
-import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
-import { PoolTabs } from 'app/constant'
+import { handleOpenDrawer } from 'app/model/main.controller'
+import { PoolTabs, QueryParams } from 'app/constant'
 
 const Widget = () => {
   const [selectedTab, setSelectedTab] = useState(PoolTabs.Sentre)
@@ -22,14 +22,20 @@ const Widget = () => {
   const {
     manifest: { appId },
   } = configs
+  const location = useLocation()
+
+  const query = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
+  )
 
   const setActiveAddress = useCallback(
     (address: string) => {
-      dispatch(selectPool(address))
+      query.set(QueryParams.address, address)
       dispatch(handleOpenDrawer(false))
-      history.push(`app/${appId}`)
+      history.push(`app/${appId}/${QueryParams.details}?${query.toString()}`)
     },
-    [dispatch, history, appId],
+    [query, dispatch, history, appId],
   )
 
   return (
@@ -43,7 +49,7 @@ const Widget = () => {
       <Col span={24} className="body-widget">
         {selectedTab === PoolTabs.Sentre ||
         selectedTab === PoolTabs.Community ? (
-          <ListPools selectedTab={selectedTab} />
+          <ListPools selectedTab={selectedTab} onClick={setActiveAddress} />
         ) : (
           <LptsPools selectedTab={selectedTab} onClick={setActiveAddress} />
         )}
