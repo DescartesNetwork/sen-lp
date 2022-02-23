@@ -14,6 +14,7 @@ import { selectPool } from 'app/model/main.controller'
 import { useDepositedPools } from 'app/hooks/pools/useDepositedPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
 import PoolCardWrapper from './components/poolCardWrapper'
+import DepositedPools from './depositedPools'
 import './index.less'
 
 const ListPools = () => {
@@ -55,7 +56,7 @@ const ListPools = () => {
     <Row gutter={[24, 24]} justify="center" className="list-pool">
       <Col xs={24} md={12} lg={8}>
         <Row gutter={[24, 24]}>
-          {!listPoolAddress.length ? (
+          {!!listPoolAddress.length ? (
             <Fragment>
               <Col span={24}>
                 <Radio.Group
@@ -64,7 +65,7 @@ const ListPools = () => {
                   className="pool-option"
                 >
                   <Radio.Button value={LiquidityPoolTabs.Liquidity}>
-                    Deposit
+                    Your liquidity
                   </Radio.Button>
                   <Radio.Button value={LiquidityPoolTabs.NonLiquidity}>
                     Pools
@@ -77,7 +78,7 @@ const ListPools = () => {
                     <PoolCardWrapper
                       selectedTab={selectedTab}
                       handleChange={handleChange}
-                      poolsSelected={poolsSelected}
+                      poolsSelected={<DepositedPools />}
                       hideHeaderOption={true}
                     />
                   </Tabs.TabPane>
