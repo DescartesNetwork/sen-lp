@@ -74,7 +74,7 @@ const Withdraw = ({
         dstAddresses[1],
         wallet,
       )
-      onClose()
+      setLPT(BigInt(0))
       return window.notify({
         type: 'success',
         description: 'Withdraw liquidity successfully. Click to view details.',
@@ -114,7 +114,7 @@ const Withdraw = ({
         <Typography.Title level={5}>Withdraw Liquidity</Typography.Title>
       </Col>
       <Col span={24}>
-        <LPT lptAddress={lptAddress} onChange={setLPT} />
+        <LPT lpt={lpt} lptAddress={lptAddress} onChange={setLPT} />
       </Col>
       <Col span={24}>
         <Info mintAddresses={mintAddresses} amounts={amounts} />
