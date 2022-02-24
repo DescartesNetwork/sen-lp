@@ -5,17 +5,19 @@ import SettingsButton from 'app/components/settingsButton'
 import NewPool from '../newPool'
 import Search from './search'
 
+type PoolCardWrapperProps = {
+  selectedTab: PoolTabs
+  handleChange: (value: PoolTabs) => void
+  poolsSelected: JSX.Element
+  hideHeaderOption?: boolean
+}
+
 const PoolCardWrapper = ({
   selectedTab,
   handleChange,
   poolsSelected,
   hideHeaderOption = false,
-}: {
-  selectedTab: PoolTabs
-  handleChange: (value: PoolTabs) => void
-  poolsSelected: JSX.Element
-  hideHeaderOption?: boolean
-}) => {
+}: PoolCardWrapperProps) => {
   return (
     <Card bordered={false} bodyStyle={{ padding: 0 }}>
       <Row gutter={[12, 24]} className="side-bar">
