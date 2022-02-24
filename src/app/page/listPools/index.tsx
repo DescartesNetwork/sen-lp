@@ -1,28 +1,28 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 
-import { Card, Col, Row, Select, Typography } from 'antd'
+import { Col, Row, Tabs, Radio } from 'antd'
 import CommunityPools from 'app/page/listPools/communityPools'
-import DepositedPools from 'app/page/listPools/depositedPools'
-import NewPool from 'app/page/listPools/newPool'
 import SentrePools from 'app/page/listPools/sentrePools'
 import YourPools from 'app/page/listPools/yourPools'
-import Search from './components/search'
-import SettingsButton from 'app/components/settingsButton'
 
-import { PoolTabs, QueryParams } from 'app/constant'
-import { AppDispatch, AppState } from 'app/model'
+import { PoolTabs, QueryParams, LiquidityPoolTabs } from 'app/constant'
+import { AppDispatch } from 'app/model'
 import { selectPool } from 'app/model/main.controller'
-import { numeric } from 'shared/util'
+import { useDepositedPools } from 'app/hooks/pools/useDepositedPools'
+import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
+import PoolCardWrapper from './components/poolCardWrapper'
+import DepositedPools from './depositedPools'
+import './index.less'
 
 const ListPools = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const {
-    main: { tvl },
-  } = useSelector((state: AppState) => state)
   const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
+  const { depositedPools } = useDepositedPools()
+  const { listPoolAddress } = useListPoolAddress(depositedPools)
+  const [liquidityTab, setLiquidityTab] = useState(LiquidityPoolTabs.Liquidity)
   const location = useLocation()
   const query = useMemo(
     () => new URLSearchParams(location.search),
@@ -45,7 +45,6 @@ const ListPools = () => {
   const poolsSelected = useMemo(() => {
     if (selectedTab === PoolTabs.Sentre) return <SentrePools />
     if (selectedTab === PoolTabs.Community) return <CommunityPools />
-    if (selectedTab === PoolTabs.Deposited) return <DepositedPools />
     return <YourPools />
   }, [selectedTab])
 
@@ -53,71 +52,53 @@ const ListPools = () => {
     checkPoolAddrOnURL()
   }, [checkPoolAddrOnURL])
 
+  useEffect(() => {
+    if (!listPoolAddress.length) {
+      setLiquidityTab(LiquidityPoolTabs.NonLiquidity)
+    }
+  }, [listPoolAddress])
+
   return (
-    <Row gutter={[24, 24]} justify="center">
+    <Row gutter={[24, 24]} justify="center" className="list-pool">
       <Col xs={24} md={12} lg={8}>
         <Row gutter={[24, 24]}>
           <Col span={24}>
-            <Card bordered={false}>
-              <Row gutter={[16, 16]} align="middle">
-                <Col flex="auto">
-                  <Typography.Title level={4}>
-                    Total value locked
-                  </Typography.Title>
-                </Col>
-                <Col>
-                  <Typography.Title level={2}>
-                    ${numeric(tvl).format('0,0.[00]a')}
-                  </Typography.Title>
-                </Col>
-              </Row>
-            </Card>
+            <Radio.Group
+              defaultValue={
+                !listPoolAddress.length
+                  ? LiquidityPoolTabs.NonLiquidity
+                  : LiquidityPoolTabs.Liquidity
+              }
+              onChange={(val) => setLiquidityTab(val.target.value)}
+              className="pool-option"
+              disabled={!listPoolAddress.length}
+            >
+              <Radio.Button value={LiquidityPoolTabs.Liquidity}>
+                Your liquidity
+              </Radio.Button>
+              <Radio.Button value={LiquidityPoolTabs.NonLiquidity}>
+                Pools
+              </Radio.Button>
+            </Radio.Group>
           </Col>
           <Col span={24}>
-            <Card bordered={false} bodyStyle={{ padding: 0 }}>
-              <Row gutter={[12, 24]} className="side-bar">
-                <Col span={24}>
-                  <Row gutter={[8, 8]} wrap={false}>
-                    <Col>
-                      <SettingsButton />
-                    </Col>
-                    <Col flex="auto">
-                      <Select
-                        value={selectedTab}
-                        onChange={handleChange}
-                        className="header-sidebar"
-                      >
-                        <Select.Option value={PoolTabs.Sentre}>
-                          Sentre pools
-                        </Select.Option>
-                        <Select.Option value={PoolTabs.Deposited}>
-                          Deposited pools
-                        </Select.Option>
-                        <Select.Option value={PoolTabs.YourPools}>
-                          Your pools
-                        </Select.Option>
-                        <Select.Option value={PoolTabs.Community}>
-                          Community pools
-                        </Select.Option>
-                      </Select>
-                    </Col>
-                    <Col>
-                      <NewPool />
-                    </Col>
-                  </Row>
-                </Col>
-                <Col span={24}>
-                  <Search />
-                </Col>
-                <Col
-                  span={24}
-                  className="body-sidebar scrollbar"
-                  id="scroll-container"
-                >
-                  {poolsSelected}
-                </Col>
-              </Row>
-            </Card>
+            <Tabs activeKey={liquidityTab} centered>
+              <Tabs.TabPane key={LiquidityPoolTabs.Liquidity}>
+                <PoolCardWrapper
+                  selectedTab={selectedTab}
+                  handleChange={handleChange}
+                  poolsSelected={<DepositedPools />}
+                  hideHeaderOption={true}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane key={LiquidityPoolTabs.NonLiquidity}>
+                <PoolCardWrapper
+                  selectedTab={selectedTab}
+                  handleChange={handleChange}
+                  poolsSelected={poolsSelected}
+                />
+              </Tabs.TabPane>
+            </Tabs>
           </Col>
         </Row>
       </Col>
