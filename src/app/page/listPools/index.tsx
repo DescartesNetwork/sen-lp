@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, Fragment } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
@@ -52,55 +52,54 @@ const ListPools = () => {
     checkPoolAddrOnURL()
   }, [checkPoolAddrOnURL])
 
+  useEffect(() => {
+    if (!listPoolAddress.length) {
+      setLiquidityTab(LiquidityPoolTabs.NonLiquidity)
+    }
+  }, [listPoolAddress])
+
   return (
     <Row gutter={[24, 24]} justify="center" className="list-pool">
       <Col xs={24} md={12} lg={8}>
         <Row gutter={[24, 24]}>
-          {!!listPoolAddress.length ? (
-            <Fragment>
-              <Col span={24}>
-                <Radio.Group
-                  defaultValue={LiquidityPoolTabs.Liquidity}
-                  onChange={(val) => setLiquidityTab(val.target.value)}
-                  className="pool-option"
-                >
-                  <Radio.Button value={LiquidityPoolTabs.Liquidity}>
-                    Your liquidity
-                  </Radio.Button>
-                  <Radio.Button value={LiquidityPoolTabs.NonLiquidity}>
-                    Pools
-                  </Radio.Button>
-                </Radio.Group>
-              </Col>
-              <Col span={24}>
-                <Tabs activeKey={liquidityTab} centered>
-                  <Tabs.TabPane key={LiquidityPoolTabs.Liquidity}>
-                    <PoolCardWrapper
-                      selectedTab={selectedTab}
-                      handleChange={handleChange}
-                      poolsSelected={<DepositedPools />}
-                      hideHeaderOption={true}
-                    />
-                  </Tabs.TabPane>
-                  <Tabs.TabPane key={LiquidityPoolTabs.NonLiquidity}>
-                    <PoolCardWrapper
-                      selectedTab={selectedTab}
-                      handleChange={handleChange}
-                      poolsSelected={poolsSelected}
-                    />
-                  </Tabs.TabPane>
-                </Tabs>
-              </Col>
-            </Fragment>
-          ) : (
-            <Col span={24}>
-              <PoolCardWrapper
-                selectedTab={selectedTab}
-                handleChange={handleChange}
-                poolsSelected={poolsSelected}
-              />
-            </Col>
-          )}
+          <Col span={24}>
+            <Radio.Group
+              defaultValue={
+                !listPoolAddress.length
+                  ? LiquidityPoolTabs.NonLiquidity
+                  : LiquidityPoolTabs.Liquidity
+              }
+              onChange={(val) => setLiquidityTab(val.target.value)}
+              className="pool-option"
+              disabled={!listPoolAddress.length}
+            >
+              <Radio.Button value={LiquidityPoolTabs.Liquidity}>
+                Your liquidity
+              </Radio.Button>
+              <Radio.Button value={LiquidityPoolTabs.NonLiquidity}>
+                Pools
+              </Radio.Button>
+            </Radio.Group>
+          </Col>
+          <Col span={24}>
+            <Tabs activeKey={liquidityTab} centered>
+              <Tabs.TabPane key={LiquidityPoolTabs.Liquidity}>
+                <PoolCardWrapper
+                  selectedTab={selectedTab}
+                  handleChange={handleChange}
+                  poolsSelected={<DepositedPools />}
+                  hideHeaderOption={true}
+                />
+              </Tabs.TabPane>
+              <Tabs.TabPane key={LiquidityPoolTabs.NonLiquidity}>
+                <PoolCardWrapper
+                  selectedTab={selectedTab}
+                  handleChange={handleChange}
+                  poolsSelected={poolsSelected}
+                />
+              </Tabs.TabPane>
+            </Tabs>
+          </Col>
         </Row>
       </Col>
     </Row>

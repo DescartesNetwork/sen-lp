@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
 import { usePool } from '@senhub/providers'
@@ -9,18 +9,20 @@ import { MintAvatar, MintName } from 'shared/antd/mint'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
+import util from '@senswap/sen-js/dist/utils'
 
 /**
  * Single amount input
  */
 const LPT = ({
+  lpt,
   lptAddress,
   onChange,
 }: {
+  lpt: bigint
   lptAddress: string
   onChange: (value: bigint) => void
 }) => {
-  const [lpt, setLPT] = useState('')
   const lpts = useSelector((state: AppState) => state.lpts)
   const { pools } = usePool()
   const { amount, pool } = lpts?.[lptAddress] || {}
@@ -33,19 +35,21 @@ const LPT = ({
 
   const onLPT = useCallback(
     async (val: string) => {
-      await setLPT(val)
       // Return amount
       if (!parseFloat(val)) return onChange(BigInt(0))
       return onChange(utils.decimalize(val, 9))
     },
     [onChange],
   )
+
+  const lptAmount = useMemo(() => util.undecimalize(lpt, 9), [lpt])
+
   return (
     <Row gutter={[4, 4]} justify="end">
       <Col span={24}>
         <NumericInput
           placeholder="Amount of LP"
-          value={lpt}
+          value={lptAmount}
           onValue={onLPT}
           size="large"
           prefix={
