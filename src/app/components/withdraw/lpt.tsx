@@ -9,7 +9,6 @@ import { MintAvatar, MintName } from 'shared/antd/mint'
 
 import { numeric } from 'shared/util'
 import { AppState } from 'app/model'
-import util from '@senswap/sen-js/dist/utils'
 
 /**
  * Single amount input
@@ -42,7 +41,7 @@ const LPT = ({
     [onChange],
   )
 
-  const lptAmount = useMemo(() => util.undecimalize(lpt, 9), [lpt])
+  const lptAmount = useMemo(() => utils.undecimalize(lpt, 9), [lpt])
 
   return (
     <Row gutter={[4, 4]} justify="end">
