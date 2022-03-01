@@ -53,6 +53,7 @@ const ListPools = () => {
   }, [checkPoolAddrOnURL])
 
   useEffect(() => {
+    setLiquidityTab(LiquidityPoolTabs.Liquidity)
     if (!listPoolAddress.length) {
       setLiquidityTab(LiquidityPoolTabs.NonLiquidity)
     }
@@ -64,14 +65,10 @@ const ListPools = () => {
         <Row gutter={[24, 24]}>
           <Col span={24}>
             <Radio.Group
-              defaultValue={
-                !listPoolAddress.length
-                  ? LiquidityPoolTabs.NonLiquidity
-                  : LiquidityPoolTabs.Liquidity
-              }
               onChange={(val) => setLiquidityTab(val.target.value)}
               className="pool-option"
               disabled={!listPoolAddress.length}
+              value={liquidityTab}
             >
               <Radio.Button value={LiquidityPoolTabs.Liquidity}>
                 Your liquidity
