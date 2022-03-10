@@ -23,6 +23,7 @@ export const extractReserve = (mintAddress: string, poolData: PoolData) => {
   return BigInt(0)
 }
 
+// get keys of enum
 export function enumKeys<O extends object, K extends keyof O = keyof O>(
   obj: O,
 ): K[] {
