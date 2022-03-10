@@ -7,16 +7,17 @@ import { Col, Row, Tabs, Radio } from 'antd'
 import CommunityPools from 'app/page/listPools/communityPools'
 import SentrePools from 'app/page/listPools/sentrePools'
 import YourPools from 'app/page/listPools/yourPools'
+import PoolCardWrapper from './components/poolCardWrapper'
+import DepositedPools from './depositedPools'
 
 import { PoolTabs, QueryParams, LiquidityPoolTabs } from 'app/constant'
 import { AppDispatch } from 'app/model'
 import { selectPool } from 'app/model/main.controller'
 import { useDepositedPools } from 'app/hooks/pools/useDepositedPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
-import PoolCardWrapper from './components/poolCardWrapper'
-import DepositedPools from './depositedPools'
-import './index.less'
 import { enumKeys } from 'app/helper'
+
+import './index.less'
 
 const ListPools = () => {
   const dispatch = useDispatch<AppDispatch>()
