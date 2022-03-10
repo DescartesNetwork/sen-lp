@@ -20,8 +20,8 @@ export enum PoolTabs {
 }
 
 export enum LiquidityPoolTabs {
-  Liquidity = 'liquidity',
-  NonLiquidity = 'non-liquidity',
+  YourLiquidity = 'your-liquidity',
+  Pools = 'pools',
 }
 
 export enum QueryParams {
