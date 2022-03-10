@@ -7,29 +7,39 @@ import { Col, Row, Tabs, Radio } from 'antd'
 import CommunityPools from 'app/page/listPools/communityPools'
 import SentrePools from 'app/page/listPools/sentrePools'
 import YourPools from 'app/page/listPools/yourPools'
+import PoolCardWrapper from './components/poolCardWrapper'
+import DepositedPools from './depositedPools'
 
 import { PoolTabs, QueryParams, LiquidityPoolTabs } from 'app/constant'
 import { AppDispatch } from 'app/model'
 import { selectPool } from 'app/model/main.controller'
 import { useDepositedPools } from 'app/hooks/pools/useDepositedPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
-import PoolCardWrapper from './components/poolCardWrapper'
-import DepositedPools from './depositedPools'
+import { enumKeys } from 'app/helper'
+
 import './index.less'
 
 const ListPools = () => {
   const dispatch = useDispatch<AppDispatch>()
   const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
   const { depositedPools } = useDepositedPools()
-  const { listPoolAddress } = useListPoolAddress(depositedPools)
-  const [liquidityTab, setLiquidityTab] = useState(LiquidityPoolTabs.Liquidity)
-  const location = useLocation()
-  const query = useMemo(
-    () => new URLSearchParams(location.search),
-    [location.search],
+  const { listPoolAddress: depositedFilterPools } =
+    useListPoolAddress(depositedPools)
+  const [liquidityTab, setLiquidityTab] = useState(
+    LiquidityPoolTabs.YourLiquidity,
   )
+  const location = useLocation()
+  const query = useMemo(() => {
+    return new URLSearchParams(location.search)
+  }, [location.search])
   const poolAddress = useMemo(
     () => query.get(QueryParams.address) || '',
+    [query],
+  )
+
+  const tabHero = useMemo(() => query.get(QueryParams.wrapTab) || '', [query])
+  const tabInPool = useMemo(
+    () => query.get(QueryParams.tabInPools) || '',
     [query],
   )
 
@@ -43,21 +53,48 @@ const ListPools = () => {
   }
 
   const poolsSelected = useMemo(() => {
+    if (!!tabInPool) {
+      for (const value of enumKeys(PoolTabs)) {
+        if (PoolTabs[value] === tabInPool) {
+          return <YourPools />
+        }
+      }
+    }
     if (selectedTab === PoolTabs.Sentre) return <SentrePools />
     if (selectedTab === PoolTabs.Community) return <CommunityPools />
     return <YourPools />
-  }, [selectedTab])
+  }, [selectedTab, tabInPool])
 
   useEffect(() => {
     checkPoolAddrOnURL()
   }, [checkPoolAddrOnURL])
 
   useEffect(() => {
-    setLiquidityTab(LiquidityPoolTabs.Liquidity)
-    if (!listPoolAddress.length) {
-      setLiquidityTab(LiquidityPoolTabs.NonLiquidity)
+    if (!!tabHero) {
+      for (const value of enumKeys(LiquidityPoolTabs)) {
+        if (LiquidityPoolTabs[value] === tabHero) {
+          return setLiquidityTab(LiquidityPoolTabs[value])
+        }
+      }
     }
-  }, [listPoolAddress])
+
+    if (depositedFilterPools.length) {
+      setLiquidityTab(LiquidityPoolTabs.YourLiquidity)
+    }
+    if (!depositedFilterPools.length) {
+      setLiquidityTab(LiquidityPoolTabs.Pools)
+    }
+  }, [depositedFilterPools.length, tabHero])
+
+  useEffect(() => {
+    if (!!tabInPool) {
+      for (const value of enumKeys(PoolTabs)) {
+        if (PoolTabs[value] === tabInPool) {
+          return setSelectedTab(PoolTabs[value])
+        }
+      }
+    }
+  }, [tabInPool])
 
   return (
     <Row gutter={[24, 24]} justify="center" className="list-pool">
@@ -67,20 +104,18 @@ const ListPools = () => {
             <Radio.Group
               onChange={(val) => setLiquidityTab(val.target.value)}
               className="pool-option"
-              disabled={!listPoolAddress.length}
+              disabled={!depositedFilterPools.length}
               value={liquidityTab}
             >
-              <Radio.Button value={LiquidityPoolTabs.Liquidity}>
+              <Radio.Button value={LiquidityPoolTabs.YourLiquidity}>
                 Your liquidity
               </Radio.Button>
-              <Radio.Button value={LiquidityPoolTabs.NonLiquidity}>
-                Pools
-              </Radio.Button>
+              <Radio.Button value={LiquidityPoolTabs.Pools}>Pools</Radio.Button>
             </Radio.Group>
           </Col>
           <Col span={24}>
             <Tabs activeKey={liquidityTab} centered>
-              <Tabs.TabPane key={LiquidityPoolTabs.Liquidity}>
+              <Tabs.TabPane key={LiquidityPoolTabs.YourLiquidity}>
                 <PoolCardWrapper
                   selectedTab={selectedTab}
                   handleChange={handleChange}
@@ -88,7 +123,7 @@ const ListPools = () => {
                   hideHeaderOption={true}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane key={LiquidityPoolTabs.NonLiquidity}>
+              <Tabs.TabPane key={LiquidityPoolTabs.Pools}>
                 <PoolCardWrapper
                   selectedTab={selectedTab}
                   handleChange={handleChange}
