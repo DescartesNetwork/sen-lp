@@ -12,13 +12,17 @@ import { AppState } from 'app/model'
 import configs from 'app/configs'
 import { useMintPrice } from 'app/hooks/useMintPrice'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { useHistory } from 'react-router-dom'
+import { LiquidityPoolTabs, PoolTabs, QueryParams } from 'app/constant'
 
 const {
   sol: { taxmanAddress },
   fee: { exoticFee, exoticTax },
+  route: { myRoute },
 } = configs
 
 const NewPool = () => {
+  const history = useHistory()
   const [visible, setVisible] = useState(false)
   const [reserveA, setReserveA] = useState(BigInt(0))
   const [mintAddressA, setMintAddressA] = useState('')
@@ -95,6 +99,9 @@ const NewPool = () => {
         srcAddresses[1],
         taxmanAddress,
         wallet,
+      )
+      history.push(
+        `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}&${QueryParams.tabInPools}=${PoolTabs.YourPools}`,
       )
       setVisible(false)
       return notifySuccess('Create a new pool', txId)

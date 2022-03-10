@@ -20,14 +20,16 @@ export enum PoolTabs {
 }
 
 export enum LiquidityPoolTabs {
-  Liquidity = 'liquidity',
-  NonLiquidity = 'non-liquidity',
+  YourLiquidity = 'your-liquidity',
+  Pools = 'pools',
 }
 
 export enum QueryParams {
   details = 'details',
   address = 'poolAddress',
   category = 'category',
+  wrapTab = 'tab',
+  tabInPools = 'tab-in-pools',
 }
 
 export const VESTING = [
