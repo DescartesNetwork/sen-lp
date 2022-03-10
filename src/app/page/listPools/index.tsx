@@ -36,8 +36,11 @@ const ListPools = () => {
     [query],
   )
 
-  const tabHero = useMemo(() => query.get('tab') || '', [query])
-  const tabInPool = useMemo(() => query.get('tab-in-pools') || '', [query])
+  const tabHero = useMemo(() => query.get(QueryParams.wrapTab) || '', [query])
+  const tabInPool = useMemo(
+    () => query.get(QueryParams.tabInPools) || '',
+    [query],
+  )
 
   const checkPoolAddrOnURL = useCallback(async () => {
     if (account.isAddress(poolAddress))

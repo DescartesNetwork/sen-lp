@@ -13,6 +13,7 @@ import configs from 'app/configs'
 import { useMintPrice } from 'app/hooks/useMintPrice'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { useHistory } from 'react-router-dom'
+import { LiquidityPoolTabs, PoolTabs, QueryParams } from 'app/constant'
 
 const {
   sol: { taxmanAddress },
@@ -99,7 +100,9 @@ const NewPool = () => {
         taxmanAddress,
         wallet,
       )
-      history.push(`${myRoute}?tab=pools&tab-in-pools=your-pools`)
+      history.push(
+        `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}&${QueryParams.tabInPools}=${PoolTabs.YourPools}`,
+      )
       setVisible(false)
       return notifySuccess('Create a new pool', txId)
     } catch (er) {
