@@ -68,10 +68,6 @@ const ListPools = () => {
   }, [checkPoolAddrOnURL])
 
   useEffect(() => {
-    setLiquidityTab(LiquidityPoolTabs.Pools)
-  }, [])
-
-  useEffect(() => {
     if (!!tabHero) {
       for (const value of enumKeys(LiquidityPoolTabs)) {
         if (LiquidityPoolTabs[value] === tabHero) {
