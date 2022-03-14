@@ -30,7 +30,6 @@ const FullSide = ({
   } = useWallet()
   const { getMint } = useMint()
   const { accounts } = useAccount()
-
   const {
     mint_a,
     mint_b,
@@ -39,7 +38,7 @@ const FullSide = ({
     mint_lpt,
     fee_ratio,
     tax_ratio,
-  } = pools[poolAddress]
+  } = pools[poolAddress] || {}
   const mintAddresses = [mint_a, mint_b]
   const decimalA = useMintDecimals(mint_a) || 0
   const decimalB = useMintDecimals(mint_b) || 0
@@ -78,7 +77,8 @@ const FullSide = ({
   }
 
   const estimateLPT = useCallback(async () => {
-    if (!account.isAddress(walletAddress)) return setLPT('')
+    if (!account.isAddress(walletAddress) || !account.isAddress(mint_lpt))
+      return setLPT('')
     try {
       const {
         [mint_lpt]: { supply },
@@ -148,6 +148,7 @@ const FullSide = ({
 
   const validateInput = useCallback(async () => {
     const { splt } = window.sentre
+    if (!mint_a || !mint_b) return false
     // get wallet account mint A
     const accAddrMintA = await splt.deriveAssociatedAddress(
       walletAddress,
@@ -191,17 +192,17 @@ const FullSide = ({
             </Space>
           </Radio>
 
-          {mintAddresses.map((mintAddress, idx) => (
-            <Radio value={mintAddress} key={mintAddress + idx}>
+          {mintAddresses?.map((mintAddress, idx) => (
+            <Radio value={mintAddress} key={`${mintAddress}${idx}`}>
               <MintSymbol mintAddress={mintAddress} />
             </Radio>
           ))}
         </Radio.Group>
       </Col>
-      {mintAddresses.map(
+      {mintAddresses?.map(
         (mintAddress, i) =>
           (mintAddress === selectMint || selectMint === 'all') && (
-            <Col key={mintAddress + i} span={24}>
+            <Col key={`${mintAddress}_${i}`} span={24}>
               <Amount
                 mintAddress={mintAddress}
                 value={amounts[i]}

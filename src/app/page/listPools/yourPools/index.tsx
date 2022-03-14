@@ -9,7 +9,7 @@ import ListMyPools from './listMyPools'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import { AppDispatch, AppState } from 'app/model'
 import configs from 'app/configs'
-import { PoolTabs, QueryParams } from 'app/constant'
+import { QueryParams } from 'app/constant'
 
 const {
   route: { myRoute },
@@ -26,13 +26,13 @@ const YourPools = () => {
     (poolAddress: string) => {
       dispatch(selectPool(poolAddress))
       dispatch(handleOpenDrawer(false))
-
       return history.push(
-        `${myRoute}?${QueryParams.address}=${poolAddress}&${QueryParams.category}=${PoolTabs.YourPools}`,
+        `${myRoute}/${QueryParams.details}?${QueryParams.address}=${poolAddress}`,
       )
     },
     [dispatch, history],
   )
+
   const action = useCallback(
     (poolAddress) => (
       <Button

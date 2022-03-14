@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { utils } from '@senswap/sen-js'
+import { account, utils } from '@senswap/sen-js'
 import { useMint, usePool } from '@senhub/providers'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
@@ -33,11 +33,12 @@ const Summary = ({
   const reserveB = utils.undecimalize(reserve_b, decimalsB)
 
   const lptAddress =
-    Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
+    Object.keys(lpts)?.find((key) => lpts[key].pool === poolAddress) || ''
   const { amount } = lpts[lptAddress] || {}
   const lpt = Number(utils.undecimalize(amount || BigInt(0), 9))
 
   useEffect(() => {
+    if (!account.isAddress(mint_lpt)) return
     ;(async () => {
       const {
         [mint_lpt]: { supply, decimals },

@@ -19,9 +19,17 @@ export enum PoolTabs {
   Community = 'community-pools',
 }
 
+export enum LiquidityPoolTabs {
+  YourLiquidity = 'your-liquidity',
+  Pools = 'pools',
+}
+
 export enum QueryParams {
+  details = 'details',
   address = 'poolAddress',
   category = 'category',
+  wrapTab = 'tab',
+  tabInPools = 'tab-in-pools',
 }
 
 export const VESTING = [

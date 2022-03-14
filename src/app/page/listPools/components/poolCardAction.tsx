@@ -1,10 +1,11 @@
+import { MouseEvent, useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+
 import { Button } from 'antd'
 import configs from 'app/configs'
 import { PoolTabs, QueryParams } from 'app/constant'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
-import { MouseEvent, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
 import IonIcon from 'shared/antd/ionicon'
 
 const {
@@ -26,10 +27,10 @@ const PoolCardAction = ({
       await dispatch(selectPool(address))
       await dispatch(handleOpenDrawer(false))
       return history.push(
-        `${myRoute}?${QueryParams.address}=${address}&${QueryParams.category}=${category}`,
+        `${myRoute}/${QueryParams.details}?${QueryParams.address}=${address}`,
       )
     },
-    [category, dispatch, history],
+    [dispatch, history],
   )
 
   return (

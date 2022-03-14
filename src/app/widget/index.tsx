@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useCallback, useMemo, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import { Col, Row } from 'antd'
 import Header from './header'
@@ -11,39 +11,47 @@ import LptsPools from './components/lptsPools'
 import ListPools from './components/pools'
 
 import configs from 'app/configs'
-import { AppDispatch, AppState } from 'app/model'
-import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
-import { PoolTabs } from 'app/constant'
+import { AppDispatch } from 'app/model'
+import { handleOpenDrawer } from 'app/model/main.controller'
+import { PoolTabs, QueryParams } from 'app/constant'
 
 const Widget = () => {
+  const [selectedTab, setSelectedTab] = useState(PoolTabs.Sentre)
   const dispatch = useDispatch<AppDispatch>()
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
   const history = useHistory()
   const {
     manifest: { appId },
   } = configs
+  const location = useLocation()
+
+  const query = useMemo(
+    () => new URLSearchParams(location.search),
+    [location.search],
+  )
 
   const setActiveAddress = useCallback(
     (address: string) => {
-      dispatch(selectPool(address))
+      query.set(QueryParams.address, address)
       dispatch(handleOpenDrawer(false))
-      history.push(`app/${appId}`)
+      history.push(`app/${appId}/${QueryParams.details}?${query.toString()}`)
     },
-    [dispatch, history, appId],
+    [query, dispatch, history, appId],
   )
+
   return (
     <Row className="widget">
       <Col span={24}>
-        <Header />
+        <Header
+          selectedTab={selectedTab}
+          onSelectedTab={(val) => setSelectedTab(val as PoolTabs)}
+        />
       </Col>
       <Col span={24} className="body-widget">
-        {selectedCategoryPool === PoolTabs.Sentre ||
-        selectedCategoryPool === PoolTabs.Community ? (
-          <ListPools onClick={setActiveAddress} />
+        {selectedTab === PoolTabs.Sentre ||
+        selectedTab === PoolTabs.Community ? (
+          <ListPools selectedTab={selectedTab} onClick={setActiveAddress} />
         ) : (
-          <LptsPools onClick={setActiveAddress} />
+          <LptsPools selectedTab={selectedTab} onClick={setActiveAddress} />
         )}
       </Col>
       <Col span={24} style={{ height: 16 }} />

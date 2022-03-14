@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useMint } from '@senhub/providers'
+import { account } from '@senswap/sen-js'
 
 /**
  * Get token decimals from multiple resources. This hook needs MintProvider for work.
@@ -12,6 +13,7 @@ const useMintDecimals = (mintAddress: string) => {
   const { getDecimals } = useMint()
 
   const fetchDecimals = useCallback(async () => {
+    if (!account.isAddress(mintAddress)) return setDecimals(undefined)
     try {
       const decimals = await getDecimals(mintAddress)
       return setDecimals(decimals)

@@ -1,11 +1,9 @@
-import { ReactElement, useMemo, useEffect, Fragment } from 'react'
-import { useSelector } from 'react-redux'
+import { ReactElement, Fragment } from 'react'
 import LazyLoad from '@senswap/react-lazyload'
 
 import { Row, Col, Empty } from 'antd'
 import ItemPool from './itemPool'
 
-import { AppState } from 'app/model'
 import { PoolTabs } from 'app/constant'
 import { useSentrePools } from 'app/hooks/pools/useSentrePools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
@@ -45,21 +43,14 @@ const SentrePools = ({
 }
 
 const CommunityPool = ({
-  onInit = () => {},
   onClick = () => {},
   action = () => <Fragment />,
 }: {
-  onInit?: (poolAddress: string) => void
   onClick?: (poolAddress: string) => void
   action?: (poolAddress: string) => ReactElement
 }) => {
   const { communityPools } = useCommunityPools()
   const { listPoolAddress } = useListPoolAddress(communityPools)
-
-  useEffect(() => {
-    if (!listPoolAddress.length) return
-    onInit(listPoolAddress[0])
-  }, [onInit, listPoolAddress])
 
   return (
     <Fragment>
@@ -80,28 +71,20 @@ const CommunityPool = ({
 }
 
 const ListPools = ({
-  onInit = () => {},
+  selectedTab,
   onClick = () => {},
   action = () => <Fragment />,
 }: {
-  onInit?: (poolAddress: string) => void
+  selectedTab: string
   onClick?: (poolAddress: string) => void
   action?: (poolAddress: string) => ReactElement
 }) => {
-  const selectedCategoryPool = useSelector(
-    (state: AppState) => state.main.selectedCategoryPool,
-  )
-  const isSentrePools = useMemo(
-    () => selectedCategoryPool === PoolTabs.Sentre,
-    [selectedCategoryPool],
-  )
-
   return (
     <Row gutter={[12, 12]} justify="center">
-      {isSentrePools ? (
+      {selectedTab === PoolTabs.Sentre ? (
         <SentrePools onClick={onClick} action={action} />
       ) : (
-        <CommunityPool onInit={onInit} onClick={onClick} action={action} />
+        <CommunityPool onClick={onClick} action={action} />
       )}
     </Row>
   )
