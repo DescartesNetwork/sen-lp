@@ -25,9 +25,7 @@ const ListPools = () => {
   const { depositedPools } = useDepositedPools()
   const { listPoolAddress: depositedFilterPools } =
     useListPoolAddress(depositedPools)
-  const [liquidityTab, setLiquidityTab] = useState(
-    LiquidityPoolTabs.YourLiquidity,
-  )
+  const [liquidityTab, setLiquidityTab] = useState(LiquidityPoolTabs.Pools)
   const location = useLocation()
   const query = useMemo(() => {
     return new URLSearchParams(location.search)
@@ -70,6 +68,10 @@ const ListPools = () => {
   }, [checkPoolAddrOnURL])
 
   useEffect(() => {
+    setLiquidityTab(LiquidityPoolTabs.Pools)
+  }, [])
+
+  useEffect(() => {
     if (!!tabHero) {
       for (const value of enumKeys(LiquidityPoolTabs)) {
         if (LiquidityPoolTabs[value] === tabHero) {
@@ -77,14 +79,7 @@ const ListPools = () => {
         }
       }
     }
-
-    if (depositedFilterPools.length) {
-      setLiquidityTab(LiquidityPoolTabs.YourLiquidity)
-    }
-    if (!depositedFilterPools.length) {
-      setLiquidityTab(LiquidityPoolTabs.Pools)
-    }
-  }, [depositedFilterPools.length, tabHero])
+  }, [tabHero])
 
   useEffect(() => {
     if (!!tabInPool) {
