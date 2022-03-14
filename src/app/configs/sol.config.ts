@@ -84,7 +84,7 @@ const configs: Record<Net, Config> = {
     purchasingAddress: 'Ecw8Vh3cwwwwMsaU63mW6knKMsuaiSakVDvKxB5nyhFC',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-    nodeUrl: 'https://solana-api.projectserum.com',
+    nodeUrl: 'http://api.google.mainnet-beta.solana.com',
     get purchasing() {
       return new Purchasing(
         this.purchasingAddress,
