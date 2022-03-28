@@ -101,7 +101,7 @@ const NewPool = () => {
         wallet,
       )
       history.push(
-        `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}&${QueryParams.tabInPools}=${PoolTabs.YourPools}`,
+        `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}&${QueryParams.poolCategory}=${PoolTabs.YourPools}`,
       )
       setVisible(false)
       return notifySuccess('Create a new pool', txId)

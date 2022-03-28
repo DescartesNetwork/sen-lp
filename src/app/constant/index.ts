@@ -29,7 +29,7 @@ export enum QueryParams {
   address = 'poolAddress',
   category = 'category',
   wrapTab = 'tab',
-  tabInPools = 'tab-in-pools',
+  poolCategory = 'pool_category',
 }
 
 export const VESTING = [

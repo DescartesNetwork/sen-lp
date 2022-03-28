@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 
 import { Col, Row, Tabs, Radio } from 'antd'
@@ -18,16 +18,20 @@ import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
 import { enumKeys } from 'app/helper'
 
 import './index.less'
+import configs from 'app/configs'
+
+const {
+  route: { myRoute },
+} = configs
 
 const ListPools = () => {
+  const history = useHistory()
   const dispatch = useDispatch<AppDispatch>()
   const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
   const { depositedPools } = useDepositedPools()
   const { listPoolAddress: depositedFilterPools } =
     useListPoolAddress(depositedPools)
-  const [liquidityTab, setLiquidityTab] = useState(
-    LiquidityPoolTabs.YourLiquidity,
-  )
+  const [liquidityTab, setLiquidityTab] = useState(LiquidityPoolTabs.Pools)
   const location = useLocation()
   const query = useMemo(() => {
     return new URLSearchParams(location.search)
@@ -39,7 +43,7 @@ const ListPools = () => {
 
   const tabHero = useMemo(() => query.get(QueryParams.wrapTab) || '', [query])
   const tabInPool = useMemo(
-    () => query.get(QueryParams.tabInPools) || '',
+    () => query.get(QueryParams.poolCategory) || '',
     [query],
   )
 
@@ -50,6 +54,9 @@ const ListPools = () => {
 
   const handleChange = (value: PoolTabs) => {
     setSelectedTab(value)
+    history.push(
+      `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}&${QueryParams.poolCategory}=${value}`,
+    )
   }
 
   const poolsSelected = useMemo(() => {
@@ -77,14 +84,7 @@ const ListPools = () => {
         }
       }
     }
-
-    if (depositedFilterPools.length) {
-      setLiquidityTab(LiquidityPoolTabs.YourLiquidity)
-    }
-    if (!depositedFilterPools.length) {
-      setLiquidityTab(LiquidityPoolTabs.Pools)
-    }
-  }, [depositedFilterPools.length, tabHero])
+  }, [tabHero])
 
   useEffect(() => {
     if (!!tabInPool) {
@@ -102,7 +102,12 @@ const ListPools = () => {
         <Row gutter={[24, 24]}>
           <Col span={24}>
             <Radio.Group
-              onChange={(val) => setLiquidityTab(val.target.value)}
+              onChange={(val) => {
+                setLiquidityTab(val.target.value)
+                history.push(
+                  `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}`,
+                )
+              }}
               className="pool-option"
               disabled={!depositedFilterPools.length}
               value={liquidityTab}
