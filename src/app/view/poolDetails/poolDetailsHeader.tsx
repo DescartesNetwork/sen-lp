@@ -7,10 +7,10 @@ import { Button, Col, Popover, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import SwapButton from 'app/components/swapButton'
+import PoolManagement from 'app/view/poolDetails/management'
 
 import { asyncWait } from 'shared/util'
 import configs from 'app/configs'
-import PoolManagement from 'app/page/poolDetails/management'
 
 const {
   route: { farmRoute },

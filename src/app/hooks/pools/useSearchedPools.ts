@@ -1,18 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { account } from '@senswap/sen-js'
+import { account, PoolData } from '@senswap/sen-js'
 import { forceCheck } from '@senswap/react-lazyload'
 import { useMint } from '@senhub/providers'
 
-import { PoolsState } from 'os/store/pools.reducer'
 import { AppState } from 'app/model'
 
 const KEYSIZE = 3
 let timeOutForceCheck: NodeJS.Timeout
 
-export const useSearchedPools = (pools: PoolsState) => {
+export const useSearchedPools = (pools: Record<string, PoolData>) => {
   const { tokenProvider } = useMint()
-  const [searchedPools, setSearchedPools] = useState<PoolsState>({})
+  const [searchedPools, setSearchedPools] = useState({})
   const {
     main: { search },
   } = useSelector((state: AppState) => state)
@@ -33,9 +32,9 @@ export const useSearchedPools = (pools: PoolsState) => {
   )
 
   const searchPools = useCallback(
-    async (pools: PoolsState) => {
+    async (pools) => {
       if (!search || search.length < KEYSIZE) return setSearchedPools(pools)
-      const newSearchedPools: PoolsState = {}
+      const newSearchedPools: Record<string, PoolData> = {}
       for (const poolAddress in pools) {
         const displayPool = await checkPool(poolAddress)
         if (displayPool) newSearchedPools[poolAddress] = pools[poolAddress]

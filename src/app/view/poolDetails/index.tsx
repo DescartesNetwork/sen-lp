@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
 
 import { Button, Col, Row } from 'antd'
-import PoolDetailsHeader from 'app/page/poolDetails/poolDetailsHeader'
-import Volume24h from 'app/page/poolDetails/volume24h'
+import PoolDetailsHeader from 'app/view/poolDetails/poolDetailsHeader'
+import Volume24h from 'app/view/poolDetails/volume24h'
 import IonIcon from 'shared/antd/ionicon'
-import TotalValueLocked from 'app/page/poolDetails/totalValueLocked'
+import TotalValueLocked from 'app/view/poolDetails/totalValueLocked'
 
 import { AppDispatch, AppState } from 'app/model'
 import { selectPool } from 'app/model/main.controller'

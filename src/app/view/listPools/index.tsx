@@ -4,9 +4,9 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 
 import { Col, Row, Tabs, Radio } from 'antd'
-import CommunityPools from 'app/page/listPools/communityPools'
-import SentrePools from 'app/page/listPools/sentrePools'
-import YourPools from 'app/page/listPools/yourPools'
+import CommunityPools from 'app/view/listPools/communityPools'
+import SentrePools from 'app/view/listPools/sentrePools'
+import YourPools from 'app/view/listPools/yourPools'
 import PoolCardWrapper from './components/poolCardWrapper'
 import DepositedPools from './depositedPools'
 

@@ -1,16 +1,16 @@
-import { usePoolTvl } from 'app/hooks/usePoolTvl'
 import { useCallback, useEffect, useState } from 'react'
+import { PoolData } from '@senswap/sen-js'
 
-import { PoolsState } from 'os/store/pools.reducer'
+import { usePoolTvl } from 'app/hooks/usePoolTvl'
 
-export const useSortedPools = (pools: PoolsState) => {
-  const [sortedPools, setSortedPools] = useState<PoolsState>({})
+export const useSortedPools = (pools: Record<string, PoolData>) => {
+  const [sortedPools, setSortedPools] = useState({})
   const { getTvl } = usePoolTvl()
 
   const sortPools = useCallback(
-    async (pools: PoolsState) => {
+    async (pools) => {
       let listPoolAddress = Object.keys(pools)
-      const newSortedPools: PoolsState = {}
+      const newSortedPools: Record<string, PoolData> = {}
       // Get tvl all pools
       const poolsTvl: Record<string, number> = {}
       await Promise.all(

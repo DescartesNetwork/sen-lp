@@ -6,7 +6,7 @@ import PoolTransLogService, { SwapActionType } from './poolTranslog'
 import { TransLog } from 'app/stat/entities/trans-log'
 
 import { fetchCGK } from 'shared/util'
-import TokenProvider from 'os/providers/tokenProvider'
+import TokenProvider from 'shared/tokenProvider'
 import { TotalSummary } from 'app/stat/constants/summary'
 import { DailyReport } from 'app/stat/entities/daily-report'
 import { DateHelper } from 'app/stat/helpers/date'

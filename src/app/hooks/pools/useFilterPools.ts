@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
-
-import { PoolsState } from 'os/store/pools.reducer'
-import { AppState } from 'app/model'
 import { useSelector } from 'react-redux'
+import { PoolData } from '@senswap/sen-js'
+
+import { AppState } from 'app/model'
 
 /**
  * Filter & display Archived Pool with showArchived option
  */
-export const useFilterPools = (pools: PoolsState) => {
-  const [filteredPools, setFilterPools] = useState<PoolsState>({})
+export const useFilterPools = (pools: Record<string, PoolData>) => {
+  const [filteredPools, setFilterPools] = useState({})
   const {
     settings: { showArchived },
   } = useSelector((state: AppState) => state)
@@ -22,8 +22,8 @@ export const useFilterPools = (pools: PoolsState) => {
   )
 
   const filterPools = useCallback(
-    (pools: PoolsState) => {
-      const displayPools: PoolsState = {}
+    (pools) => {
+      const displayPools: Record<string, PoolData> = {}
       for (const poolAddress in pools)
         if (showArchived || !checkArchivedPools(poolAddress))
           displayPools[poolAddress] = pools[poolAddress]
