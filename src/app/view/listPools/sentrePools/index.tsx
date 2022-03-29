@@ -39,9 +39,7 @@ const SentrePools = () => {
     async (address: string) => {
       await dispatch(selectPool(address))
       query.set(QueryParams.address, address)
-      return history.push(
-        `${myRoute}/${QueryParams.details}?${query.toString()}`,
-      )
+      return history.push(`${myRoute}/details?${query.toString()}`)
     },
     [dispatch, history, query],
   )

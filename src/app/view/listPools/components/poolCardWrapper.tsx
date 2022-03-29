@@ -1,13 +1,13 @@
 import { Row, Col, Card, Select } from 'antd'
 
-import { PoolTabs } from 'app/constant'
+import { PoolCategory } from 'app/constant'
 import SettingsButton from 'app/components/settingsButton'
 import NewPool from '../newPool'
 import Search from './search'
 
 type PoolCardWrapperProps = {
-  selectedTab: PoolTabs
-  handleChange: (value: PoolTabs) => void
+  selectedTab: PoolCategory
+  handleChange: (value: PoolCategory) => void
   poolsSelected: JSX.Element
   hideHeaderOption?: boolean
 }
@@ -32,13 +32,13 @@ const PoolCardWrapper = ({
                 onChange={handleChange}
                 className="header-sidebar"
               >
-                <Select.Option value={PoolTabs.Sentre}>
+                <Select.Option value={PoolCategory.Sentre}>
                   Sentre pools
                 </Select.Option>
-                <Select.Option value={PoolTabs.YourPools}>
+                <Select.Option value={PoolCategory.YourPools}>
                   Your pools
                 </Select.Option>
-                <Select.Option value={PoolTabs.Community}>
+                <Select.Option value={PoolCategory.Community}>
                   Community pools
                 </Select.Option>
               </Select>

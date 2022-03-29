@@ -13,7 +13,7 @@ import {
   onSetTotalTvl,
   selectPool,
 } from 'app/model/main.controller'
-import { PoolTabs, QueryParams } from 'app/constant'
+import { QueryParams } from 'app/constant'
 import { useCommunityPools } from 'app/hooks/pools/useCommunityPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
 import PoolCardAction from '../components/poolCardAction'
@@ -36,7 +36,7 @@ const CommunityPools = () => {
       await dispatch(selectPool(address))
       await dispatch(handleOpenDrawer(false))
       return history.push(
-        `${myRoute}/${QueryParams.details}?${QueryParams.address}=${address}`,
+        `${myRoute}/details?${QueryParams.address}=${address}`,
       )
     },
     [dispatch, history],
@@ -59,12 +59,7 @@ const CommunityPools = () => {
               <LazyLoad height={78} overflow>
                 <PoolCard
                   poolAddress={poolAddress}
-                  action={
-                    <PoolCardAction
-                      poolAddress={poolAddress}
-                      category={PoolTabs.Community}
-                    />
-                  }
+                  action={<PoolCardAction poolAddress={poolAddress} />}
                   onClick={setActivePoolAddress}
                   selected={selectedPoolAddress === poolAddress}
                   apy

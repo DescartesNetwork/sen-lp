@@ -1,7 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useCallback, useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { account } from '@senswap/sen-js'
 
 import { Col, Row, Tabs, Radio } from 'antd'
 import CommunityPools from 'app/view/listPools/communityPools'
@@ -10,12 +8,9 @@ import YourPools from 'app/view/listPools/yourPools'
 import PoolCardWrapper from './components/poolCardWrapper'
 import DepositedPools from './depositedPools'
 
-import { PoolTabs, QueryParams, LiquidityPoolTabs } from 'app/constant'
-import { AppDispatch } from 'app/model'
-import { selectPool } from 'app/model/main.controller'
+import { PoolCategory, QueryParams, PageTabs } from 'app/constant'
 import { useDepositedPools } from 'app/hooks/pools/useDepositedPools'
 import { useListPoolAddress } from 'app/hooks/pools/useListPoolAddress'
-import { enumKeys } from 'app/helper'
 
 import './index.less'
 import configs from 'app/configs'
@@ -26,75 +21,44 @@ const {
 
 const ListPools = () => {
   const history = useHistory()
-  const dispatch = useDispatch<AppDispatch>()
-  const [selectedTab, setSelectedTab] = useState<PoolTabs>(PoolTabs.Sentre)
-  const { depositedPools } = useDepositedPools()
-  const { listPoolAddress: depositedFilterPools } =
-    useListPoolAddress(depositedPools)
-  const [liquidityTab, setLiquidityTab] = useState(LiquidityPoolTabs.Pools)
   const location = useLocation()
+  const { depositedPools } = useDepositedPools()
+  const { listPoolAddress } = useListPoolAddress(depositedPools)
+
   const query = useMemo(() => {
     return new URLSearchParams(location.search)
   }, [location.search])
-  const poolAddress = useMemo(
-    () => query.get(QueryParams.address) || '',
-    [query],
+
+  const poolCategory =
+    query.get(QueryParams.poolCategory) || PoolCategory.Sentre
+  const pageTabSelected = query.get(QueryParams.wrapTab) || PageTabs.Pools
+
+  const onChangeWrapTab = useCallback(
+    (tab: PageTabs) => {
+      query.set(QueryParams.wrapTab, tab)
+      history.push(`${myRoute}?${query.toString()}`)
+    },
+    [history, query],
   )
 
-  const tabHero = useMemo(() => query.get(QueryParams.wrapTab) || '', [query])
-  const tabInPool = useMemo(
-    () => query.get(QueryParams.poolCategory) || '',
-    [query],
+  const onChangePoolCategory = useCallback(
+    (poolCategory: PoolCategory) => {
+      query.set(QueryParams.poolCategory, poolCategory)
+      history.push(`${myRoute}?${query.toString()}`)
+    },
+    [history, query],
   )
-
-  const checkPoolAddrOnURL = useCallback(async () => {
-    if (account.isAddress(poolAddress))
-      return await dispatch(selectPool(poolAddress))
-  }, [dispatch, poolAddress])
-
-  const handleChange = (value: PoolTabs) => {
-    setSelectedTab(value)
-    history.push(
-      `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}&${QueryParams.poolCategory}=${value}`,
-    )
-  }
 
   const poolsSelected = useMemo(() => {
-    if (!!tabInPool) {
-      for (const value of enumKeys(PoolTabs)) {
-        if (PoolTabs[value] === tabInPool) {
-          return <YourPools />
-        }
-      }
+    switch (poolCategory) {
+      case PoolCategory.Community:
+        return <CommunityPools />
+      case PoolCategory.YourPools:
+        return <YourPools />
+      default:
+        return <SentrePools />
     }
-    if (selectedTab === PoolTabs.Sentre) return <SentrePools />
-    if (selectedTab === PoolTabs.Community) return <CommunityPools />
-    return <YourPools />
-  }, [selectedTab, tabInPool])
-
-  useEffect(() => {
-    checkPoolAddrOnURL()
-  }, [checkPoolAddrOnURL])
-
-  useEffect(() => {
-    if (!!tabHero) {
-      for (const value of enumKeys(LiquidityPoolTabs)) {
-        if (LiquidityPoolTabs[value] === tabHero) {
-          return setLiquidityTab(LiquidityPoolTabs[value])
-        }
-      }
-    }
-  }, [tabHero])
-
-  useEffect(() => {
-    if (!!tabInPool) {
-      for (const value of enumKeys(PoolTabs)) {
-        if (PoolTabs[value] === tabInPool) {
-          return setSelectedTab(PoolTabs[value])
-        }
-      }
-    }
-  }, [tabInPool])
+  }, [poolCategory])
 
   return (
     <Row gutter={[24, 24]} justify="center" className="list-pool">
@@ -102,36 +66,31 @@ const ListPools = () => {
         <Row gutter={[24, 24]}>
           <Col span={24}>
             <Radio.Group
-              onChange={(val) => {
-                setLiquidityTab(val.target.value)
-                history.push(
-                  `${myRoute}?${QueryParams.wrapTab}=${LiquidityPoolTabs.Pools}`,
-                )
-              }}
+              onChange={(e) => onChangeWrapTab(e.target.value)}
               className="pool-option"
-              disabled={!depositedFilterPools.length}
-              value={liquidityTab}
+              disabled={!listPoolAddress.length}
+              value={pageTabSelected}
             >
-              <Radio.Button value={LiquidityPoolTabs.YourLiquidity}>
+              <Radio.Button value={PageTabs.YourLiquidity}>
                 Your liquidity
               </Radio.Button>
-              <Radio.Button value={LiquidityPoolTabs.Pools}>Pools</Radio.Button>
+              <Radio.Button value={PageTabs.Pools}>Pools</Radio.Button>
             </Radio.Group>
           </Col>
           <Col span={24}>
-            <Tabs activeKey={liquidityTab} centered>
-              <Tabs.TabPane key={LiquidityPoolTabs.YourLiquidity}>
+            <Tabs activeKey={pageTabSelected} centered>
+              <Tabs.TabPane key={PageTabs.YourLiquidity}>
                 <PoolCardWrapper
-                  selectedTab={selectedTab}
-                  handleChange={handleChange}
+                  selectedTab={poolCategory as PoolCategory}
+                  handleChange={onChangePoolCategory}
                   poolsSelected={<DepositedPools />}
                   hideHeaderOption={true}
                 />
               </Tabs.TabPane>
-              <Tabs.TabPane key={LiquidityPoolTabs.Pools}>
+              <Tabs.TabPane key={PageTabs.Pools}>
                 <PoolCardWrapper
-                  selectedTab={selectedTab}
-                  handleChange={handleChange}
+                  selectedTab={poolCategory as PoolCategory}
+                  handleChange={onChangePoolCategory}
                   poolsSelected={poolsSelected}
                 />
               </Tabs.TabPane>
