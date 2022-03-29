@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { usePool } from '@senhub/providers'
+import { PoolData } from '@senswap/sen-js'
 
 import configs from 'app/configs'
-import { PoolsState } from 'os/store/pools.reducer'
 
 const {
   sol: { senOwners },
 } = configs
 
 export const useSentrePools = () => {
-  const [sentrePools, setSentrePools] = useState<PoolsState>({})
+  const [sentrePools, setSentrePools] = useState({})
   const { pools } = usePool()
 
   const checkSentrePools = useCallback(
@@ -18,8 +18,8 @@ export const useSentrePools = () => {
   )
 
   const filterSentrePools = useCallback(
-    (pools: PoolsState) => {
-      const newSentrePools: PoolsState = {}
+    (pools) => {
+      const newSentrePools: Record<string, PoolData> = {}
       for (const poolAddress in pools)
         if (checkSentrePools(poolAddress))
           newSentrePools[poolAddress] = pools[poolAddress]

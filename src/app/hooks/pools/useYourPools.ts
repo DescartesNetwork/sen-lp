@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { usePool, useWallet } from '@senhub/providers'
+import { PoolData } from '@senswap/sen-js'
 
-import { PoolsState } from 'os/store/pools.reducer'
 import { AppState } from 'app/model'
 
 export const useYourPools = () => {
-  const [yourPools, setYourPools] = useState<PoolsState>({})
+  const [yourPools, setYourPools] = useState({})
   const lpts = useSelector((state: AppState) => state.lpts)
   const { wallet } = useWallet()
   const { pools } = usePool()
 
   const getYourPools = useCallback(() => {
-    const newYourPools: PoolsState = {}
+    const newYourPools: Record<string, PoolData> = {}
     for (const lptAddr in lpts) {
       const { pool } = lpts[lptAddr]
       const poolData = pools[pool]
