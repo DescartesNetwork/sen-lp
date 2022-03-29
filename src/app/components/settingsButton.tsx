@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Popover, Space, Switch, Typography, Button } from 'antd'
 import IonIcon from 'shared/antd/ionicon'
 
-import { RootDispatch } from 'os/store'
-import { AppState } from 'app/model'
+import { AppDispatch, AppState } from 'app/model'
 import { setShowArchived } from 'app/model/settings.controller'
 
 const SettingsButton = () => {
-  const dispatch = useDispatch<RootDispatch>()
+  const dispatch = useDispatch<AppDispatch>()
   const {
     settings: { showArchived },
   } = useSelector((state: AppState) => state)

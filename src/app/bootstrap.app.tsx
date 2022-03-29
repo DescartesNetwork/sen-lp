@@ -7,8 +7,7 @@ import {
   MintProvider,
 } from '@senhub/providers'
 
-import PageView from 'app/page'
-import WidgetView from 'app/widget'
+import View from 'app/view'
 
 import model from 'app/model'
 import configs from 'app/configs'
@@ -29,35 +28,12 @@ export const Page = () => {
           <AccountProvider>
             <WalletProvider>
               <Provider store={model}>
-                <PageView />
+                <View />
               </Provider>
             </WalletProvider>
           </AccountProvider>
         </PoolProvider>
       </MintProvider>
     </UIProvider>
-  )
-}
-
-export const widgetConfig: WidgetConfig = {
-  size: 'small',
-  type: 'solid',
-}
-
-export const Widget = () => {
-  return (
-    <MintProvider>
-      <UIProvider appId={appId} antd>
-        <PoolProvider>
-          <AccountProvider>
-            <WalletProvider>
-              <Provider store={model}>
-                <WidgetView />
-              </Provider>
-            </WalletProvider>
-          </AccountProvider>
-        </PoolProvider>
-      </UIProvider>
-    </MintProvider>
   )
 }
