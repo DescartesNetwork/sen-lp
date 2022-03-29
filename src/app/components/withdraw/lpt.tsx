@@ -17,15 +17,17 @@ const LPT = ({
   lpt,
   lptAddress,
   onChange,
+  poolAddress,
 }: {
   lpt: bigint
   lptAddress: string
+  poolAddress: string
   onChange: (value: bigint) => void
 }) => {
-  const lpts = useSelector((state: AppState) => state.lpts)
+  const { lpts } = useSelector((state: AppState) => state)
   const { pools } = usePool()
-  const { amount, pool } = lpts?.[lptAddress] || {}
-  const { mint_lpt } = pools?.[pool] || {}
+  const { amount } = lpts?.[lptAddress] || {}
+  const { mint_lpt } = pools?.[poolAddress] || {}
 
   const balance = useMemo(() => {
     if (!amount) return '0'
