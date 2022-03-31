@@ -40,9 +40,7 @@ const DepositedPools = () => {
       dispatch(selectPool(address))
       dispatch(handleOpenDrawer(false))
       query.set(QueryParams.address, address)
-      return history.push(
-        `${myRoute}/${QueryParams.details}?${query.toString()}`,
-      )
+      return history.push(`${myRoute}/details?${query.toString()}`)
     },
     [dispatch, history, query],
   )

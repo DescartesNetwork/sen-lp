@@ -6,7 +6,9 @@ import { PoolData } from '@senswap/sen-js'
 import { AppState } from 'app/model'
 
 export const useDepositedPools = () => {
-  const [depositedPools, setDepositedPools] = useState({})
+  const [depositedPools, setDepositedPools] = useState<
+    Record<string, PoolData>
+  >({})
   const lpts = useSelector((state: AppState) => state.lpts)
   const { pools } = usePool()
 

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import { Button } from 'antd'
 import configs from 'app/configs'
-import { PoolTabs, QueryParams } from 'app/constant'
+import { QueryParams } from 'app/constant'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
 import IonIcon from 'shared/antd/ionicon'
 
@@ -12,13 +12,7 @@ const {
   route: { myRoute },
 } = configs
 
-const PoolCardAction = ({
-  poolAddress,
-  category,
-}: {
-  poolAddress: string
-  category: PoolTabs
-}) => {
+const PoolCardAction = ({ poolAddress }: { poolAddress: string }) => {
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -27,7 +21,7 @@ const PoolCardAction = ({
       await dispatch(selectPool(address))
       await dispatch(handleOpenDrawer(false))
       return history.push(
-        `${myRoute}/${QueryParams.details}?${QueryParams.address}=${address}`,
+        `${myRoute}/details?${QueryParams.address}=${address}`,
       )
     },
     [dispatch, history],

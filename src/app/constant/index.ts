@@ -12,22 +12,19 @@ export enum OrderState {
   Canceled = 5,
 }
 
-export enum PoolTabs {
+export enum PoolCategory {
   Sentre = 'sentre-pools',
-  Deposited = 'deposited-pools',
   YourPools = 'your-pools',
   Community = 'community-pools',
 }
 
-export enum LiquidityPoolTabs {
+export enum PageTabs {
   YourLiquidity = 'your-liquidity',
   Pools = 'pools',
 }
 
 export enum QueryParams {
-  details = 'details',
   address = 'poolAddress',
-  category = 'category',
   wrapTab = 'tab',
   poolCategory = 'pool_category',
 }

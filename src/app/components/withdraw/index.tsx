@@ -22,7 +22,7 @@ const Withdraw = ({
   const [amounts, setAmounts] = useState<string[]>([])
   const [decimals, setDecimals] = useState([0, 0])
   const [loading, setLoading] = useState(false)
-  const lpts = useSelector((state: AppState) => state.lpts)
+  const { lpts } = useSelector((state: AppState) => state)
 
   const lptAddress =
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
@@ -34,8 +34,8 @@ const Withdraw = ({
   const { pools } = usePool()
   const { getMint } = useMint()
 
-  const { mint_a, mint_b, mint_lpt, reserve_a, reserve_b } =
-    pools?.[lptPoolAddress] || {}
+  const { reserve_a, reserve_b, mint_lpt } = pools?.[lptPoolAddress] || {}
+  const { mint_a, mint_b } = pools?.[poolAddress]
   const mintAddresses = [mint_a, mint_b]
 
   const fetchData = useCallback(async () => {
@@ -114,7 +114,12 @@ const Withdraw = ({
         <Typography.Title level={5}>Withdraw Liquidity</Typography.Title>
       </Col>
       <Col span={24}>
-        <LPT lpt={lpt} lptAddress={lptAddress} onChange={setLPT} />
+        <LPT
+          lpt={lpt}
+          poolAddress={poolAddress}
+          lptAddress={lptAddress}
+          onChange={setLPT}
+        />
       </Col>
       <Col span={24}>
         <Info mintAddresses={mintAddresses} amounts={amounts} />
