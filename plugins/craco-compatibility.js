@@ -25,7 +25,10 @@ const overrideWebpackConfig = ({ context, webpackConfig, pluginOptions }) => {
     crypto: require.resolve('crypto-browserify'),
     https: require.resolve('https-browserify'),
     path: require.resolve('path-browserify'),
+    url: require.resolve('url/'),
     fs: false,
+    // For Jupiter Aggregator
+    process: require.resolve('process/browser'),
   }
   // Fix unrecognized change / caching problem
   webpackConfig.cache.buildDependencies.config.push(
