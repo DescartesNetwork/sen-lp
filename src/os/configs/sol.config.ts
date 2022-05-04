@@ -1,17 +1,5 @@
 import { Net } from 'shared/runtime'
 
-const balancing = () => {
-  const endPoints = [
-    'https://ssc-dao.genesysgo.net/',
-    // 'https://sentre.genesysgo.net',
-    'https://solana-api.projectserum.com',
-    'https://api.google.mainnet-beta.solana.com',
-  ]
-  const rand = Math.floor(Math.random() * 100) % endPoints.length
-  console.log('Debug OS RPC:', endPoints[rand])
-  return endPoints[rand]
-}
-
 const SOLVARS = {
   spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
   splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
@@ -52,7 +40,7 @@ const conf: Record<Net, Conf> = {
    */
   mainnet: {
     ...SOLVARS,
-    node: balancing(),
+    node: 'https://ssc-dao.genesysgo.net',
     swapAddress: 'SSW7ooZ1EbEognq5GosbygA3uWW1Hq1NsFq6TsftCFV',
     taxmanAddress: '9doo2HZQEmh2NgfT3Yx12M89aoBheycYqH1eaR5gKb3e',
   },
