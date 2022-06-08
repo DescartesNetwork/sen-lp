@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 
 import { Button, Col, Empty, Row } from 'antd'
 import PoolCard from '../components/poolCard'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import configs from 'app/configs'
 import { onSetTotalTvl, selectPool } from 'app/model/main.controller'

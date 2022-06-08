@@ -1,4 +1,4 @@
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 
 import { OrderData } from '@senswap/sen-js'
 import { Typography } from 'antd'

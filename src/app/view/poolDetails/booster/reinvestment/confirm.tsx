@@ -5,7 +5,7 @@ import { utils } from '@senswap/sen-js'
 
 import { Button, Col, Card, Modal, Row, Space, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { AppState } from 'app/model'
 import { numeric } from 'shared/util'

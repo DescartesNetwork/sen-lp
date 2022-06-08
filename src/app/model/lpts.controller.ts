@@ -38,6 +38,7 @@ export const getLPTs = createAsyncThunk(
       )
     ).map((re) => {
       if (!re?.data) return null
+      //@ts-ignore
       return splt.parseMintData(re.data)
     })
     if (!mintData?.length) return {}

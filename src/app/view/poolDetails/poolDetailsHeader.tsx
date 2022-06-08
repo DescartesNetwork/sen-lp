@@ -4,7 +4,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import { usePool, useWallet } from '@senhub/providers'
 
 import { Button, Col, Popover, Row, Space, Tooltip, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
 import SwapButton from 'app/components/swapButton'
 import PoolManagement from 'app/view/poolDetails/management'

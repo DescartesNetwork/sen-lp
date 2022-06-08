@@ -4,7 +4,7 @@ import { useAccount, usePool, useWallet } from '@senhub/providers'
 import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Modal, Button, Typography, Space } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import AmountSelect, { AmountSelectOnChnage } from './amountSelect'
 
 import { notifyError, notifySuccess } from 'app/helper'

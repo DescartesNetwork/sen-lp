@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import configs from 'app/configs'
 import { QueryParams } from 'app/constant'
 import { handleOpenDrawer, selectPool } from 'app/model/main.controller'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 const {
   route: { myRoute },

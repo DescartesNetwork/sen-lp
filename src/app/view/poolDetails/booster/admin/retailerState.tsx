@@ -7,7 +7,7 @@ import { AppState } from 'app/model'
 import { notifyError, notifySuccess } from 'app/helper'
 import configs from 'app/configs'
 import { account } from '@senswap/sen-js'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 const RetailerState = ({ retailerAddress }: { retailerAddress: string }) => {
   const [loading, setLoading] = useState(false)
