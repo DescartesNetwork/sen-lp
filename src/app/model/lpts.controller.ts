@@ -37,9 +37,8 @@ export const getLPTs = createAsyncThunk(
         mintPublicKeys,
       )
     ).map((re) => {
-
       if (!re?.data) return null
-      // @ts-ignore           
+      //@ts-ignore
       return splt.parseMintData(re.data)
     })
     if (!mintData?.length) return {}
