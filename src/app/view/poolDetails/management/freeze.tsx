@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { usePool } from '@senhub/providers'
 
 import { Button, Row, Col, Typography, Badge, Space } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { explorer } from 'shared/util'
 

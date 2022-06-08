@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 
 import { Col, Empty, Row } from 'antd'
 import PoolCard from '../components/poolCard'

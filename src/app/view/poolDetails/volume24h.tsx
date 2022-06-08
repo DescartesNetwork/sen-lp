@@ -4,7 +4,7 @@ import moment from 'moment'
 import { useUI } from '@senhub/providers'
 
 import { Button, Card, Col, Row, Space, Spin, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import SenChart from 'app/components/chart'
 
 import PoolService from 'app/stat/logic/pool/pool'

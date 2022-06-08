@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 import { useUI } from '@senhub/providers'
 
 import { Affix, Button } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { handleOpenDrawer } from 'app/model/main.controller'
 

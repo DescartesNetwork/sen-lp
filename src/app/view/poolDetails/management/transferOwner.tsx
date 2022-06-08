@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { account } from '@senswap/sen-js'
 
 import { Button, Row, Col, Input, Card, Space, Typography } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { explorer } from 'shared/util'
 

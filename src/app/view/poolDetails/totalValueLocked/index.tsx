@@ -7,7 +7,7 @@ import { Card, Col, Row, Typography, Space, Button } from 'antd'
 import PoolTVL from 'app/components/poolTVL'
 
 import { AppState } from 'app/model'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import LiquidityPosition from './liquidityPosition'
 import { QueryParams } from 'app/constant'
 

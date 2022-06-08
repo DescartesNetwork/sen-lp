@@ -2,7 +2,7 @@ import { useHistory } from 'react-router-dom'
 import { usePool } from '@senhub/providers'
 
 import { Button, Col, Row, Space, Typography, Popover } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import configs from 'app/configs'
 import { PoolStatus } from 'app/constant'

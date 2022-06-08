@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 import { usePool, useWallet } from '@senhub/providers'
 
 import { Col, Empty, Row } from 'antd'

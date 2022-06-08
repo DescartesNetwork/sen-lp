@@ -1,6 +1,6 @@
 import { Space, Select, Divider, Typography } from 'antd'
 import { MintAvatar, MintSymbol } from 'shared/antd/mint'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import Avatar from 'antd/lib/avatar/avatar'
 
 const DEFAULT_VALUE = 'Select'

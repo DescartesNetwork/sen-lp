@@ -1,6 +1,6 @@
 import { ReactElement, Fragment, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import LazyLoad from '@senswap/react-lazyload'
+import LazyLoad from '@sentre/react-lazyload'
 
 import { Row, Col, Empty } from 'antd'
 import PoolCard from '../components/poolCard'

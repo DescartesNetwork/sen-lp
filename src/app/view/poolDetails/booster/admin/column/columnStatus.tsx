@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 
 import { Button, Modal, Typography } from 'antd'
 import OrderStatus from 'app/components/orderStatus'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import ConfirmOrder from './confirmOrder'
 
 import { OrderState } from 'app/constant'

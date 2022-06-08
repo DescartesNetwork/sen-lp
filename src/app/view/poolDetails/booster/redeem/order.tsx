@@ -5,7 +5,7 @@ import moment from 'moment'
 
 import { Card, Row, Col, Space, Typography, Button, Collapse } from 'antd'
 import { MintSymbol } from 'shared/antd/mint'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import Action from './action'
 import Caption from 'app/components/caption'
 import OrderStatus from 'app/components/orderStatus'

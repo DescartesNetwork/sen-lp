@@ -4,7 +4,7 @@ import { account, utils } from '@senswap/sen-js'
 import { useMint, usePool } from '@senhub/providers'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 import PoolPrice from 'app/components/poolPrice'
 import { MintSymbol } from 'shared/antd/mint'
 

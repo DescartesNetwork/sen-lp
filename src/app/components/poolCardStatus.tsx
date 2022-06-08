@@ -1,7 +1,7 @@
 import { usePool, useWallet } from '@senhub/providers'
 
 import { Space } from 'antd'
-import IonIcon from 'shared/antd/ionicon'
+import IonIcon from '@sentre/antd-ionicon'
 
 import { PoolStatus } from 'app/constant'
 
