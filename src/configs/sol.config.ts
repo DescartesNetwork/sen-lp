@@ -1,6 +1,6 @@
 import { Purchasing } from '@senswap/sen-js'
 
-import { Net } from '@sentre/senhub'
+import { Net, rpc } from '@sentre/senhub'
 
 /**
  * Contructor
@@ -33,7 +33,7 @@ const configs: Record<Net, Config> = {
     purchasingAddress: 'FHeonxeZFH76K57KGRWgsmE97tiupcHDjvWNKMQDmdVd',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-    nodeUrl: 'https://api.devnet.solana.com',
+    nodeUrl: rpc,
     get purchasing() {
       return new Purchasing(
         this.purchasingAddress,
@@ -57,7 +57,7 @@ const configs: Record<Net, Config> = {
     purchasingAddress: '',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-    nodeUrl: 'https://api.testnet.solana.com',
+    nodeUrl: rpc,
     get purchasing() {
       return new Purchasing(
         this.purchasingAddress,
@@ -84,7 +84,7 @@ const configs: Record<Net, Config> = {
     purchasingAddress: 'Ecw8Vh3cwwwwMsaU63mW6knKMsuaiSakVDvKxB5nyhFC',
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-    nodeUrl: 'https://ssc-dao.genesysgo.net',
+    nodeUrl: rpc,
     get purchasing() {
       return new Purchasing(
         this.purchasingAddress,
