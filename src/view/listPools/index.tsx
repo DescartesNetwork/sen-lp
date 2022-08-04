@@ -70,7 +70,10 @@ const ListPools = () => {
               options={(
                 Object.keys(PageTabs) as Array<keyof typeof PageTabs>
               ).map((key) => {
-                return { label: key, value: PageTabs[key] }
+                return {
+                  label: PageTabs[key].replace('-', ' '),
+                  value: PageTabs[key],
+                }
               })}
               value={pageTabSelected}
               onChange={(val) => onChangeWrapTab(val.toString() as PageTabs)}
