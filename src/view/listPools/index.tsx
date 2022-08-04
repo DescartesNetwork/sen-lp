@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Col, Row, Tabs, Radio } from 'antd'
+import { Col, Row, Tabs, Segmented } from 'antd'
 import CommunityPools from 'view/listPools/communityPools'
 import SentrePools from 'view/listPools/sentrePools'
 import YourPools from 'view/listPools/yourPools'
@@ -63,19 +63,23 @@ const ListPools = () => {
   return (
     <Row gutter={[24, 24]} justify="center" className="list-pool">
       <Col xs={24} md={12} lg={8}>
-        <Row gutter={[24, 24]}>
-          <Col span={24}>
-            <Radio.Group
-              onChange={(e) => onChangeWrapTab(e.target.value)}
-              className="pool-option"
-              disabled={!listPoolAddress.length}
+        <Row gutter={[24, 24]} justify="center">
+          <Col>
+            <Segmented
+              className="liquidity-and-pool"
+              options={(
+                Object.keys(PageTabs) as Array<keyof typeof PageTabs>
+              ).map((key) => {
+                return {
+                  label: PageTabs[key].replace('-', ' '),
+                  value: PageTabs[key],
+                }
+              })}
               value={pageTabSelected}
-            >
-              <Radio.Button value={PageTabs.YourLiquidity}>
-                Your liquidity
-              </Radio.Button>
-              <Radio.Button value={PageTabs.Pools}>Pools</Radio.Button>
-            </Radio.Group>
+              onChange={(val) => onChangeWrapTab(val.toString() as PageTabs)}
+              block
+              disabled={!listPoolAddress.length}
+            />
           </Col>
           <Col span={24}>
             <Tabs activeKey={pageTabSelected} centered>
