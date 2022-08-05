@@ -22,16 +22,6 @@ const config: Record<Env, Config> = {
   },
 
   /**
-   * Staging configurations
-   */
-  staging: {
-    exoticFee: BigInt(2500000),
-    exoticTax: BigInt(0),
-    correlatedFee: BigInt(500000),
-    correlatedTax: BigInt(0),
-  },
-
-  /**
    * Production configurations
    */
   production: {

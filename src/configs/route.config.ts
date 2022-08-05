@@ -20,15 +20,6 @@ const config: Record<Env, Config> = {
   },
 
   /**
-   * Staging configurations
-   */
-  staging: {
-    myRoute: '/app/sen_lp',
-    swapRoute: '/app/sen_swap',
-    farmRoute: '/app/sen_farming',
-  },
-
-  /**
    * Production configurations
    */
   production: {
