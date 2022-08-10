@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
-import { useMint, usePool, util } from '@sentre/senhub'
+import {
+  usePool,
+  util,
+  tokenProvider,
+  useGetMintData,
+  useGetMintDecimals,
+} from '@sentre/senhub'
 
 /**
  * @param mintAddress
@@ -8,7 +14,8 @@ import { useMint, usePool, util } from '@sentre/senhub'
  * @returns
  */
 export const useMintPrice = (mintAddress: string, strict?: boolean) => {
-  const { tokenProvider, getMint, getDecimals } = useMint()
+  const getDecimals = useGetMintDecimals()
+  const getMint = useGetMintData()
   const { pools } = usePool()
   const [mintPrice, setMintPrice] = useState(0)
 
@@ -28,13 +35,13 @@ export const useMintPrice = (mintAddress: string, strict?: boolean) => {
       }
       return price
     },
-    [strict, tokenProvider],
+    [strict],
   )
 
   const getTokenUsd = useCallback(
     async (mintAddress: string, amountBigint: bigint) => {
       const mintPrice = await getTokenPrice(mintAddress)
-      const mintDecimals = await getDecimals(mintAddress)
+      const mintDecimals = (await getDecimals({ mintAddress })) || 0
       const amount = Number(utils.undecimalize(amountBigint, mintDecimals))
       return amount * mintPrice
     },
@@ -49,9 +56,9 @@ export const useMintPrice = (mintAddress: string, strict?: boolean) => {
       if (!poolData) return 0
       const { reserve_a, reserve_b, mint_a, mint_b } = poolData
       if (reserve_a * reserve_b === BigInt(0)) return 0
-      const {
-        [lptAddress]: { supply },
-      } = await getMint({ address: lptAddress })
+      const mintDataLPT = await getMint({ mintAddress: lptAddress })
+      if (!mintDataLPT) return 0
+      const { supply } = mintDataLPT[lptAddress]
       const balanceA: number = await getTokenUsd(mint_a, reserve_a)
       const balanceB: number = await getTokenUsd(mint_b, reserve_b)
       return (balanceA + balanceB) / Number(utils.undecimalize(supply, 9))
@@ -77,7 +84,7 @@ export const useMintPrice = (mintAddress: string, strict?: boolean) => {
         return 0
       }
     },
-    [getMintLptPrice, tokenProvider],
+    [getMintLptPrice],
   )
 
   useEffect(() => {

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
 import {
   useAccount,
-  useMint,
+  useGetMintData,
   usePool,
   useWalletAddress,
   util,
@@ -31,7 +31,7 @@ const FullSide = ({
   const [disabled, setDisabled] = useState(true)
   const { pools } = usePool()
   const walletAddress = useWalletAddress()
-  const { getMint } = useMint()
+  const getMint = useGetMintData()
   const { accounts } = useAccount()
   const {
     mint_a,
@@ -83,9 +83,10 @@ const FullSide = ({
     if (!account.isAddress(walletAddress) || !account.isAddress(mint_lpt))
       return setLPT('')
     try {
-      const {
-        [mint_lpt]: { supply },
-      } = await getMint({ address: mint_lpt })
+      const mintState = await getMint({ mintAddress: mint_lpt })
+      if (!mintState) return setLPT('')
+      const { supply } = mintState[mint_lpt]
+
       const { lpt } = Swap.oracle.sided_deposit(
         amounts[0],
         amounts[1],

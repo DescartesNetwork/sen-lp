@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { useMint, usePool, util } from '@sentre/senhub'
+import { useGetMintData, usePool, util } from '@sentre/senhub'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -21,7 +21,7 @@ const Summary = ({
   const [isReverse, setIsReverse] = useState(false)
   const [totalLPT, setTotalLPT] = useState('0')
   const { lpts } = useSelector((state: AppState) => state)
-  const { getMint } = useMint()
+  const getMint = useGetMintData()
   const { pools } = usePool()
 
   const { mint_a, mint_b, reserve_a, reserve_b, mint_lpt } =
@@ -39,9 +39,9 @@ const Summary = ({
   useEffect(() => {
     if (!account.isAddress(mint_lpt)) return
     ;(async () => {
-      const {
-        [mint_lpt]: { supply, decimals },
-      } = await getMint({ address: mint_lpt })
+      const mintState = await getMint({ mintAddress: mint_lpt })
+      if (!mintState) return setTotalLPT('0')
+      const { supply, decimals } = mintState[mint_lpt]
       return setTotalLPT(utils.undecimalize(supply, decimals))
     })()
   }, [mint_lpt, getMint])
