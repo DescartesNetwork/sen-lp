@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { usePool, useWallet } from '@sentre/senhub'
+import { usePool, useWalletAddress } from '@sentre/senhub'
 
 import { Button, Card, Modal, Tabs } from 'antd'
 import Deposit from 'components/deposit'
@@ -20,9 +20,7 @@ const DepositForm = ({
 }) => {
   const [visible, setVisible] = useState(false)
   const [selectedTab, setSelectedTab] = useState('deposit')
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { pools } = usePool()
 
   const isOwner = walletAddress === pools[poolAddress]?.owner

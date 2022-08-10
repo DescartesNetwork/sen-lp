@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { usePool, useWallet, util } from '@sentre/senhub'
+import { usePool, useWalletAddress, util } from '@sentre/senhub'
 
 import { Button, Col, Popover, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -20,9 +20,7 @@ const PoolDetailsHeader = ({ poolAddress }: { poolAddress: string }) => {
   const [visible, setVisible] = useState(false)
   const history = useHistory()
   const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { mint_lpt, owner } = pools?.[poolAddress] || {}
 
   const onCopy = async () => {

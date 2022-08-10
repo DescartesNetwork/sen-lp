@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
-import { useAccount, useMint, usePool, useWallet, util } from '@sentre/senhub'
+import {
+  useAccount,
+  useMint,
+  usePool,
+  useWalletAddress,
+  util,
+} from '@sentre/senhub'
 
 import { Row, Col, Button, Radio, Space, Tag, RadioChangeEvent } from 'antd'
 import Summary from './summary'
@@ -24,9 +30,7 @@ const FullSide = ({
   const [selectMint, setSelectMint] = useState<string>('all')
   const [disabled, setDisabled] = useState(true)
   const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { getMint } = useMint()
   const { accounts } = useAccount()
   const {

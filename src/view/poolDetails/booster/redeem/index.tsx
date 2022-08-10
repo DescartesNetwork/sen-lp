@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import LazyLoad from '@sentre/react-lazyload'
-import { usePool, useWallet } from '@sentre/senhub'
+import { usePool, useWalletAddress } from '@sentre/senhub'
 
 import { Col, Empty, Row } from 'antd'
 import Order from './order'
@@ -10,9 +10,7 @@ import { AppState } from 'model'
 const Redeem = ({ poolAddress }: { poolAddress: string }) => {
   const { orders, retailers } = useSelector((state: AppState) => state)
   const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const { mint_lpt } = pools[poolAddress] || {}
   const orderAddresses = Object.keys(orders).filter((orderAddress) => {

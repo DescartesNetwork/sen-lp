@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Swap, utils } from '@senswap/sen-js'
-import { useMint, usePool, useWallet, util } from '@sentre/senhub'
+import { useMint, usePool, useWalletAddress, util } from '@sentre/senhub'
 
 import { Row, Col, Typography, Button } from 'antd'
 import LPT from './lpt'
@@ -27,9 +27,7 @@ const Withdraw = ({
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
   const lptPoolAddress = lpts?.[lptAddress]?.pool
 
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { pools } = usePool()
   const { getMint } = useMint()
 

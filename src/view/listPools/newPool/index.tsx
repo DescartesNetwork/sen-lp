@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useAccount, usePool, useWallet } from '@sentre/senhub'
+import { useAccount, usePool, useWalletAddress } from '@sentre/senhub'
 import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Modal, Button, Typography, Space } from 'antd'
@@ -31,9 +31,7 @@ const NewPool = () => {
   const [isMintAChanged, setIsMintAChanged] = useState(false)
   const [suggestions, setSuggestions] = useState([0, 0])
   const { lpts } = useSelector((state: AppState) => state)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { accounts } = useAccount()
   const { pools } = usePool()
 

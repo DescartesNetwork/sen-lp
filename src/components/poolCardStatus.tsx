@@ -1,4 +1,4 @@
-import { usePool, useWallet } from '@sentre/senhub'
+import { usePool, useWalletAddress } from '@sentre/senhub'
 
 import { Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -8,9 +8,7 @@ import { PoolStatus } from 'constant'
 const PoolCardStatus = ({ poolAddress }: { poolAddress: string }) => {
   const { pools } = usePool()
   const poolData = pools[poolAddress] || {}
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const isFrozen = poolData.state === PoolStatus.Frozen
   const isOwner = walletAddress === poolData?.owner
