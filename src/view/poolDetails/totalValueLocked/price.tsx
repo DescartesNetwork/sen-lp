@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { usePool } from '@sentre/senhub'
 
 import { Button, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import { MintAvatar } from 'shared/antd/mint'
 
 import PoolPrice from 'components/poolPrice'
+import { usePool } from 'hooks/pools/usePool'
 
 const Price = ({ poolAddress }: { poolAddress: string }) => {
   const { pools } = usePool()

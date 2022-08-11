@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import { usePool } from '@sentre/senhub'
 import { PoolData } from '@senswap/sen-js'
 
 import configs from 'configs'
+import { usePool } from 'hooks/pools/usePool'
 
 const {
   sol: { senOwners },

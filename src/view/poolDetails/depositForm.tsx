@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { usePool, useWalletAddress } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Button, Card, Modal, Tabs } from 'antd'
 import Deposit from 'components/deposit'
@@ -10,6 +10,8 @@ import WithDrawHistory from './history/withdraw'
 import Reinvestment from './booster/reinvestment'
 import Redeem from './booster/redeem'
 import Admin from './booster/admin'
+
+import { usePool } from 'hooks/pools/usePool'
 
 const DepositForm = ({
   poolAddress,

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { useGetMintData, usePool, util } from '@sentre/senhub'
+import { useGetMintData, util } from '@sentre/senhub'
 
 import { Row, Col, Card, Typography, Space, Button } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -10,6 +10,7 @@ import { MintSymbol } from 'shared/antd/mint'
 
 import { AppState } from 'model'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { usePool } from 'hooks/pools/usePool'
 
 const Summary = ({
   value = '0',

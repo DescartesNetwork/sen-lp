@@ -4,7 +4,6 @@ import { Swap, utils } from '@senswap/sen-js'
 import {
   useGetMintData,
   useGetMintDecimals,
-  usePool,
   useWalletAddress,
   util,
 } from '@sentre/senhub'
@@ -14,6 +13,7 @@ import LPT from './lpt'
 import Info from './info'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 const Withdraw = ({
   poolAddress,

@@ -1,9 +1,10 @@
-import { usePool, useWalletAddress } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { PoolStatus } from 'constant'
+import { usePool } from 'hooks/pools/usePool'
 
 const PoolCardStatus = ({ poolAddress }: { poolAddress: string }) => {
   const { pools } = usePool()

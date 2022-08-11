@@ -1,11 +1,11 @@
 import { useHistory } from 'react-router-dom'
-import { usePool } from '@sentre/senhub'
 
 import { Button, Col, Row, Space, Typography, Popover } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import configs from 'configs'
 import { PoolStatus } from 'constant'
+import { usePool } from 'hooks/pools/usePool'
 
 const {
   route: { swapRoute },

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { usePool, useWalletAddress, util } from '@sentre/senhub'
+import { useWalletAddress, util } from '@sentre/senhub'
 
 import { Button, Col, Popover, Row, Space, Tooltip, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -10,6 +10,7 @@ import SwapButton from 'components/swapButton'
 import PoolManagement from 'view/poolDetails/management'
 
 import configs from 'configs'
+import { usePool } from 'hooks/pools/usePool'
 
 const {
   route: { farmRoute },

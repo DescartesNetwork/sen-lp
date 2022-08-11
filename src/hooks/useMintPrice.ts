@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { utils } from '@senswap/sen-js'
 import {
-  usePool,
   util,
   tokenProvider,
   useGetMintData,
   useGetMintDecimals,
 } from '@sentre/senhub'
+
+import { usePool } from 'hooks/pools/usePool'
 
 /**
  * @param mintAddress

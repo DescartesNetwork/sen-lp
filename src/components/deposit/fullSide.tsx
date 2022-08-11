@@ -3,7 +3,6 @@ import { account, Swap, utils } from '@senswap/sen-js'
 import {
   useAccounts,
   useGetMintData,
-  usePool,
   useWalletAddress,
   util,
 } from '@sentre/senhub'
@@ -14,6 +13,7 @@ import Amount from 'components/amount'
 import { MintSymbol } from 'shared/antd/mint'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { usePool } from 'hooks/pools/usePool'
 
 const FullSide = ({
   poolAddress,

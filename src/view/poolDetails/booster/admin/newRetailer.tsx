@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { usePool, useWalletAddress } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Button, Row, Col } from 'antd'
 
@@ -8,6 +8,7 @@ import configs from 'configs'
 import { notifyError, notifySuccess } from 'helper'
 import { AppDispatch } from 'model'
 import { getRetailer } from 'model/retailers.controller'
+import { usePool } from 'hooks/pools/usePool'
 
 const NewRetailer = ({ poolAddress }: { poolAddress: string }) => {
   const dispatch = useDispatch<AppDispatch>()

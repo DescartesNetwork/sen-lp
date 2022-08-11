@@ -6,6 +6,7 @@ import PoolDetails from './poolDetails'
 import LptWatcher from 'components/watcher/lptWatcher'
 import RetailerWatcher from 'components/watcher/retailerWatcher'
 import OrderWatcher from 'components/watcher/orderWatcher'
+import PoolWatcher from 'components/watcher/pool.watcher'
 
 const Container = () => {
   return (
@@ -19,6 +20,7 @@ const Container = () => {
       <LptWatcher />
       <RetailerWatcher />
       <OrderWatcher />
+      <PoolWatcher />
     </Row>
   )
 }

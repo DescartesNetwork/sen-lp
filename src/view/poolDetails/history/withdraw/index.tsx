@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { usePool } from '@sentre/senhub'
 
 import { Col, RadioChangeEvent, Row, Table } from 'antd'
 import SelectDay, { DayOptions } from '../selectDay'
@@ -9,6 +8,7 @@ import { AppState } from 'model'
 import { fetchWithdrawHistories } from 'model/history.controller'
 import { HISTORY_COLUMNS } from './columns'
 import { notifyError } from 'helper'
+import { usePool } from 'hooks/pools/usePool'
 
 const WithDrawHistory = () => {
   const [pastDays, setPastDays] = useState(DayOptions.SEVEN_DAYS)

@@ -1,12 +1,13 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { useGetMintData, usePool, util } from '@sentre/senhub'
+import { useGetMintData, util } from '@sentre/senhub'
 
 import { Col, Row, Space, Typography } from 'antd'
 import Price from './price'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 const APY_DATE = 365
 

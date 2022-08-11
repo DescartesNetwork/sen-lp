@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
 import { utils } from '@senswap/sen-js'
-import { usePool, util } from '@sentre/senhub'
+import { util } from '@sentre/senhub'
 
 import { Button, Row, Col } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 import FeeInput from './FeeInput'
+
+import { usePool } from 'hooks/pools/usePool'
 
 // Fee decimal = 9
 // however feeUI = Fee * 100 (%)

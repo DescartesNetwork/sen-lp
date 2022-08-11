@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { usePool, useWalletAddress } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { Row, Col, Space, Typography, Switch, Table, Button } from 'antd'
 import NewRetailer from './newRetailer'
@@ -11,6 +11,7 @@ import { ADMIN_COLUMNS } from './column'
 import { AppDispatch, AppState } from 'model'
 import { getOrders } from 'model/orders.controller'
 import { OrderState } from 'constant'
+import { usePool } from 'hooks/pools/usePool'
 import './index.less'
 
 const AMOUNT_ROW = 6
