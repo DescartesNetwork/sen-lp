@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { account, utils } from '@senswap/sen-js'
-import { useAccount, useWalletAddress, util } from '@sentre/senhub'
+import { useAccounts, useWalletAddress, util } from '@sentre/senhub'
 
 import { Row, Col, Button, Typography, Space } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -26,7 +26,7 @@ const AmountSelect = ({
   const [amount, setAmount] = useState('')
   const [activeMintAddress, setActiveMintAddress] = useState<string>('Select')
   const [accountAddress, setAccountAddress] = useState('')
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
   const decimals = useMintDecimals(activeMintAddress) || 0
   const walletAddress = useWalletAddress()
 

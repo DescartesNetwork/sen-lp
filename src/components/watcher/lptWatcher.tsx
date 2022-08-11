@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { useAccount, useWalletAddress } from '@sentre/senhub'
+import { useAccounts, useWalletAddress } from '@sentre/senhub'
 
 import { notifyError } from 'helper'
 import { AppDispatch } from 'model'
@@ -12,7 +12,7 @@ let watchId = 0
 
 const LptWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
   const walletAddress = useWalletAddress()
 
   // First-time fetching

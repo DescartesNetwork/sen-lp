@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
 import {
-  useAccount,
+  useAccounts,
   useGetMintData,
   usePool,
   useWalletAddress,
@@ -32,7 +32,7 @@ const FullSide = ({
   const { pools } = usePool()
   const walletAddress = useWalletAddress()
   const getMint = useGetMintData()
-  const { accounts } = useAccount()
+  const accounts = useAccounts()
   const {
     mint_a,
     mint_b,
