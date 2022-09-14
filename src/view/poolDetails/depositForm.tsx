@@ -27,6 +27,41 @@ const DepositForm = ({
 
   const isOwner = walletAddress === pools[poolAddress]?.owner
   const isDeposit = selectedTab === 'deposit'
+  const actionItems = [
+    {
+      label: 'Deposit',
+      key: 'deposit',
+      children: <Deposit poolAddress={poolAddress} />,
+    },
+    {
+      label: 'Withdraw',
+      key: 'withdraw',
+      children: <Withdraw poolAddress={poolAddress} />,
+    },
+    {
+      label: 'Reinvestmnet',
+      key: 'reinvestmnet',
+      children: <Reinvestment poolAddress={poolAddress} />,
+    },
+    {
+      label: 'Redeem',
+      key: 'redeem',
+      children: <Redeem poolAddress={poolAddress} />,
+    },
+  ]
+
+  const historyItems = [
+    {
+      label: 'Deposit',
+      key: 'deposit-history',
+      children: <DepositHistory />,
+    },
+    {
+      label: 'Withdraw',
+      key: 'withdraw-history',
+      children: <WithDrawHistory />,
+    },
+  ]
 
   return (
     <Card bordered={false} style={{ height: isDeposit ? '100%' : 'auto' }}>
@@ -42,39 +77,26 @@ const DepositForm = ({
         }
         activeKey={selectedTab}
         onChange={setSelectedTab}
-      >
-        <Tabs.TabPane tab="Deposit" key="deposit">
-          <Deposit poolAddress={poolAddress} />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Withdraw" key="withdraw">
-          <Withdraw poolAddress={poolAddress} />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="reinvestmnet" tab="Reinvestment">
-          <Reinvestment poolAddress={poolAddress} />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="redeem" tab="Redeem">
-          <Redeem poolAddress={poolAddress} />
-        </Tabs.TabPane>
-        {isOwner ? (
-          <Tabs.TabPane key="admin" tab="Admin">
-            <Admin poolAddress={poolAddress} />
-          </Tabs.TabPane>
-        ) : null}
-      </Tabs>
+        items={
+          isOwner
+            ? actionItems
+            : [
+                ...actionItems,
+                {
+                  label: 'Admin',
+                  key: 'admin',
+                  children: <Admin poolAddress={poolAddress} />,
+                },
+              ]
+        }
+      />
       <Modal
         closeIcon={<IonIcon name="close-outline" />}
-        visible={visible}
+        open={visible}
         onCancel={() => setVisible(false)}
         footer={false}
       >
-        <Tabs>
-          <Tabs.TabPane tab="Deposit" key="deposit-history">
-            <DepositHistory />
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="Withdraw" key="withdraw-history">
-            <WithDrawHistory />
-          </Tabs.TabPane>
-        </Tabs>
+        <Tabs items={historyItems} />
       </Modal>
     </Card>
   )

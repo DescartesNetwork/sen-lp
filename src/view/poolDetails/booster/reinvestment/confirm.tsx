@@ -129,7 +129,7 @@ const Confirm = ({
 
   return (
     <Modal
-      visible={visible}
+      open={visible}
       footer={false}
       closeIcon={<IonIcon name="close-outline" />}
       onCancel={onClose}
