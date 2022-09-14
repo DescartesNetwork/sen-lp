@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useMint } from '@sentre/senhub'
+import { useGetMintDecimals } from '@sentre/senhub'
 import { account } from '@senswap/sen-js'
 
 /**
@@ -10,12 +10,12 @@ import { account } from '@senswap/sen-js'
  */
 const useMintDecimals = (mintAddress: string) => {
   const [decimals, setDecimals] = useState<number | undefined>(undefined)
-  const { getDecimals } = useMint()
+  const getDecimals = useGetMintDecimals()
 
   const fetchDecimals = useCallback(async () => {
     if (!account.isAddress(mintAddress)) return setDecimals(undefined)
     try {
-      const decimals = await getDecimals(mintAddress)
+      const decimals = (await getDecimals({ mintAddress })) || 0
       return setDecimals(decimals)
     } catch (er: any) {
       return setDecimals(undefined)

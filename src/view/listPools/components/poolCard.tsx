@@ -1,7 +1,7 @@
 import { Fragment, ReactElement, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { usePool, util } from '@sentre/senhub'
+import { util } from '@sentre/senhub'
 
 import { Row, Col, Card, Space, Typography, Divider, Tooltip } from 'antd'
 import PoolTVL from 'components/poolTVL'
@@ -12,6 +12,7 @@ import { AppState } from 'model'
 import { fetchStatPoolData } from 'model/stat.controller'
 import { PoolStatus } from 'constant'
 import { useMyLp } from 'hooks/useMyLp'
+import { usePool } from 'hooks/pools/usePool'
 
 const PoolCard = ({
   poolAddress,

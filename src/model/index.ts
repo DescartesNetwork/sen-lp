@@ -8,6 +8,7 @@ import retailers from 'model/retailers.controller'
 import orders from 'model/orders.controller'
 import settings from 'model/settings.controller'
 import history from 'model/history.controller'
+import pools from 'model/pools.controller'
 
 /**
  * Isolated store
@@ -24,9 +25,11 @@ const model = configureStore({
     orders,
     settings,
     history,
+    pools,
   },
 })
 
 export type AppState = ReturnType<typeof model.getState>
 export type AppDispatch = typeof model.dispatch
+
 export default model

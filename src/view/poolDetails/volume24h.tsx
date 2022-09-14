@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import moment from 'moment'
-import { useUI, DataLoader, util } from '@sentre/senhub'
+import { DataLoader, util, useInfix, Infix } from '@sentre/senhub'
 
 import { Button, Card, Col, Row, Space, Spin, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
@@ -26,9 +26,7 @@ const Volume24h = () => {
   )
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(true)
-  const {
-    ui: { width },
-  } = useUI()
+  const infix = useInfix()
 
   const volumeChartConfigs = {
     borderColor: CHART_CONFIGS.transparent,
@@ -68,7 +66,7 @@ const Volume24h = () => {
   }, [fetchChart])
 
   const iconName = visible ? 'chevron-down-outline' : 'chevron-forward-outline'
-  const isMobile = width < 768
+  const isMobile = infix < Infix.md
 
   useEffect(() => {
     if (!isMobile) return setVisible(true)

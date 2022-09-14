@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { useUI } from '@sentre/senhub'
+import { useInfix, Infix } from '@sentre/senhub'
 
 import { Card, Col, Row, Typography, Space, Button } from 'antd'
 import PoolTVL from 'components/poolTVL'
@@ -16,16 +16,14 @@ const TotalValueLocked = () => {
     main: { selectedPoolAddress },
   } = useSelector((state: AppState) => state)
   const [visible, setVisible] = useState(true)
-  const {
-    ui: { width },
-  } = useUI()
   const location = useLocation()
+  const infix = useInfix()
   const query = useMemo(() => new URLSearchParams(location.search), [location])
   const queryPoolAddress = query.get(QueryParams.address) || ''
 
   const poolAddress = queryPoolAddress || selectedPoolAddress
   const iconName = visible ? 'chevron-down-outline' : 'chevron-forward-outline'
-  const isMobile = width < 768
+  const isMobile = infix < Infix.md
 
   useEffect(() => {
     if (!isMobile) return setVisible(true)

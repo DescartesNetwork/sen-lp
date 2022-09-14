@@ -1,12 +1,13 @@
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { usePool, util } from '@sentre/senhub'
+import { util } from '@sentre/senhub'
 
 import { Col, Divider, Row, Space, Typography, Button } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { MintSymbol } from 'shared/antd/mint'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 const Form = ({
   poolAddress,

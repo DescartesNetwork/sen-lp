@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useAccount, usePool, useWallet } from '@sentre/senhub'
+import { useHistory } from 'react-router-dom'
+import { useAccounts, useWalletAddress } from '@sentre/senhub'
 import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Modal, Button, Typography, Space } from 'antd'
@@ -12,7 +13,7 @@ import { AppState } from 'model'
 import configs from 'configs'
 import { useMintPrice } from 'hooks/useMintPrice'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
-import { useHistory } from 'react-router-dom'
+import { usePool } from 'hooks/pools/usePool'
 import { PageTabs, PoolCategory, QueryParams } from 'constant'
 
 const {
@@ -31,10 +32,8 @@ const NewPool = () => {
   const [isMintAChanged, setIsMintAChanged] = useState(false)
   const [suggestions, setSuggestions] = useState([0, 0])
   const { lpts } = useSelector((state: AppState) => state)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
-  const { accounts } = useAccount()
+  const walletAddress = useWalletAddress()
+  const accounts = useAccounts()
   const { pools } = usePool()
 
   // String combination of mint_a and mint_b

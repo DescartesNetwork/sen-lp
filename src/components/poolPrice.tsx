@@ -1,10 +1,11 @@
 import { utils } from '@senswap/sen-js'
-import { usePool, util } from '@sentre/senhub'
+import { util } from '@sentre/senhub'
 
 import { Space, Typography } from 'antd'
 import { MintSymbol } from 'shared/antd/mint'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { usePool } from 'hooks/pools/usePool'
 
 const PoolPrice = ({
   poolAddress,
