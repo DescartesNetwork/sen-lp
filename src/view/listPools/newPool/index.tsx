@@ -150,7 +150,7 @@ const NewPool = () => {
         New
       </Button>
       <Modal
-        visible={visible}
+        open={visible}
         onCancel={onClose}
         closeIcon={<IonIcon name="close" />}
         footer={null}

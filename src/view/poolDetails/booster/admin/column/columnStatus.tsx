@@ -24,7 +24,7 @@ const ColumnStatus = ({
         </Button>
         <Modal
           title={<Typography.Title level={4}>Confirm order</Typography.Title>}
-          visible={visible}
+          open={visible}
           footer={null}
           onCancel={() => setVisible(false)}
           closeIcon={<IonIcon name="close" />}

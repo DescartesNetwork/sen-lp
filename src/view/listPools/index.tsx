@@ -60,6 +60,32 @@ const ListPools = () => {
     }
   }, [poolCategory])
 
+  const items = [
+    {
+      label: '',
+      key: PageTabs.YourLiquidity,
+      children: (
+        <PoolCardWrapper
+          selectedTab={poolCategory as PoolCategory}
+          handleChange={onChangePoolCategory}
+          poolsSelected={<DepositedPools />}
+          hideHeaderOption={true}
+        />
+      ),
+    },
+    {
+      label: '',
+      key: PageTabs.Pools,
+      children: (
+        <PoolCardWrapper
+          selectedTab={poolCategory as PoolCategory}
+          handleChange={onChangePoolCategory}
+          poolsSelected={poolsSelected}
+        />
+      ),
+    },
+  ]
+
   return (
     <Row gutter={[24, 24]} justify="center" className="list-pool">
       <Col xs={24} md={12} lg={8}>
@@ -82,23 +108,7 @@ const ListPools = () => {
             />
           </Col>
           <Col span={24}>
-            <Tabs activeKey={pageTabSelected} centered>
-              <Tabs.TabPane key={PageTabs.YourLiquidity}>
-                <PoolCardWrapper
-                  selectedTab={poolCategory as PoolCategory}
-                  handleChange={onChangePoolCategory}
-                  poolsSelected={<DepositedPools />}
-                  hideHeaderOption={true}
-                />
-              </Tabs.TabPane>
-              <Tabs.TabPane key={PageTabs.Pools}>
-                <PoolCardWrapper
-                  selectedTab={poolCategory as PoolCategory}
-                  handleChange={onChangePoolCategory}
-                  poolsSelected={poolsSelected}
-                />
-              </Tabs.TabPane>
-            </Tabs>
+            <Tabs activeKey={pageTabSelected} centered items={items} />
           </Col>
         </Row>
       </Col>
