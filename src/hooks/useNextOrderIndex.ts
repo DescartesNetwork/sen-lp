@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { AppState } from 'model'
 import configs from 'configs'
@@ -10,9 +10,7 @@ const LIMIT = 10000
 const useNextOrderIndex = (retailerAddress: string): number => {
   const [index, setIndex] = useState(0)
   const { orders } = useSelector((state: AppState) => state)
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   const orderAddresses = Object.keys(orders)
   const searchIndex = useCallback(async () => {

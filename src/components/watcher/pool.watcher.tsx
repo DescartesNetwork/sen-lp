@@ -1,43 +1,45 @@
 import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { account } from '@senswap/sen-js'
-import { useWalletAddress } from '@sentre/senhub'
+import { util, useWalletAddress } from '@sentre/senhub'
 
-import { notifyError } from 'helper'
 import { AppDispatch } from 'model'
-import { getRetailers, upsetRetailer } from 'model/retailers.controller'
+import { getPools, upsetPool } from 'model/pools.controller'
+
 import configs from 'configs'
 
 const {
-  sol: { purchasing },
+  sol: { taxmanAddress },
 } = configs
 
 // Watch id
 let watchId = 0
 
-const RetailerWatcher = () => {
+const PoolWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
   const walletAddress = useWalletAddress()
 
   // First-time fetching
   const fetchData = useCallback(async () => {
     try {
-      if (!account.isAddress(walletAddress)) return
-      await dispatch(getRetailers()).unwrap()
+      if (!util.isAddress(walletAddress)) return
+      await dispatch(getPools()).unwrap()
     } catch (er) {
-      await notifyError(er)
+      return window.notify({
+        type: 'error',
+        description: 'Cannot fetch data of pools',
+      })
     }
   }, [dispatch, walletAddress])
   // Watch account changes
   const watchData = useCallback(async () => {
     if (watchId) return console.warn('Already watched')
-    const callback = (er: string | null, re: any) => {
+    const { swap } = window.sentre || {}
+    const filters = [{ memcmp: { bytes: taxmanAddress, offset: 65 } }]
+    watchId = swap?.watch((er: string | null, re: any) => {
       if (er) return console.error(er)
       const { address, data } = re
-      return dispatch(upsetRetailer({ address, data }))
-    }
-    const filters = [{ dataSize: 161 }]
-    watchId = purchasing.watch(callback, filters)
+      return dispatch(upsetPool({ address, data }))
+    }, filters)
   }, [dispatch])
 
   useEffect(() => {
@@ -47,8 +49,10 @@ const RetailerWatcher = () => {
     return () => {
       ;(async () => {
         try {
-          await purchasing.unwatch(watchId)
-        } catch (er) {}
+          await window.sentre.swap.unwatch(watchId)
+        } catch (er) {
+          // Do nothing
+        }
       })()
       watchId = 0
     }
@@ -57,4 +61,4 @@ const RetailerWatcher = () => {
   return <Fragment />
 }
 
-export default RetailerWatcher
+export default PoolWatcher

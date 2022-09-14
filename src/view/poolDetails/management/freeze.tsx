@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react'
-import { usePool, util } from '@sentre/senhub'
+import { util } from '@sentre/senhub'
 
 import { Button, Row, Col, Typography, Badge, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
+
+import { usePool } from 'hooks/pools/usePool'
 
 enum PoolStatus {
   Frozen = 2,

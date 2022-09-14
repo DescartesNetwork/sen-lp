@@ -1,13 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Swap, utils } from '@senswap/sen-js'
-import { useMint, usePool, useWallet, util } from '@sentre/senhub'
+import {
+  useGetMintData,
+  useGetMintDecimals,
+  useWalletAddress,
+  util,
+} from '@sentre/senhub'
 
 import { Row, Col, Typography, Button } from 'antd'
 import LPT from './lpt'
 import Info from './info'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 const Withdraw = ({
   poolAddress,
@@ -22,16 +28,15 @@ const Withdraw = ({
   const [decimals, setDecimals] = useState([0, 0])
   const [loading, setLoading] = useState(false)
   const { lpts } = useSelector((state: AppState) => state)
+  const getDecimals = useGetMintDecimals()
 
   const lptAddress =
     Object.keys(lpts).find((key) => lpts[key].pool === poolAddress) || ''
   const lptPoolAddress = lpts?.[lptAddress]?.pool
 
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
   const { pools } = usePool()
-  const { getMint } = useMint()
+  const getMint = useGetMintData()
 
   const { reserve_a, reserve_b, mint_lpt } = pools?.[lptPoolAddress] || {}
   const { mint_a, mint_b } = pools?.[poolAddress]
@@ -39,21 +44,17 @@ const Withdraw = ({
 
   const fetchData = useCallback(async () => {
     try {
-      const {
-        [mint_lpt]: { supply },
-      } = await getMint({ address: mint_lpt })
+      const mintDataLPT = await getMint({ mintAddress: mint_lpt })
+      if (!mintDataLPT) return setSupply(undefined)
+      const { supply } = mintDataLPT[mint_lpt]
       setSupply(supply)
     } catch (er) {}
     try {
-      const {
-        [mint_a]: { decimals: decimalsA },
-      } = await getMint({ address: mint_a })
-      const {
-        [mint_b]: { decimals: decimalsB },
-      } = await getMint({ address: mint_b })
+      let decimalsA = (await getDecimals({ mintAddress: mint_a })) || 0
+      let decimalsB = (await getDecimals({ mintAddress: mint_b })) || 0
       setDecimals([decimalsA, decimalsB])
     } catch (er) {}
-  }, [mint_a, mint_b, mint_lpt, getMint])
+  }, [getMint, mint_lpt, getDecimals, mint_a, mint_b])
 
   const onWithdraw = async () => {
     if (!lpt) return

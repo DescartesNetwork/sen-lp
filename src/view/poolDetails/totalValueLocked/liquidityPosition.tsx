@@ -1,12 +1,13 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
-import { useMint, usePool, util } from '@sentre/senhub'
+import { useGetMintData, util } from '@sentre/senhub'
 
 import { Col, Row, Space, Typography } from 'antd'
 import Price from './price'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 const APY_DATE = 365
 
@@ -62,7 +63,7 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
   const roi = useSelector(
     (state: AppState) => state.stat?.[poolAddress]?.details?.roi,
   )
-  const { getMint } = useMint()
+  const getMint = useGetMintData()
   const { pools } = usePool()
 
   const { mint_lpt } = pools[poolAddress] || {}
@@ -83,9 +84,10 @@ const LiquidityPosition = ({ poolAddress }: { poolAddress: string }) => {
   useEffect(() => {
     ;(async () => {
       if (!account.isAddress(mint_lpt)) return 0
-      const {
-        [mint_lpt]: { decimals, supply },
-      } = await getMint({ address: mint_lpt })
+      const mintDataLPT = await getMint({ mintAddress: mint_lpt })
+      if (!mintDataLPT) return setSupply(0)
+      const { supply, decimals } = mintDataLPT[mint_lpt]
+
       setSupply(Number(utils.undecimalize(supply, decimals)))
     })()
   }, [getMint, mint_lpt])

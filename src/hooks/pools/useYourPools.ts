@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { usePool, useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 import { PoolData } from '@senswap/sen-js'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 export const useYourPools = () => {
   const [yourPools, setYourPools] = useState({})
   const lpts = useSelector((state: AppState) => state.lpts)
-  const { wallet } = useWallet()
+  const walletAddress = useWalletAddress()
   const { pools } = usePool()
 
   const getYourPools = useCallback(() => {
@@ -16,11 +17,11 @@ export const useYourPools = () => {
     for (const lptAddr in lpts) {
       const { pool } = lpts[lptAddr]
       const poolData = pools[pool]
-      if (poolData && poolData.owner === wallet.address)
+      if (poolData && poolData.owner === walletAddress)
         newYourPools[pool] = poolData
     }
     return setYourPools(newYourPools)
-  }, [lpts, pools, wallet.address])
+  }, [lpts, pools, walletAddress])
 
   useEffect(() => {
     getYourPools()

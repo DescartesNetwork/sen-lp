@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { usePool } from '@sentre/senhub'
 import { PoolData } from '@senswap/sen-js'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 export const useDepositedPools = () => {
   const [depositedPools, setDepositedPools] = useState<

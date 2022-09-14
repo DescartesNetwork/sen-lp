@@ -14,9 +14,23 @@ const PoolManagement = ({
   visible = false,
   onClose = () => {},
 }: PropsType) => {
+  const items = [
+    {
+      label: 'Freeze/Thaw',
+      key: 'freeze-thaw',
+      children: <Freeze address={poolAddress} />,
+    },
+    { label: 'Fee', key: 'fee', children: <Fee address={poolAddress} /> },
+    {
+      label: 'Transfer Owner',
+      key: 'transfer-owner',
+      children: <TransferOwner address={poolAddress} />,
+    },
+  ]
+
   return (
     <Modal
-      visible={visible}
+      open={visible}
       onCancel={onClose}
       centered
       closable={false}
@@ -24,17 +38,7 @@ const PoolManagement = ({
       style={{ minHeight: 285 }}
       bodyStyle={{ padding: 0 }}
     >
-      <Tabs style={{ padding: 24 }}>
-        <Tabs.TabPane key="freeze-thaw" tab="Freeze/Thaw">
-          <Freeze address={poolAddress} />
-        </Tabs.TabPane>
-        <Tabs.TabPane key="fee" tab="Fee">
-          <Fee address={poolAddress}></Fee>
-        </Tabs.TabPane>
-        <Tabs.TabPane key="transfer-owner" tab="Transfer Owner">
-          <TransferOwner address={poolAddress} />
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs style={{ padding: 24 }} items={items} />
     </Modal>
   )
 }

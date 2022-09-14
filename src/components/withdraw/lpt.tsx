@@ -1,13 +1,14 @@
 import { useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { usePool, util } from '@sentre/senhub'
+import { util } from '@sentre/senhub'
 
 import { Row, Col, Typography, Space, Button, Divider } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
 import { MintAvatar, MintName } from 'shared/antd/mint'
 
 import { AppState } from 'model'
+import { usePool } from 'hooks/pools/usePool'
 
 /**
  * Single amount input

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { account, PoolData } from '@senswap/sen-js'
 import { forceCheck } from '@sentre/react-lazyload'
-import { useMint } from '@sentre/senhub'
+import { tokenProvider } from '@sentre/senhub'
 
 import { AppState } from 'model'
 
@@ -10,7 +10,6 @@ const KEYSIZE = 3
 let timeOutForceCheck: NodeJS.Timeout
 
 export const useSearchedPools = (pools: Record<string, PoolData>) => {
-  const { tokenProvider } = useMint()
   const [searchedPools, setSearchedPools] = useState({})
   const {
     main: { search },
@@ -28,7 +27,7 @@ export const useSearchedPools = (pools: Record<string, PoolData>) => {
       if (mintAddress.includes(mint_b)) return true
       return false
     },
-    [pools, search, tokenProvider],
+    [pools, search],
   )
 
   const searchPools = useCallback(

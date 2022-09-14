@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, Swap, utils } from '@senswap/sen-js'
-import { useAccount, useMint, usePool, useWallet, util } from '@sentre/senhub'
+import {
+  useAccounts,
+  useGetMintData,
+  useWalletAddress,
+  util,
+} from '@sentre/senhub'
 
 import { Row, Col, Button, Radio, Space, Tag, RadioChangeEvent } from 'antd'
 import Summary from './summary'
@@ -8,6 +13,7 @@ import Amount from 'components/amount'
 import { MintSymbol } from 'shared/antd/mint'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { usePool } from 'hooks/pools/usePool'
 
 const FullSide = ({
   poolAddress,
@@ -24,11 +30,9 @@ const FullSide = ({
   const [selectMint, setSelectMint] = useState<string>('all')
   const [disabled, setDisabled] = useState(true)
   const { pools } = usePool()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
-  const { getMint } = useMint()
-  const { accounts } = useAccount()
+  const walletAddress = useWalletAddress()
+  const getMint = useGetMintData()
+  const accounts = useAccounts()
   const {
     mint_a,
     mint_b,
@@ -79,9 +83,10 @@ const FullSide = ({
     if (!account.isAddress(walletAddress) || !account.isAddress(mint_lpt))
       return setLPT('')
     try {
-      const {
-        [mint_lpt]: { supply },
-      } = await getMint({ address: mint_lpt })
+      const mintState = await getMint({ mintAddress: mint_lpt })
+      if (!mintState) return setLPT('')
+      const { supply } = mintState[mint_lpt]
+
       const { lpt } = Swap.oracle.sided_deposit(
         amounts[0],
         amounts[1],

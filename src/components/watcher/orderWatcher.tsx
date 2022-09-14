@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { useWallet } from '@sentre/senhub'
+import { useWalletAddress } from '@sentre/senhub'
 
 import { notifyError } from 'helper'
 import { AppDispatch } from 'model'
@@ -17,9 +17,7 @@ let watchId = 0
 
 const OrderWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
-  const {
-    wallet: { address: walletAddress },
-  } = useWallet()
+  const walletAddress = useWalletAddress()
 
   // First-time fetching
   const fetchData = useCallback(async () => {

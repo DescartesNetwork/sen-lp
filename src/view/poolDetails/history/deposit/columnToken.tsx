@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
-import { usePool, util } from '@sentre/senhub'
+import { util } from '@sentre/senhub'
 
 import { Space, Typography } from 'antd'
 
@@ -8,6 +8,7 @@ import { AppState } from 'model'
 import { HistoryDeposit } from 'model/history.controller'
 import { MintSymbol } from 'shared/antd/mint'
 import useMintDecimals from 'shared/hooks/useMintDecimals'
+import { usePool } from 'hooks/pools/usePool'
 
 const ColumnToken = ({ record }: { record: HistoryDeposit }) => {
   const {
