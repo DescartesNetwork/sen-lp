@@ -17,13 +17,13 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
 
   const onReject = async () => {
     try {
-      const { wallet } = window.sentre
+      const { solana } = window.sentre
       const {
         sol: { purchasing },
       } = configs
-      if (!wallet) throw new Error('Wallet is not connected')
+      if (!solana) throw new Error('Wallet is not connected')
       await setLoading(true)
-      const { txId } = await purchasing.rejectOrder(orderAddress, wallet)
+      const { txId } = await purchasing.rejectOrder(orderAddress, solana)
       return notifySuccess('Reject the order', txId)
     } catch (er: any) {
       return notifyError(er)
@@ -34,13 +34,13 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
 
   const onApprove = async () => {
     try {
-      const { wallet } = window.sentre
+      const { solana } = window.sentre
       const {
         sol: { purchasing },
       } = configs
-      if (!wallet) throw new Error('Wallet is not connected')
+      if (!solana) throw new Error('Wallet is not connected')
       await setLoading(true)
-      const { txId } = await purchasing.approveOrder(orderAddress, wallet)
+      const { txId } = await purchasing.approveOrder(orderAddress, solana)
       return notifySuccess('Approve the order', txId)
     } catch (er: any) {
       return notifyError(er)

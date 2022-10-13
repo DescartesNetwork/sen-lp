@@ -8,9 +8,13 @@ import { TransLog } from 'stat/entities/trans-log'
 import { TotalSummary } from 'stat/constants/summary'
 import { DailyReport } from 'stat/entities/daily-report'
 import { DateHelper } from 'stat/helpers/date'
+import configs from 'configs'
 
 const DATE_RANGE = 11
 
+const {
+  sol: { swap },
+} = configs
 export default class PoolService {
   poolAddress: string
   poolData: PoolData | undefined
@@ -24,7 +28,6 @@ export default class PoolService {
 
   getPoolData = async (): Promise<PoolData> => {
     if (!this.poolData) {
-      const swap = window.sentre.swap
       this.poolData = await swap.getPoolData(this.poolAddress)
     }
     return this.poolData

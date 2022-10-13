@@ -22,12 +22,12 @@ const RetailerState = ({ retailerAddress }: { retailerAddress: string }) => {
       const {
         sol: { purchasing },
       } = configs
-      const { wallet } = window.sentre
-      if (!wallet) throw new Error('Wallet is not connected')
+      const { solana } = window.sentre
+      if (!solana) throw new Error('Wallet is not connected')
       if (!account.isAddress(retailerAddress))
         throw new Error('Invalid retailer address')
       await setLoading(true)
-      const { txId } = await purchasing.freezeRetailer(retailerAddress, wallet)
+      const { txId } = await purchasing.freezeRetailer(retailerAddress, solana)
       return notifySuccess(`Freeze the retailer ${retailerAddress}`, txId)
     } catch (er) {
       return notifyError(er)
@@ -41,12 +41,12 @@ const RetailerState = ({ retailerAddress }: { retailerAddress: string }) => {
       const {
         sol: { purchasing },
       } = configs
-      const { wallet } = window.sentre
-      if (!wallet) throw new Error('Wallet is not connected')
+      const { solana } = window.sentre
+      if (!solana) throw new Error('Wallet is not connected')
       if (!account.isAddress(retailerAddress))
         throw new Error('Invalid retailer address')
       await setLoading(true)
-      const { txId } = await purchasing.thawRetailer(retailerAddress, wallet)
+      const { txId } = await purchasing.thawRetailer(retailerAddress, solana)
       return notifySuccess(`Thaw the retailer ${retailerAddress}`, txId)
     } catch (er) {
       return notifyError(er)

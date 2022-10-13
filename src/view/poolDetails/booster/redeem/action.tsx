@@ -17,13 +17,13 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
 
   const onCancel = async () => {
     try {
-      const { wallet } = window.sentre
+      const { solana } = window.sentre
       const {
         sol: { purchasing },
       } = configs
-      if (!wallet) throw new Error('Wallet is not connected')
+      if (!solana) throw new Error('Wallet is not connected')
       await setLoading(true)
-      const { txId } = await purchasing.cancelOrder(orderAddress, wallet)
+      const { txId } = await purchasing.cancelOrder(orderAddress, solana)
       return notifySuccess('Cancel the order', txId)
     } catch (er: any) {
       return notifyError(er)
@@ -34,13 +34,13 @@ const Action = ({ orderAddress }: { orderAddress: string }) => {
 
   const onRedeem = async () => {
     try {
-      const { wallet } = window.sentre
+      const { solana } = window.sentre
       const {
         sol: { purchasing },
       } = configs
-      if (!wallet) throw new Error('Wallet is not connected')
+      if (!solana) throw new Error('Wallet is not connected')
       await setLoading(true)
-      const { txId } = await purchasing.redeemOrder(orderAddress, wallet)
+      const { txId } = await purchasing.redeemOrder(orderAddress, solana)
       return notifySuccess('Redeem the order', txId)
     } catch (er: any) {
       return notifyError(er)

@@ -42,13 +42,13 @@ const ConfirmOrder = ({
 
   const onReject = async () => {
     try {
-      const { wallet } = window.sentre
+      const { solana } = window.sentre
       const {
         sol: { purchasing },
       } = configs
-      if (!wallet) throw new Error('Wallet is not connected')
+      if (!solana) throw new Error('Wallet is not connected')
       await setLoadingReject(true)
-      const { txId } = await purchasing.rejectOrder(orderData.address, wallet)
+      const { txId } = await purchasing.rejectOrder(orderData.address, solana)
       return notifySuccess('Reject the order', txId)
     } catch (er: any) {
       return notifyError(er)
@@ -59,13 +59,13 @@ const ConfirmOrder = ({
 
   const onApprove = async () => {
     try {
-      const { wallet } = window.sentre
+      const { solana } = window.sentre
       const {
         sol: { purchasing },
       } = configs
-      if (!wallet) throw new Error('Wallet is not connected')
+      if (!solana) throw new Error('Wallet is not connected')
       await setLoadingApprove(true)
-      const { txId } = await purchasing.approveOrder(orderData.address, wallet)
+      const { txId } = await purchasing.approveOrder(orderData.address, solana)
       return notifySuccess('Approve the order', txId)
     } catch (er: any) {
       return notifyError(er)

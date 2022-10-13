@@ -5,11 +5,16 @@ import { Button, Row, Col, Typography, Badge, Space } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
 import { usePool } from 'hooks/pools/usePool'
+import configs from 'configs'
 
 enum PoolStatus {
   Frozen = 2,
   Active = 1,
 }
+
+const {
+  sol: { swap },
+} = configs
 
 const CardDescription = ({
   poolStatus,
@@ -48,9 +53,9 @@ const Freeze = ({ address }: { address: string }) => {
 
   const onFreezePool = async () => {
     setLoading(true)
-    const { swap, wallet } = window.sentre
-    if (!wallet) return
-    const { txId } = await swap.freezePool(address, wallet)
+    const { solana } = window.sentre
+    if (!solana) return
+    const { txId } = await swap.freezePool(address, solana)
     setLoading(false)
     if (!txId)
       return window.notify({
@@ -66,9 +71,9 @@ const Freeze = ({ address }: { address: string }) => {
 
   const onThawPool = async () => {
     setLoading(true)
-    const { swap, wallet } = window.sentre
-    if (!wallet) return
-    const { txId } = await swap.thawPool(address, wallet)
+    const { solana } = window.sentre
+    if (!solana) return
+    const { txId } = await swap.thawPool(address, solana)
     setLoading(false)
     if (!txId)
       return window.notify({

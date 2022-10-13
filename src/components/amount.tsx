@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { account, utils } from '@senswap/sen-js'
-import { useAccounts, useWalletAddress, util } from '@sentre/senhub'
+import { useAccounts, useWalletAddress, util, splt } from '@sentre/senhub'
 
 import { Row, Col, Typography, Space, Button, Divider } from 'antd'
 import NumericInput from 'shared/antd/numericInput'
@@ -52,7 +52,6 @@ const Amount = ({
   }, [decimals, value])
 
   const fetchAssociatedAddress = useCallback(async () => {
-    const { splt } = window.sentre
     try {
       const associatedAddress = await account.deriveAssociatedAddress(
         walletAddress,

@@ -1,4 +1,4 @@
-import { Purchasing } from '@senswap/sen-js'
+import { Purchasing, Swap } from '@senswap/sen-js'
 
 import { Net, rpc } from '@sentre/senhub'
 
@@ -17,6 +17,7 @@ type Config = {
   splataAddress: string
   nodeUrl: string
   purchasing: Purchasing
+  swap: Swap
 }
 
 const configs: Record<Net, Config> = {
@@ -34,6 +35,14 @@ const configs: Record<Net, Config> = {
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     nodeUrl: rpc,
+    get swap() {
+      return new Swap(
+        this.swapAddress,
+        this.spltAddress,
+        this.splataAddress,
+        rpc,
+      )
+    },
     get purchasing() {
       return new Purchasing(
         this.purchasingAddress,
@@ -58,6 +67,14 @@ const configs: Record<Net, Config> = {
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     nodeUrl: rpc,
+    get swap() {
+      return new Swap(
+        this.swapAddress,
+        this.spltAddress,
+        this.splataAddress,
+        rpc,
+      )
+    },
     get purchasing() {
       return new Purchasing(
         this.purchasingAddress,
@@ -85,6 +102,14 @@ const configs: Record<Net, Config> = {
     spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
     splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
     nodeUrl: rpc,
+    get swap() {
+      return new Swap(
+        this.swapAddress,
+        this.spltAddress,
+        this.splataAddress,
+        rpc,
+      )
+    },
     get purchasing() {
       return new Purchasing(
         this.purchasingAddress,
