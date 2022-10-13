@@ -106,8 +106,8 @@ const Confirm = ({
       const {
         sol: { purchasing },
       } = configs
-      const { wallet } = window.sentre
-      if (!wallet) throw new Error('Wallet is not connected')
+      const { solana } = window.sentre
+      if (!solana) throw new Error('Wallet is not connected')
       await setLoading(true)
       // Execute
       const { txId } = await purchasing.placeOrder(
@@ -116,7 +116,7 @@ const Confirm = ({
         askAmount,
         lockedTime,
         retailerAddress,
-        wallet,
+        solana,
       )
       notifySuccess('Place a new order', txId)
       return onClose()

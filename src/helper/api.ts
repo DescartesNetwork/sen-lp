@@ -5,7 +5,7 @@ const api = {
   auth: async (auth: boolean | object = false) => {
     if (typeof auth === 'object') return auth
     if (!auth) return null
-    const wallet = window.sentre.wallet
+    const wallet = window.sentre.solana
     if (!wallet) throw new Error('Wallet is not connected')
     const datetime = Number(new Date()) + 10000 // Valid in 10s
     const msg = datetime.toString() + Math.floor(Math.random() * 10 ** 16)

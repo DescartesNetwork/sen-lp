@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useMemo } from 'react'
 import { useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
-import { useAccounts, useWalletAddress } from '@sentre/senhub'
+import { useAccounts, useWalletAddress, splt } from '@sentre/senhub'
 
 import { notifyError } from 'helper'
 import { AppDispatch } from 'model'
@@ -41,7 +41,7 @@ const LptWatcher = () => {
       return dispatch(upsetLPT({ address, data }))
     }
     const filters = [{ memcmp: { bytes: walletAddress, offset: 32 } }]
-    watchId = window.sentre.splt.watch(callback, filters)
+    watchId = splt.watch(callback, filters)
   }, [dispatch, walletAddress])
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const LptWatcher = () => {
     return () => {
       ;(async () => {
         try {
-          await window.sentre.splt.unwatch(watchId)
+          await splt.unwatch(watchId)
         } catch (er) {}
       })()
       watchId = 0

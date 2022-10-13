@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import base58 from 'bs58'
 import { PoolData } from '@senswap/sen-js'
+import { splt } from '@sentre/senhub'
 
 import { DateHelper } from 'stat/helpers/date'
 import PoolTransLogService, {
@@ -79,10 +80,7 @@ export const fetchWithdrawHistories = createAsyncThunk<
   Partial<State>,
   { days: number; poolData: PoolData }
 >(`${NAME}/fetchWithdrawHistories`, async ({ days, poolData }) => {
-  const {
-    sentre: { splt },
-  } = window
-  const walletAddress = await window.sentre.wallet?.getAddress()
+  const walletAddress = await window.sentre.solana?.getAddress()
   if (!walletAddress) throw new Error('Wallet is not connected')
 
   const transLogs = await getTransLogs(days, walletAddress)
@@ -122,7 +120,7 @@ export const fetchDepositHistory = createAsyncThunk<
   Partial<State>,
   { days: number; poolData: PoolData }
 >(`${NAME}/fetchDepositHistory`, async ({ days, poolData }) => {
-  const walletAddress = await window.sentre.wallet?.getAddress()
+  const walletAddress = await window.sentre.solana?.getAddress()
   if (!walletAddress) throw new Error('Wallet is not connected')
   const { struct } = require('soprox-abi')
 

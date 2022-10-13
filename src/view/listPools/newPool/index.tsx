@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { useAccounts, useWalletAddress } from '@sentre/senhub'
+import { useAccounts, useWalletAddress, splt } from '@sentre/senhub'
 import { account, utils } from '@senswap/sen-js'
 
 import { Row, Col, Modal, Button, Typography, Space } from 'antd'
@@ -17,7 +17,7 @@ import { usePool } from 'hooks/pools/usePool'
 import { PageTabs, PoolCategory, QueryParams } from 'constant'
 
 const {
-  sol: { taxmanAddress },
+  sol: { taxmanAddress, swap },
   fee: { exoticFee, exoticTax },
   route: { myRoute },
 } = configs
@@ -77,8 +77,8 @@ const NewPool = () => {
 
   const onNewPool = async () => {
     try {
-      const { swap, splt, wallet } = window.sentre
-      if (!wallet || !account.isAddress(walletAddress))
+      const { solana } = window.sentre
+      if (!solana || !account.isAddress(walletAddress))
         throw new Error('Wallet is not connected')
       if (!account.isAddress(mintAddressA) || !account.isAddress(mintAddressB))
         throw new Error('Please select both tokens')
@@ -97,7 +97,7 @@ const NewPool = () => {
         srcAddresses[0],
         srcAddresses[1],
         taxmanAddress,
-        wallet,
+        solana,
       )
       history.push(
         `${myRoute}?${QueryParams.wrapTab}=${PageTabs.Pools}&${QueryParams.poolCategory}=${PoolCategory.YourPools}`,

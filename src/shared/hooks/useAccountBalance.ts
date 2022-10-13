@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { account, DEFAULT_EMPTY_ADDRESS, utils } from '@senswap/sen-js'
-import { useAccounts, useWalletAddress, useWalletBalance } from '@sentre/senhub'
+import {
+  useAccounts,
+  useWalletAddress,
+  useWalletBalance,
+  splt,
+} from '@sentre/senhub'
 
 import useMintDecimals from './useMintDecimals'
 
@@ -52,7 +57,7 @@ const useAccountBalance = (accountAddress: string) => {
   if (!account.isAddress(walletAddress) || !account.isAddress(accountAddress))
     return buildResult()
   if (accountAddress === walletAddress)
-    return buildResult(DEFAULT_EMPTY_ADDRESS, lamports, 9)
+    return buildResult(DEFAULT_EMPTY_ADDRESS, BigInt(lamports), 9)
 
   return buildResult(mintAddress, amount, decimals)
 }
@@ -73,9 +78,6 @@ export const useAccountBalanceByMintAddress = (mintAddress: string) => {
     ;(async () => {
       if (!account.isAddress(walletAddress) || !account.isAddress(mintAddress))
         return setAccountAddress('')
-      const {
-        sentre: { splt },
-      } = window
       try {
         const address = await splt.deriveAssociatedAddress(
           walletAddress,

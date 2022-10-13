@@ -6,6 +6,7 @@ import {
   useGetMintDecimals,
   useWalletAddress,
   util,
+  splt,
 } from '@sentre/senhub'
 
 import { Row, Col, Typography, Button } from 'antd'
@@ -14,6 +15,11 @@ import Info from './info'
 
 import { AppState } from 'model'
 import { usePool } from 'hooks/pools/usePool'
+import configs from 'configs'
+
+const {
+  sol: { swap },
+} = configs
 
 const Withdraw = ({
   poolAddress,
@@ -59,20 +65,20 @@ const Withdraw = ({
   const onWithdraw = async () => {
     if (!lpt) return
     setLoading(true)
-    const { swap, wallet, splt } = window.sentre
+    const { solana } = window.sentre
     const dstAddresses = await Promise.all(
       mintAddresses.map((mintAddress) =>
         splt.deriveAssociatedAddress(walletAddress, mintAddress),
       ),
     )
-    if (!wallet) return
+    if (!solana) return
     try {
       const { txId } = await swap.removeLiquidity(
         lpt,
         poolAddress,
         dstAddresses[0],
         dstAddresses[1],
-        wallet,
+        solana,
       )
       setLPT(BigInt(0))
       return window.notify({

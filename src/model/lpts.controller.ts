@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { account, AccountData, utils } from '@senswap/sen-js'
+import { splt } from '@sentre/senhub'
+
+import configs from 'configs'
+
+const {
+  sol: { swap },
+} = configs
 
 /**
  * Store constructor
@@ -24,7 +31,6 @@ export const getLPTs = createAsyncThunk(
   }: {
     accounts: Array<AccountData & { address: string }>
   }) => {
-    const { splt, swap } = window.sentre
     // Get the corresponding mint list
     const mintAddresses = accounts.map(({ mint: mintAddress }) => mintAddress)
     const mintPublicKeys = mintAddresses.map((mintAddress) =>
@@ -78,7 +84,6 @@ export const getLPT = createAsyncThunk<
     lpts: { [address]: data },
   } = getState()
   if (data) return { [address]: data }
-  const { swap } = window.sentre
   const raw = await swap.getLPTData(address)
   return { [address]: raw }
 })
@@ -96,7 +101,6 @@ export const upsetLPT = createAsyncThunk<
   const { pool } = lptData || {}
   if (account.isAddress(pool)) return { [address]: { ...data, pool } }
   // To make sure the new account is an lpt account
-  const { swap } = window.sentre
   const raw = await swap.getLPTData(address)
   return { [address]: raw }
 })

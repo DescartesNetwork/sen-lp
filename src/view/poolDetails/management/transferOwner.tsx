@@ -5,6 +5,12 @@ import { util } from '@sentre/senhub'
 import { Button, Row, Col, Input, Card, Space, Typography } from 'antd'
 import IonIcon from '@sentre/antd-ionicon'
 
+import configs from 'configs'
+
+const {
+  sol: { swap },
+} = configs
+
 const TransferOwner = ({ address: poolAddress }: { address: string }) => {
   const [newOwner, setNewOwner] = useState('')
   const [loading, setLoading] = useState(false)
@@ -12,12 +18,12 @@ const TransferOwner = ({ address: poolAddress }: { address: string }) => {
   const onTransferOwner = async () => {
     await setLoading(true)
     try {
-      const { swap, wallet } = window.sentre
-      if (!wallet) throw new Error('Wallet is not connected.')
+      const { solana } = window.sentre
+      if (!solana) throw new Error('Wallet is not connected.')
       const { txId } = await swap.transferPoolOwnership(
         poolAddress,
         newOwner,
-        wallet,
+        solana,
       )
       return window.notify({
         type: 'success',

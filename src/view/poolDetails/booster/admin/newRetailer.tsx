@@ -17,12 +17,12 @@ const NewRetailer = ({ poolAddress }: { poolAddress: string }) => {
   const poolData = pools[poolAddress]
 
   const onNew = async () => {
-    const { wallet } = window.sentre
+    const { solana } = window.sentre
     const {
       sol: { purchasing, sntrAddress },
     } = configs
     try {
-      if (!wallet) throw new Error('Wallet is not connected')
+      if (!solana) throw new Error('Wallet is not connected')
       if (!account.isAddress(poolData?.mint_lpt))
         throw new Error('Invalid bid mint address')
       if (!account.isAddress(sntrAddress))
@@ -31,7 +31,7 @@ const NewRetailer = ({ poolAddress }: { poolAddress: string }) => {
         walletAddress,
         poolData.mint_lpt,
         sntrAddress,
-        wallet,
+        solana,
       )
       await dispatch(getRetailer({ address: retailerAddress })).unwrap()
       return notifySuccess('Initialize a new retailer', txId)

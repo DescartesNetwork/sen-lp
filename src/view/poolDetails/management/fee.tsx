@@ -7,11 +7,16 @@ import IonIcon from '@sentre/antd-ionicon'
 import FeeInput from './FeeInput'
 
 import { usePool } from 'hooks/pools/usePool'
+import configs from 'configs'
 
 // Fee decimal = 9
 // however feeUI = Fee * 100 (%)
 // -> FEE_DECIMALS_PERCENT = 9 - 2 = 7
 const FEE_DECIMALS_PERCENT = 7
+
+const {
+  sol: { swap },
+} = configs
 
 const Fee = ({ address: poolAddress }: { address: string }) => {
   const { pools } = usePool()
@@ -32,13 +37,13 @@ const Fee = ({ address: poolAddress }: { address: string }) => {
       FEE_DECIMALS_PERCENT,
     )
     // PRECISION
-    const { swap, wallet } = window.sentre
-    if (!wallet) return
+    const { solana } = window.sentre
+    if (!solana) return
     const { txId } = await swap.updateFee(
       feeAmount,
       taxAmount,
       poolAddress,
-      wallet,
+      solana,
     )
     setLoading(false)
     if (!txId)

@@ -5,6 +5,7 @@ import {
   useGetMintData,
   useWalletAddress,
   util,
+  splt,
 } from '@sentre/senhub'
 
 import { Row, Col, Button, Radio, Space, Tag, RadioChangeEvent } from 'antd'
@@ -14,6 +15,11 @@ import { MintSymbol } from 'shared/antd/mint'
 
 import useMintDecimals from 'shared/hooks/useMintDecimals'
 import { usePool } from 'hooks/pools/usePool'
+import configs from 'configs'
+
+const {
+  sol: { swap },
+} = configs
 
 const FullSide = ({
   poolAddress,
@@ -113,13 +119,13 @@ const FullSide = ({
 
   const onDeposit = async () => {
     setLoading(true)
-    const { splt, swap, wallet } = window.sentre
+    const { solana } = window.sentre
     const [srcAAddress, srcBAddress] = await Promise.all(
       mintAddresses.map((mintAddress) =>
         splt.deriveAssociatedAddress(walletAddress, mintAddress),
       ),
     )
-    if (!wallet) return
+    if (!solana) return
     try {
       const { txId } = await swap.addSidedLiquidity(
         amounts[0],
@@ -127,7 +133,7 @@ const FullSide = ({
         poolAddress,
         srcAAddress,
         srcBAddress,
-        wallet,
+        solana,
       )
       onClose()
       return window.notify({
@@ -151,7 +157,6 @@ const FullSide = ({
   }, [selectMint])
 
   const validateInput = useCallback(async () => {
-    const { splt } = window.sentre
     if (!mint_a || !mint_b) return false
     // get wallet account mint A
     const accAddrMintA = await splt.deriveAssociatedAddress(
